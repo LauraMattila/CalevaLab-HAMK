@@ -1,27 +1,32 @@
-
+import React, {useState, useEffect} from 'react';
 import firestore, { firebase } from '@react-native-firebase/firestore';
 
 
-const FitbitDb = () => {
 
-async function fetchUserId(id) {
+
+export async function fetchUserId(id) {
   try {
+    console.log(id);
     var userId = await firestore().collection('users').where('user_id', '==', id).get();
-    //console.log(userId);
-
+    if (userId.empty) {
+      console.log("EI ole");
+      return;
+    }
+    userId.forEach(doc => {
+      console.log(doc.data().fitbit_user_id);
+    })
   }catch(error){
     console.error(error);
   } 
 };
 
-async function fetchAccessToken(id) {
+export async function fetchAccessToken(id) {
    try {
-     var accessToken = await firestore().collection('users').where('user_id', '==', id).get('fitbit_access_token');
+     var accessToken = await firestore().collection('users').where('user_id', '==', id).get();
      console.log(accessToken);
     }catch(error){
         console.error(error);
       }
     };
-};
 
-export default FitbitDb;
+
