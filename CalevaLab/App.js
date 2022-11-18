@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import type {Node} from 'react';
-import {StyleSheet, Text, View, ScrollView, FlatList} from 'react-native';
+import {StyleSheet, Text, View, ScrollView, FlatList, Button} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
-import {Appbar, TextInput, Button} from 'react-native-paper';
+import {fetchUserId, fetchAccessToken} from './db/FitbitDb';
 
 const App: () => Node = () => {
     const [user, setUser] = useState('');
@@ -13,6 +13,8 @@ const App: () => Node = () => {
     const [startTime, setStartTime] = useState();
     const [endTime, setEndTime] = useState();
     const [loading, setLoading] = useState(true);
+
+    const [userId, setUserId]= useState('4');
 
     useEffect(() => {
         return ref.onSnapshot(querySnapshot => {
@@ -56,7 +58,9 @@ const App: () => Node = () => {
           </View>
         )}
       />
+        <Button title='perse' onPress={() => fetchUserId(userId)}></Button>
         </View>
+        
   );
 };
 
