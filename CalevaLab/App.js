@@ -3,6 +3,7 @@ import type {Node} from 'react';
 import {StyleSheet, Text, View, ScrollView, FlatList, Button} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import {fetchUserId, fetchAccessToken} from './db/FitbitDb';
+import {getSleepDataFit} from './components/FitbitApi';
 
 const App: () => Node = () => {
     const [user, setUser] = useState('');
@@ -15,6 +16,7 @@ const App: () => Node = () => {
     const [loading, setLoading] = useState(true);
 
     const [userId, setUserId]= useState('4');
+    const [accessToken, setAccessToken]= useState('');
 
     useEffect(() => {
         return ref.onSnapshot(querySnapshot => {
@@ -59,6 +61,7 @@ const App: () => Node = () => {
         )}
       />
         <Button title='perse' onPress={() => fetchUserId(userId)}></Button>
+        <Button title='Kives' onPress={() => getSleepDataFit(userId)}></Button>
         </View>
         
   );
