@@ -13,8 +13,9 @@ export async function fetchUserId(id) {
       return;
     }
     userId.forEach(doc => {
-      return doc.data().fitbit_user_id;
+      result = doc.data().fitbit_user_id;
     })
+    return result;
   }catch(error){
     console.error(error);
   } 
@@ -25,12 +26,13 @@ export async function fetchAccessToken(id) {
      console.log(id);
      var accessToken = await firestore().collection('users').where('user_id', '==', id).get();
      if (accessToken.empty) {
-      console.log("Ei oo")
+      console.log("Ei oo");
       return;
      }
      accessToken.forEach(doc => {
-      return doc.data().fitbit_access_token;
+      result =  doc.data().fitbit_access_token;
      })
+     return result;
     }catch(error){
         console.error(error);
       }

@@ -1,15 +1,18 @@
 
-import {fetchUserId, fetchAccessToken} from './db/FitbitDb';
+import {fetchUserId, fetchAccessToken} from '../db/FitbitDb';
 
 
 
  export async function getSleepDataFit(id) {
     try {
+      var user_id = await fetchUserId(id);
       console.log(user_id);
-      const user_id = fetchUserId(id);
-      
-      const URL = 'https://api.fitbit.com/1.2/user/'+user_id+'/sleep/list.json';
-      const accessToken = fetchAccessToken(id);
+      //const date = new Date().toISOString().slice(0, 10);
+      const date = new Date("2022-11-10").toISOString().slice(0,10);
+      console.log(date);
+      const URL = 'https://api.fitbit.com/1.2/user/'+user_id+'/sleep/list.json?afterDate='+date+'&sort=asc&offset=0&limit=28';
+      const accessToken = await fetchAccessToken(id);
+      console.log(accessToken);
       const response = await fetch(URL,
         {
           method: 'GET',
@@ -22,15 +25,22 @@ import {fetchUserId, fetchAccessToken} from './db/FitbitDb';
       );
 
       const json = await response.json();
-      console.log('Sleep (minutes) = ' + json.summary['totalMinutesAsleep']);
-      setSleep(json.summary['totalMinutesAsleep']);
+      console.log(json);
+      console.log('Sleep (minutes) = ' + json.sleep[0].minutesAsleep);
+      console.log('Date = ' + json.sleep[1].dateOfSleep);
+      json.sleep.forEach(sleep => {
+        var userSleep = sleep.minutesAsleep;
+        var sleepDate = sleep.dateOfSleep;
+        console.log(userSleep);
+        console.log(sleepDate);
+      });
     } catch (error) {
       console.error(error);
     }
   };
 
 
-  const getStepsFit = async () => {
+ export const getStepsFit = async () => {
     try {
       const response = await fetch(
         'https://api.fitbit.com/1.2/user/B8HWHQ/activities/date/2022-11-18.json',
@@ -52,7 +62,7 @@ import {fetchUserId, fetchAccessToken} from './db/FitbitDb';
     }
   };
 
-  const getCalsFit = async () => {
+ export const getCalsFit = async () => {
     try {
       const response = await fetch(
         'https://api.fitbit.com/1.2/user/B8HWHQ/activities/date/2022-11-18.json',
