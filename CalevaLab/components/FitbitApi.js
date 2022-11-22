@@ -1,5 +1,5 @@
 
-import {fetchUserId, fetchAccessToken} from '../db/FitbitDb';
+import {fetchUserId, fetchAccessToken, saveSleepLog} from '../db/FitbitDb';
 
 
 
@@ -25,14 +25,31 @@ import {fetchUserId, fetchAccessToken} from '../db/FitbitDb';
       );
 
       const json = await response.json();
-      console.log(json);
-      console.log('Sleep (minutes) = ' + json.sleep[0].minutesAsleep);
-      console.log('Date = ' + json.sleep[1].dateOfSleep);
+      //console.log(json);
+      //console.log('Sleep (minutes) = ' + json.sleep[0].minutesAsleep);
+      //console.log('Date = ' + json.sleep[1].dateOfSleep);
+      let index = 0;
+      var userSleep = 0;
+      var sleepDate;
       json.sleep.forEach(sleep => {
-        var userSleep = sleep.minutesAsleep;
-        var sleepDate = sleep.dateOfSleep;
-        console.log(userSleep);
-        console.log(sleepDate);
+        userSleep += sleep.minutesAsleep;
+        sleepDate = sleep.dateOfSleep;
+        index+=1;
+        try {
+          if (json.sleep[index]!== undefined) {
+            if (sleepDate==json.sleep[index].dateOfSleep) {
+              return;
+            }
+          }
+          
+        } catch(error) {
+          console.error(error);
+        }
+        //console.log(sleepDate);
+        //console.log(userSleep);
+        saveSleepLog(sleepDate, userSleep, id);
+        userSleep = 0;
+        
       });
     } catch (error) {
       console.error(error);

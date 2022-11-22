@@ -38,4 +38,20 @@ export async function fetchAccessToken(id) {
       }
     };
 
+export async function saveSleepLog(sleepDate, sleepMin, id) {
+    try {
+      const sleepData = {
+        date: sleepDate,
+        sleep_min: sleepMin,
+        user_id: id,
+      };
+      const res = await firestore()
+        .collection('fitbit_sleep')
+        .doc(sleepDate + '-' + id)
+        .set(sleepData);
+        } catch(error) {
+          console.error(error);
+        }
+      };
+
 

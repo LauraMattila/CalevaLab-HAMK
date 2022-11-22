@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import type {Node} from 'react';
+
 import {
   StyleSheet,
   Text,
@@ -15,7 +16,9 @@ import Dashboard from './screens/Dashboard';
 import Userprofile from './screens/Userprofile';
 import Athletecard from './screens/Athletecard';
 
+
 const App: () => Node = () => {
+
   const Drawer = createDrawerNavigator();
 
   return (
@@ -26,6 +29,10 @@ const App: () => Node = () => {
         <Drawer.Screen name="Athlete Card" component={Athletecard}/>
       </Drawer.Navigator>
     </NavigationContainer>
+
+    
+   
+
   );
 };
 
