@@ -12,8 +12,9 @@ export async function fetchUserIdP(id) {
       return;
     }
     userIdP.forEach(doc => {
-      return doc.data().polar_user_id;
+      result = doc.data().polar_user_id;
     });
+    return result;
   } catch (error) {
     console.error(error);
   }
@@ -32,6 +33,7 @@ export async function fetchAccessTokenP(id) {
     }
     accessTokenP.forEach(doc => {
       result = doc.data().polar_access_token;
+      
     });
     return result;
   } catch (error) {

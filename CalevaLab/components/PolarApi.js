@@ -35,14 +35,12 @@ export async function getSleep(id) {
   }
 }
 
-export async function postSomething() {
+export async function postSomething(id) {
   try {
     const accessTokenP = await fetchAccessTokenP(id);
     const userId = await fetchUserIdP(id);
     const response = await fetch(
-      'https://www.polaraccesslink.com/v3/users/' +
-        userId +
-        '/activity-transactions',
+      'https://www.polaraccesslink.com/v3/users/'+userId+'/activity-transactions',
       {
         method: 'POST',
         headers: {
@@ -63,15 +61,51 @@ export async function postSomething() {
   }
 }
 
+
+//Does not work yet!
+export async function listActivity(id) {
+    try {
+      const accessTokenP = await fetchAccessTokenP(id);
+      const userId = await fetchUserIdP(id);
+      const transactionId = await postSomething(id);
+      const response = await fetch(
+        'https://www.polaraccesslink.com/v3/users/'+userId+'/activity-transactions/'+transactionId,
+        {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+  
+            Authorization: 'Bearer ' + accessTokenP,
+          },
+        },
+      );
+  
+       
+      const json = await response.json();
+      //const parseJson = JSON.parse(json);
+      //const activityId = parseJson[parseJson.length - 1];
+
+      json['activity-log'].forEach(item => {
+        const activityLink = item;
+        console.log(activityLink);
+      });
+      return activityLink;
+      //return activityId;
+   
+        
+    } catch (error) {
+      console.log(error);
+    }
+  }
+       
+
 export async function putSomething() {
   try {
     const accessTokenP = await fetchAccessTokenP(id);
     const userId = await fetchUserIdP(id);
-    const transactionId = await postSomething();
+    const transactionId = await postSomething(id);
     const response = await fetch(
-      'https://www.polaraccesslink.com/v3/users/' +
-        userId +
-        '/activity-transactions/' +
+      'https://www.polaraccesslink.com/v3/users/'+userId+'/activity-transactions/' +
         transactionId,
       {
         method: 'PUT',
@@ -90,14 +124,19 @@ export async function putSomething() {
 }
 
 
-//Does not work yet!
-export async function listActivity() {
+
+
+
+
+//needs listActivity() to work
+export async function getActivity(id) {
   try {
+
+    const activityId = await listActivity(id);
     const accessTokenP = await fetchAccessTokenP(id);
     const userId = await fetchUserIdP(id);
-    const transactionId = await postSomething();
-    const response = await fetch(
-      'https://www.polaraccesslink.com/v3/users/'+userId+'/activity-transactions/'+transactionId,
+    const transactionId = await postSomething(id);
+    const response = await fetch('https://www.polaraccesslink.com/v3/users/59404981/activity-transactions',
       {
         method: 'GET',
         headers: {
@@ -109,41 +148,20 @@ export async function listActivity() {
     );
 
     const json = await response.json();
-
-    //const activityId = json[]
 
     console.log(json);
   } catch (error) {
     console.log(error);
   }
 }
+export async function allAtOnce() {
+    try {
 
+       await postSomething();
+       await listActivity();
+        
 
-
-//needs listActivity() to work
-export async function getActivity() {
-  try {
-    const accessTokenP = await fetchAccessTokenP(id);
-    const userId = await fetchUserIdP(id);
-    const transactionId = await postSomething();
-    const response = await fetch(
-      'https://www.polaraccesslink.com/v3/users/' +
-        userId +
-        '/activity-transactions/'+transactionId+'/activities/1714765106',
-      {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-
-          Authorization: 'Bearer ' + accessTokenP,
-        },
-      },
-    );
-
-    const json = await response.json();
-
-    console.log(json);
-  } catch (error) {
-    console.log(error);
-  }
+    } catch (error) {
+        console.log(error);
+      }
 }

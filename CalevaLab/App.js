@@ -5,7 +5,7 @@ import firestore from '@react-native-firebase/firestore';
 import {fetchUserId, fetchAccessToken} from './db/FitbitDb';
 
 import {fetchUserIdP, fetchAccessTokenP} from './db/PolarDb';
-import { getSleep, postSomething,getActivity,putSomething} from './components/PolarApi';
+import { getSleep, postSomething,getActivity,putSomething, listActivity, allAtOnce} from './components/PolarApi';
 
 import {getSleepDataFit} from './components/FitbitApi';
 
@@ -25,13 +25,14 @@ const App: () => Node = () => {
    useEffect(()=>{
       //getSleep();
       //postSomething();
+      //listActivity();
      //putSomething();
-      //getActivity();
+     // getActivity();
       
 },[]);
 
-    const [userId, setUserId]= useState('4');
-    const [accessToken, setAccessToken]= useState('');
+    const [userId, setUserId]= useState('1');
+    const [accessToken, setAccessToken]= useState();
 
     useEffect(() => {
         return ref.onSnapshot(querySnapshot => {
@@ -79,6 +80,9 @@ const App: () => Node = () => {
         <Button title='polarId' onPress={() => fetchUserIdP(userId)}></Button>
         <Button title='polarAccess' onPress={() => fetchAccessTokenP(userId)}></Button>
         <Button title='polar sleep' onPress={() => getSleep(userId)}></Button>
+        <Button title='All at once' onPress={() => listActivity(userId)}></Button>
+
+
 
 
 
