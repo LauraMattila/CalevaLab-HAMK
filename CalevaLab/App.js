@@ -32,8 +32,7 @@ const App: () => Node = () => {
         <Drawer.Screen name="Athlete Card" component={Athletecard}/>
       </Drawer.Navigator>
     </NavigationContainer>
- 
-  
+
   );
 };
 
