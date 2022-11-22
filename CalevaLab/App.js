@@ -3,6 +3,8 @@ import type {Node} from 'react';
 import {StyleSheet, Text, View, ScrollView, FlatList, Button} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import {fetchUserId, fetchAccessToken} from './db/FitbitDb';
+import {fetchUserIdP, fetchAccessTokenP} from './db/PolarDb';
+import { getSleep, postSomething,getActivity,putSomething} from './components/PolarApi';
 
 const App: () => Node = () => {
     const [user, setUser] = useState('');
@@ -14,7 +16,16 @@ const App: () => Node = () => {
     const [endTime, setEndTime] = useState();
     const [loading, setLoading] = useState(true);
 
-    const [userId, setUserId]= useState('4');
+    const [userId, setUserId]= useState('1');
+
+
+   useEffect(()=>{
+      //getSleep();
+      //postSomething();
+     //putSomething();
+      //getActivity();
+      
+},[]);
 
     useEffect(() => {
         return ref.onSnapshot(querySnapshot => {
@@ -59,6 +70,15 @@ const App: () => Node = () => {
         )}
       />
         <Button title='perse' onPress={() => fetchUserId(userId)}></Button>
+        <Button title='polarId' onPress={() => fetchUserIdP(userId)}></Button>
+        <Button title='polarAccess' onPress={() => fetchAccessTokenP(userId)}></Button>
+        <Button title='polar sleep' onPress={() => getSleep(userId)}></Button>
+
+
+
+        
+
+
         </View>
         
   );
