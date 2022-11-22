@@ -10,6 +10,7 @@ import {
   Button,
 } from 'react-native';
 
+
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {NavigationContainer} from '@react-navigation/native';
 import Dashboard from './screens/Dashboard';
@@ -18,6 +19,8 @@ import Athletecard from './screens/Athletecard';
 
 
 const App: () => Node = () => {
+
+
 
   const Drawer = createDrawerNavigator();
 
@@ -29,7 +32,10 @@ const App: () => Node = () => {
         <Drawer.Screen name="Athlete Card" component={Athletecard}/>
       </Drawer.Navigator>
     </NavigationContainer>
+ 
+  
   );
 };
 
 export default App;
+
