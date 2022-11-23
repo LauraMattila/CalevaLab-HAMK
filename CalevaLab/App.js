@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 
 
-
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {NavigationContainer} from '@react-navigation/native';
 import Dashboard from './screens/Dashboard';
@@ -34,8 +33,6 @@ const App: () => Node = () => {
       </Drawer.Navigator>
     </NavigationContainer>
 
-
-   
   );
 };
 
