@@ -1,5 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import {fetchUserId, fetchAccessToken, saveSleepLog, SaveStepsLog} from '../db/FitbitDb';
+import {
+  fetchUserId,
+  fetchAccessToken,
+  saveSleepLog,
+  SaveStepsLog,
+} from '../db/FitbitDb';
 
 export async function getSleepDataFit(id) {
   try {
@@ -57,16 +62,22 @@ export async function getSleepDataFit(id) {
 export async function getStepsFit(id) {
   try {
     var user_id = await fetchUserId(id);
-    const startdate = new Date('2022-11-17').toISOString().slice(0, 10);
-    const enddate = new Date('2022-11-22').toISOString().slice(0, 10);
+    const enddate = new Date();
+    let day = enddate.getDate();
+    let month = enddate.getMonth() + 1;
+    let year = enddate.getFullYear();
+    let currentDate = `${year}-${month}-${day}`;
+
+    const startdate = new Date();
+    startdate.setDate(enddate.getDate() - 28);
 
     const URL =
       'https://api.fitbit.com/1.2/user/' +
       user_id +
       '/activities/steps/date/' +
-      startdate +
+      startdate.toISOString().split('T')[0] +
       '/' +
-      enddate +
+      currentDate +
       '.json';
     const accessToken = await fetchAccessToken(id);
 
@@ -86,16 +97,11 @@ export async function getStepsFit(id) {
     const json = await response.json();
 
     json['activities-steps'].forEach(item => {
-      const stepsDate =  item.dateTime;
+      const stepsDate = item.dateTime;
       const steps = item.value;
-
-      //console.log("total: "+JSON.stringify(item)+ "   date: " +item.timeDate);
-
       console.log('Steps: ' + item.value + '     Date: ' + item.dateTime);
       SaveStepsLog(stepsDate, steps, id);
     });
-
-   
   } catch (error) {
     console.error(error);
   }
