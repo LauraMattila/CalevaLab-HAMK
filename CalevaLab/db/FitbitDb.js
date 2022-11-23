@@ -1,6 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import firestore, { firebase } from '@react-native-firebase/firestore';
 
+import firestore, { firebase } from '@react-native-firebase/firestore';
 
 
 
@@ -55,6 +54,7 @@ export async function saveSleepLog(sleepDate, sleepMin, id) {
       };
 
 
+
       export async function SaveStepsLog(stepsDate, steps, id) {
         try {
           const stepsData = {
@@ -70,6 +70,25 @@ export async function saveSleepLog(sleepDate, sleepMin, id) {
               console.error(error);
             }
           };
+          
+
+      export async function fetchSleepLog(sleepDate, id) {
+        try {
+          console.log(id);
+          console.log(sleepDate);
+          var response= await firestore().collection('fitbit_sleep').doc(sleepDate + '-' + id).get();
+          //console.log(sleepLog);
+            if (!response.exists) {
+              console.log("EI ole");   
+              return;
+            } else {
+                console.log(response.data());
+            }
     
+          }catch(error){
+            console.error(error);
+          } 
+        };
+
 
 
