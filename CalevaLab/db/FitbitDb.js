@@ -1,4 +1,5 @@
 import firestore, {firebase} from '@react-native-firebase/firestore';
+import {string} from 'prop-types';
 
 export async function fetchUserId(id) {
   try {
@@ -56,16 +57,17 @@ export async function saveSleepLog(sleepDate, sleepMin, id) {
   }
 }
 
-export async function SaveStepsLog(stepsDate, steps, id) {
+export async function SaveStepsLog(stepsDate, steps, id, string) {
   try {
     const stepsData = {
       date: stepsDate,
       value: steps,
       user_id: id,
+      
     };
     const res = await firestore()
       .collection('fitbit_steps')
-      .doc(stepsDate + '-' + id)
+      .doc(string + '-' + id)
       .set(stepsData);
   } catch (error) {
     console.error(error);
@@ -93,18 +95,16 @@ export async function fetchSleepLog(sleepDate, id) {
 }
 
 export async function fetchStepsLog(stepsDate, id) {
-
   const date = new Date();
-    let day = date.getDate();
-    let month = date.getMonth() + 1;
-    let year = date.getFullYear();
-    let currentDate = `${year}-${month}-${day}`;
+  let day = date.getDate();
+  let month = date.getMonth() + 1;
+  let year = date.getFullYear();
+  let currentDate = `${year}-${month}-${day}`;
 
   try {
-  
     var response = await firestore()
       .collection('fitbit_steps')
-      .doc("2022-11-22"+ '-' + id)
+      .doc('2022-11-22' + '-' + id)
       .get();
     //console.log(sleepLog);
     if (!response.exists) {
@@ -112,13 +112,8 @@ export async function fetchStepsLog(stepsDate, id) {
       return;
     } else {
       console.log(response.data());
-
-
     }
   } catch (error) {
     console.error(error);
   }
 }
-
-
-
