@@ -21,6 +21,8 @@ import {
   postSomething,
   getActivity,
   putSomething,
+  listActivity,
+  testActivity,
 } from '../components/PolarApi';
 
 const Dashboard = ({navigation}) => {
@@ -44,7 +46,7 @@ const Dashboard = ({navigation}) => {
   const [endTime, setEndTime] = useState();
   const [loading, setLoading] = useState(true);
 
-  const [userId, setUserId] = useState('4');
+  const [userId, setUserId] = useState('1');
   const [accessToken, setAccessToken] = useState('');
 
   useEffect(() => {
@@ -110,6 +112,9 @@ const Dashboard = ({navigation}) => {
           onPress={() => fetchAccessTokenP(userId)}></Button>
         <Button title="polar sleep" onPress={() => getSleep(userId)}></Button>
         <Button title="Kives" onPress={() => getSleepDataFit(userId)}></Button>
+        <Button title="Activities" onPress={() => getActivity(userId)}></Button>
+
+        
       </View>
 
       <View>

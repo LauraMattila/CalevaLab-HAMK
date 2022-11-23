@@ -56,3 +56,34 @@ export async function createSleep(sleepDate, sleepMin, id) {
     console.error(error);
   }
 }
+
+export async function createSteps(stepsDate, steps, id) {
+    try {
+      const stepData = {
+        date: stepsDate,
+        steps: steps,
+        userId: id,
+      };
+      const ref = await firestore()
+        .collection('polar_steps')
+        .doc(stepsDate + '-' + id)
+        .set(stepData);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  export async function createCalories(caloriesDate, calories, id) {
+    try {
+      const caloriesData = {
+        caloriesDate: caloriesDate,
+        calories: calories,
+        userId: id,
+      };
+      const ref = await firestore()
+        .collection('polar_calories')
+        .doc(caloriesDate + '-' + id)
+        .set(caloriesData);
+    } catch (error) {
+      console.error(error);
+    }
+  }

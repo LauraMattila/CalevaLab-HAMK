@@ -1,6 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import firestore, {firebase} from '@react-native-firebase/firestore';
-import {fetchUserIdP, fetchAccessTokenP, createSleep} from '../db/PolarDb';
+import {
+  fetchUserIdP,
+  fetchAccessTokenP,
+  createSleep,
+  createSteps,
+  createCalories,
+} from '../db/PolarDb';
 
 export async function getSleep(id) {
   try {
@@ -35,12 +41,15 @@ export async function getSleep(id) {
   }
 }
 
+//Posts the transaction id
 export async function postSomething(id) {
   try {
     const accessTokenP = await fetchAccessTokenP(id);
     const userId = await fetchUserIdP(id);
     const response = await fetch(
-      'https://www.polaraccesslink.com/v3/users/'+userId+'/activity-transactions',
+      'https://www.polaraccesslink.com/v3/users/' +
+        userId +
+        '/activity-transactions',
       {
         method: 'POST',
         headers: {
@@ -61,82 +70,17 @@ export async function postSomething(id) {
   }
 }
 
-
-//Does not work yet!
+//Puts all the links of activity into a list
 export async function listActivity(id) {
-    try {
-      const accessTokenP = await fetchAccessTokenP(id);
-      const userId = await fetchUserIdP(id);
-      const transactionId = await postSomething(id);
-      const response = await fetch(
-        'https://www.polaraccesslink.com/v3/users/'+userId+'/activity-transactions/'+transactionId,
-        {
-          method: 'GET',
-          headers: {
-            Accept: 'application/json',
-  
-            Authorization: 'Bearer ' + accessTokenP,
-          },
-        },
-      );
-  
-       
-      const json = await response.json();
-      //const parseJson = JSON.parse(json);
-      //const activityId = parseJson[parseJson.length - 1];
-
-      json['activity-log'].forEach(item => {
-        const activityLink = item;
-        console.log(activityLink);
-      });
-      return activityLink;
-      //return activityId;
-   
-        
-    } catch (error) {
-      console.log(error);
-    }
-  }
-       
-
-export async function putSomething() {
   try {
     const accessTokenP = await fetchAccessTokenP(id);
     const userId = await fetchUserIdP(id);
     const transactionId = await postSomething(id);
     const response = await fetch(
-      'https://www.polaraccesslink.com/v3/users/'+userId+'/activity-transactions/' +
+      'https://www.polaraccesslink.com/v3/users/' +
+        userId +
+        '/activity-transactions/' +
         transactionId,
-      {
-        method: 'PUT',
-        headers: {
-          Authorization: 'Bearer ' + accessTokenP,
-        },
-      },
-    );
-
-    const json = await response.json();
-
-    console.log();
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-
-
-
-
-
-//needs listActivity() to work
-export async function getActivity(id) {
-  try {
-
-    const activityId = await listActivity(id);
-    const accessTokenP = await fetchAccessTokenP(id);
-    const userId = await fetchUserIdP(id);
-    const transactionId = await postSomething(id);
-    const response = await fetch('https://www.polaraccesslink.com/v3/users/59404981/activity-transactions',
       {
         method: 'GET',
         headers: {
@@ -149,19 +93,85 @@ export async function getActivity(id) {
 
     const json = await response.json();
 
-    console.log(json);
+    const activityLinkList = [];
+    json['activity-log'].forEach(item => {
+      activityLinkList.push(item);
+    });
+    return activityLinkList;
   } catch (error) {
     console.log(error);
   }
 }
-export async function allAtOnce() {
-    try {
 
-       await postSomething();
-       await listActivity();
+export async function putSomething(id) {
+  try {
+    const accessTokenP = await fetchAccessTokenP(id);
+    const userId = await fetchUserIdP(id);
+    const activityLink = await listActivity(id);
+
+    const response = await fetch(activityLink, {
+      method: 'PUT',
+      headers: {
+        Authorization: 'Bearer ' + accessTokenP,
+      },
+    });
+
+    const json = await response.json();
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+//needs listActivity() to work
+export async function getActivity(id) {
+  try {
+    const accessTokenP = await fetchAccessTokenP(id);
+    const userId = await fetchUserIdP(id);
+    const activityLink = await listActivity(id);
+
+    const activitySummary = [];
+
+    for (const link of activityLink){
+        const jsonObj = await activity(link, accessTokenP, id);
         
+        activitySummary.push(jsonObj);
+        
+    }
+    console.log(activitySummary.date);
+    //console.log(activitySummary.date);
+  } catch (error) {
+    console.log(error);
+  }
+}
 
-    } catch (error) {
-        console.log(error);
-      }
+export async function activity(link, accessToken, id) {
+  try {
+    const accessTokenP = accessToken;
+    const response = await fetch(link, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+
+        Authorization: 'Bearer ' + accessTokenP,
+      },
+    });
+
+    const json = await response.json();
+
+    const steps = json['active-steps'];
+    const date = json.date;
+    const calories = json.calories;
+
+    var obj = new Object();
+    obj.date = date;
+    obj.steps = steps;
+    obj.calories = calories;
+    var jsonString = JSON.stringify(obj);
+
+    //console.log('Json Objekti '+ jsonString);
+    //console.log(json);
+    return jsonString;
+  } catch (error) {
+    console.log(error);
+  }
 }
