@@ -13,7 +13,10 @@ import {
 } from 'react-native';
 
 import firestore from '@react-native-firebase/firestore';
-import {fetchUserId, fetchAccessToken, fetchSleepLog} from '../db/FitbitDb';
+
+import {fetchUserId, fetchAccessToken, fetchStepsLog} from '../db/FitbitDb';
+
+
 import {fetchUserIdP, fetchAccessTokenP} from '../db/PolarDb';
 import {getSleepDataFit, getStepsFit} from '../components/FitbitApi';
 import {
@@ -37,6 +40,7 @@ const Dashboard = ({navigation}) => {
 
   const [user, setUser] = useState('');
   const ref = firestore().collection('users');
+  const ref2 = firestore().collection('fitbit_steps');
   const [summary, setSummary] = useState();
   const [sleep, setSleep] = useState();
   const [users, setUsers] = useState([]);
@@ -48,6 +52,10 @@ const Dashboard = ({navigation}) => {
   const [userId, setUserId] = useState('4');
   const [date, setDate]= useState('2022-11-18');
   const [accessToken, setAccessToken] = useState('');
+  
+  
+ 
+ 
 
   useEffect(() => {
     //getSleep();
