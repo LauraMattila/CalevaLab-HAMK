@@ -131,14 +131,38 @@ export async function getActivity(id) {
 
     const activitySummary = [];
 
-    for (const link of activityLink){
-        const jsonObj = await activity(link, accessTokenP, id);
-        
-        activitySummary.push(jsonObj);
-        
+    for (const link of activityLink) {
+      const jsonObj = await activity(link, accessTokenP, id);
+
+      activitySummary.push(jsonObj);
     }
-    console.log(activitySummary.date);
-    //console.log(activitySummary.date);
+
+    activitySummary.sort(function (a, b) {
+      return new Date(a.date) - new Date(b.date);
+    });
+
+    var index = 0;
+
+    activitySummary.forEach(item => {
+      var date = item['date'];
+      var calories = item['calories'];
+      var steps = item['steps'];
+      index += 1;
+      console.log(activitySummary[index].date);
+      if (activitySummary[index]!== undefined) {
+        console.log('hevosenseiväs ')
+      if (date == activitySummary[index].date) {
+        console.log('kahen kilon siika ')
+        return;
+      }
+    }
+
+      console.log(item);
+      createSteps(date, steps, id);
+      createCalories(date, calories, id);
+    });
+
+    console.log(activitySummary);
   } catch (error) {
     console.log(error);
   }

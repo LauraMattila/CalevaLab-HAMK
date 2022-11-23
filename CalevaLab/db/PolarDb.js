@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import firestore, {firebase} from '@react-native-firebase/firestore';
+import { getTimestamp } from 'react-native-reanimated/lib/reanimated2/core';
 
 export async function fetchUserIdP(id) {
   try {
@@ -63,6 +64,7 @@ export async function createSteps(stepsDate, steps, id) {
         date: stepsDate,
         steps: steps,
         userId: id,
+        
       };
       const ref = await firestore()
         .collection('polar_steps')
@@ -75,7 +77,7 @@ export async function createSteps(stepsDate, steps, id) {
   export async function createCalories(caloriesDate, calories, id) {
     try {
       const caloriesData = {
-        caloriesDate: caloriesDate,
+        date: caloriesDate,
         calories: calories,
         userId: id,
       };
