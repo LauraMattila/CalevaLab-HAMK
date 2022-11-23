@@ -55,3 +55,21 @@ export async function saveSleepLog(sleepDate, sleepMin, id) {
       };
 
 
+      export async function SaveStepsLog(stepsDate, steps, id) {
+        try {
+          const stepsData = {
+            date: stepsDate,
+            value: steps,
+            user_id: id,
+          };
+          const res = await firestore()
+            .collection('fitbit_steps')
+            .doc(stepsDate + '-' + id)
+            .set(stepsData);
+            } catch(error) {
+              console.error(error);
+            }
+          };
+    
+
+
