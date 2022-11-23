@@ -15,7 +15,7 @@ import {
 import firestore from '@react-native-firebase/firestore';
 import {fetchUserId, fetchAccessToken, fetchSleepLog} from '../db/FitbitDb';
 import {fetchUserIdP, fetchAccessTokenP} from '../db/PolarDb';
-import {getSleepDataFit} from '../components/FitbitApi';
+import {getSleepDataFit, getStepsFit} from '../components/FitbitApi';
 import {
   getSleep,
   postSomething,
@@ -43,6 +43,7 @@ const Dashboard = ({navigation}) => {
   const [startTime, setStartTime] = useState();
   const [endTime, setEndTime] = useState();
   const [loading, setLoading] = useState(true);
+
 
   const [userId, setUserId] = useState('4');
   const [date, setDate]= useState('2022-11-18');
@@ -112,6 +113,8 @@ const Dashboard = ({navigation}) => {
         <Button title="polar sleep" onPress={() => getSleep(userId)}></Button>
         <Button title="Kives" onPress={() => getSleepDataFit(userId)}></Button>
         <Button title='Palli' onPress={() => fetchSleepLog(date, userId)}></Button>
+        <Button title="tissi" onPress={() => getStepsFit(userId)}></Button>
+
       </View>
 
       <View>
