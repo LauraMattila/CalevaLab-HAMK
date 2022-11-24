@@ -159,6 +159,7 @@ export async function fetchStepsLog(id) {
   try {
     var response = await firestore()
       .collection('fitbit_steps')
+      .where('user_id','==', id)
       .where('date', '>=', (startdate))
       .get();
 
