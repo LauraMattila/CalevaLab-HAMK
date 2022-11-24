@@ -93,8 +93,8 @@ export async function fetchStepsP(id) {
   
       //const sleepListP = []
   
-      sleepMins.forEach(doc => {
-        result = doc.data().sleepMin;
+      steps.forEach(doc => {
+        result = doc.data().steps;
         console.log(doc.data())
         //sleepListP.push(doc.data());
       });
@@ -118,7 +118,7 @@ export async function fetchStepsP(id) {
   
   
        
-      if (steps.empty) {
+      if (calories.empty) {
         console.log('EI ole');
         return;
       }

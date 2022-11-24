@@ -135,17 +135,19 @@ export async function getActivity(id) {
     //loop start
     while(true) {
     const transactionId = await postSomething(id);
+    console.log("Transaction ID: " + transactionId);
     if (transactionId == undefined) {
+        console.log("No new data available")
         return;
     }
     const activityLink = await listActivity(id, transactionId);
     
     const activitySummary = [];
-
+    console.log(activityLink);
     for (const link of activityLink) {
-      const jsonObj = await activity(link, accessTokenP, id);
+      const jsonObj = await activity(link, accessTokenP);
 
-      activitySummary.push(...jsonObj);
+      activitySummary.push(jsonObj);
     }
 
     activitySummary.sort(function (a, b) {
@@ -180,7 +182,7 @@ export async function getActivity(id) {
   }
 }
 
-export async function activity(link, accessToken, id) {
+export async function activity(link, accessToken) {
   try {
     const accessTokenP = accessToken;
     const response = await fetch(link, {
@@ -194,18 +196,6 @@ export async function activity(link, accessToken, id) {
 
     const json = await response.json();
 
-    const steps = json['active-steps'];
-    const date = json.date;
-    const calories = json.calories;
-
-    var obj = new Object();
-    obj.date = date;
-    obj.steps = steps;
-    obj.calories = calories;
-    var jsonString = JSON.stringify(obj);
-
-    //console.log('Json Objekti '+ jsonString);
-    //console.log(json);
     return json;
   } catch (error) {
     console.log(error);
