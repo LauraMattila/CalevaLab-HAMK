@@ -1,3 +1,4 @@
+import { firebase } from '@react-native-firebase/firestore';
 import React, {useState, useEffect} from 'react';
 
 import {

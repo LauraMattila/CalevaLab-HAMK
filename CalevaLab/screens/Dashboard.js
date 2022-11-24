@@ -62,7 +62,7 @@ const Dashboard = ({navigation}) => {
   const [loading, setLoading] = useState(true);
 
 
-  const [userId, setUserId] = useState('4');
+  const [userId, setUserId] = useState('3');
 
 
   const [accessToken, setAccessToken] = useState('');
@@ -129,7 +129,7 @@ const Dashboard = ({navigation}) => {
         </Col>
       </Grid>
 
-      {/* <Button title="Fitbit id" onPress={() => fetchUserId(userId)}></Button>
+       {/* <Button title="Fitbit id" onPress={() => fetchUserId(userId)}></Button>
         <Button title="polarId" onPress={() => fetchUserIdP(userId)}></Button>
         <Button
           title="polarAccess"
@@ -160,7 +160,7 @@ const Dashboard = ({navigation}) => {
           onPress={() => fetchSleepLog(userId)}></Button>
         <Button
           title="fitbit calories from db"
-          onPress={() => fetchCaloriesLog(userId)}></Button> */}
+          onPress={() => fetchCaloriesLog(userId)}></Button>  */}
 
       <View>
         <FlatList

@@ -44,7 +44,7 @@ export async function fetchAccessToken(id) {
 export async function saveSleepLog(sleepDate, sleepMin, id) {
   try {
     const sleepData = {
-      date: sleepDate,
+      date: new Date(sleepDate),
       sleep_min: sleepMin,
       user_id: id,
     };
@@ -101,6 +101,7 @@ export async function fetchCaloriesLog(id) {
   try {
     var response = await firestore()
       .collection('fitbit_calories')
+      .where('user_id','==', id)
       .where('date', '>=', startdate)
       .get();
 
@@ -119,15 +120,15 @@ export async function fetchCaloriesLog(id) {
   }
 }
 
-export async function fetchSleepLog(sleepDate, id) {
+export async function fetchSleepLog(id) {
   const today = new Date();
   const startdate = new Date();
   startdate.setDate(today.getDate() - 7);
   try {
-;
     var response = await firestore()
       .collection('fitbit_sleep')
-      .where('date', '>=', startdate)
+      .where('user_id','==', id)
+      .where('date', '>=', (startdate))
       .get();
 
     response.forEach(doc => {
