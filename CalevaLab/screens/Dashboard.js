@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import type {Node} from 'react';
 //import Icon from 'react-native-vector-icons/AntDesign';
 import SwitchSelector from 'react-native-switch-selector';
 import {
@@ -26,6 +25,8 @@ import {
   postSomething,
   getActivity,
   putSomething,
+  listActivity,
+  testActivity,
 } from '../components/PolarApi';
 
 const Dashboard = ({navigation}) => {
