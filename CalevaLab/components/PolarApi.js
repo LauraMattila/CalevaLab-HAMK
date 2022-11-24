@@ -71,16 +71,16 @@ export async function postSomething(id) {
 }
 
 //Puts all the links of activity into a list
-export async function listActivity(id) {
+export async function listActivity(id, transaction) {
   try {
     const accessTokenP = await fetchAccessTokenP(id);
     const userId = await fetchUserIdP(id);
-    const transactionId = await postSomething(id);
+    
     const response = await fetch(
       'https://www.polaraccesslink.com/v3/users/' +
         userId +
         '/activity-transactions/' +
-        transactionId,
+        transaction,
       {
         method: 'GET',
         headers: {
@@ -103,13 +103,18 @@ export async function listActivity(id) {
   }
 }
 
-export async function putSomething(id) {
+export async function putSomething(id, transaction) {
   try {
     const accessTokenP = await fetchAccessTokenP(id);
     const userId = await fetchUserIdP(id);
-    const activityLink = await listActivity(id);
+    
 
-    const response = await fetch(activityLink, {
+    const response = await fetch(
+      'https://www.polaraccesslink.com/v3/users/' +
+        userId +
+        '/activity-transactions/' +
+        transaction,
+      {
       method: 'PUT',
       headers: {
         Authorization: 'Bearer ' + accessTokenP,
@@ -127,8 +132,14 @@ export async function getActivity(id) {
   try {
     const accessTokenP = await fetchAccessTokenP(id);
     const userId = await fetchUserIdP(id);
-    const activityLink = await listActivity(id);
-
+    //loop start
+    while(true) {
+    const transactionId = await postSomething(id);
+    if (transactionId == undefined) {
+        return;
+    }
+    const activityLink = await listActivity(id, transactionId);
+    
     const activitySummary = [];
 
     for (const link of activityLink) {
@@ -144,11 +155,11 @@ export async function getActivity(id) {
     var index = 0;
 
     activitySummary.forEach(item => {
-      var date = item['date'];
-      var calories = item['calories'];
-      var steps = item['steps'];
+      var date = item.date;
+      var calories = item.calories;
+      var steps = item['active-steps'];
       index += 1;
-      console.log(steps);
+
       if (activitySummary[index]!== undefined) {
         console.log('hevosenseiväs ')
       if (date == activitySummary[index].date) {
@@ -156,12 +167,13 @@ export async function getActivity(id) {
         return;
       }
     }
-
       console.log(item);
       createSteps(date, steps, id);
       createCalories(date, calories, id);
     });
-
+    putSomething(id, transactionId);
+  }
+    //loop end
     console.log(activitySummary);
   } catch (error) {
     console.log(error);
@@ -194,7 +206,7 @@ export async function activity(link, accessToken, id) {
 
     //console.log('Json Objekti '+ jsonString);
     //console.log(json);
-    return jsonString;
+    return json;
   } catch (error) {
     console.log(error);
   }

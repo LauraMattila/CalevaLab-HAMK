@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import type {Node} from 'react';
 //import Icon from 'react-native-vector-icons/AntDesign';
 import SwitchSelector from 'react-native-switch-selector';
 import {
@@ -13,9 +12,13 @@ import {
 } from 'react-native';
 
 import firestore from '@react-native-firebase/firestore';
-import {fetchUserId, fetchAccessToken} from '../db/FitbitDb';
+
 import {fetchUserIdP, fetchAccessTokenP, fetchSleepP, fetchStepsP} from '../db/PolarDb';
-import {getSleepDataFit} from '../components/FitbitApi';
+
+import {fetchUserId, fetchAccessToken, fetchStepsLog,fetchSleepLog } from '../db/FitbitDb';
+
+import {getSleepDataFit, getStepsFit, getCalsFit} from '../components/FitbitApi';
+
 import {
   getSleep,
   postSomething,
@@ -39,6 +42,7 @@ const Dashboard = ({navigation}) => {
 
   const [user, setUser] = useState('');
   const ref = firestore().collection('users');
+  const ref2 = firestore().collection('fitbit_steps');
   const [summary, setSummary] = useState();
   const [sleep, setSleep] = useState();
   const [users, setUsers] = useState([]);
@@ -46,8 +50,20 @@ const Dashboard = ({navigation}) => {
   const [endTime, setEndTime] = useState();
   const [loading, setLoading] = useState(true);
 
-  const [userId, setUserId] = useState('1');
+
+  const [userId, setUserId] = useState('4');
+
+  
+  const [date, setDate]= useState("");
   const [accessToken, setAccessToken] = useState('');
+  
+  
+ 
+ 
+
+
+
+
 
 
 
@@ -100,20 +116,26 @@ const Dashboard = ({navigation}) => {
       </View>
 
       <View style={styles.app}>
-        <Button title="perse" onPress={() => fetchUserId(userId)}></Button>
+        <Button title="Fitbit id" onPress={() => fetchUserId(userId)}></Button>
         <Button title="polarId" onPress={() => fetchUserIdP(userId)}></Button>
         <Button
           title="polarAccess"
           onPress={() => fetchAccessTokenP(userId)}></Button>
+
         <Button title="Set polar sleep" onPress={() => getSleep(userId)}></Button>
-        <Button title="Kives" onPress={() => getSleepDataFit(userId)}></Button>
         <Button title="POlar Activities" onPress={() => getActivity(userId)}></Button>
         <Button title="Get polar Sleep" onPress={() => fetchSleepP(userId)}></Button>
         <Button title="Get polar steps" onPress={() => fetchStepsP(userId)}></Button>
 
+        <Button title="polar sleep" onPress={() => getSleep(userId)}></Button>
+
+        <Button title="fitbit sleep" onPress={() => getSleepDataFit(userId)}></Button>
+        <Button title='fitbit sleep log' onPress={() => fetchSleepLog(date, userId)}></Button>
+        <Button title="fitbit steps" onPress={() => getStepsFit(userId)}></Button>
+        <Button title="fitbit steps log" onPress={() => fetchStepsLog(userId)}></Button>
+        <Button title="FitBit Calories" onPress={() => getCalsFit(userId)}></Button>
 
 
-        
       </View>
 
       <View>
