@@ -69,7 +69,7 @@ export async function getStepsFit(id) {
     let year = enddate.getFullYear();
     console.log(enddate)
     const startdate = new Date();
-    startdate.setDate(enddate.getDate() - 2);
+    startdate.setDate(enddate.getDate() - 5);
 
     const URL =
       'https://api.fitbit.com/1.2/user/' +
@@ -95,15 +95,16 @@ export async function getStepsFit(id) {
       },
     });
     const json = await response.json();
-   
+    console.log(response);
     
     json['activities-steps'].forEach(item => {
       const string = item.dateTime;
       const stepsDate =new Date(string);
       const steps = item.value;
       SaveStepsLog(stepsDate, steps, id, string);
-      
     });
+
+
   } catch (error) {
     console.error(error);
   }
