@@ -94,24 +94,47 @@ export async function fetchSleepLog(sleepDate, id) {
   }
 }
 
-export async function fetchStepsLog(stepsDate, id) {
-  const date = new Date();
-  let day = date.getDate();
-  let month = date.getMonth() + 1;
-  let year = date.getFullYear();
-  let currentDate = `${year}-${month}-${day}`;
+
+export async function fetchStepsLog(id) {
+  
+  const today = new Date();
+  let day = today.getDate();
+  let month = today.getMonth() + 1;
+  let year = today.getFullYear();
+  
+
+  const startdate = new Date();
+  startdate.setDate(today.getDate()-5);
+  
+  console.log("TODAY:     "+today);
+  console.log("STEPSDATE:     "+startdate);
+  console.log("ID:     "+id);
+
 
   try {
     var response = await firestore()
       .collection('fitbit_steps')
+
+      
+      //.where('date', '==', (startdate))
+      //.where('date', '>', (today.toISOString().split('T')[0]))
+      .doc((startdate.toISOString().split('T')[0]) + '-' + id)
+
       .doc('2022-11-22' + '-' + id)
+
       .get();
-    //console.log(sleepLog);
+
     if (!response.exists) {
       console.log('EI ole');
       return;
     } else {
       console.log(response.data());
+
+      //const responseList  = [];
+
+      // responseList.push(response.data());
+      //console.log(Object.keys(responseList));
+
     }
   } catch (error) {
     console.error(error);
