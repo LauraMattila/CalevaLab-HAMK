@@ -21,6 +21,7 @@ import Athletecard from './screens/Athletecard';
 const App: () => Node = () => {
 
 
+
   const Drawer = createDrawerNavigator();
 
   return (
@@ -32,9 +33,8 @@ const App: () => Node = () => {
       </Drawer.Navigator>
     </NavigationContainer>
 
-    
-  
   );
 };
 
 export default App;
+
