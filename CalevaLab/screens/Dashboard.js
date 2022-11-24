@@ -1,7 +1,10 @@
 import React, {useState, useEffect, Component} from 'react';
 //import Icon from 'react-native-vector-icons/AntDesign';
 import SwitchSelector from 'react-native-switch-selector';
-import {Col, Row, Grid} from 'react-native-easy-grid';
+import {Provider as PaperProvider} from 'react-native-paper';
+import {DataTable} from 'react-native-paper';
+import Moment from 'moment';
+
 import {
   StyleSheet,
   Text,
@@ -44,6 +47,7 @@ import {
   testActivity,
 } from '../components/PolarApi';
 
+
 const Dashboard = ({navigation}) => {
   const options = [
     {label: 'days', value: 'days'},
@@ -66,76 +70,127 @@ const Dashboard = ({navigation}) => {
   const [endTime, setEndTime] = useState();
   const [loading, setLoading] = useState(true);
 
-
-
-  const [userId, setUserId] = useState('1');
-
+  const [userId, setUserId] = useState('4');
 
   const [accessToken, setAccessToken] = useState('');
 
-  useEffect(() => {
-    return ref.onSnapshot(querySnapshot => {
-      const list = [];
-      querySnapshot.forEach(doc => {
-        const {fname, lname} = doc.data();
-        list.push({
-          id: doc.id,
-          fname,
-          lname,
-        });
-      });
+  var today = new Date();
+  var startdate = new Date();
+  startdate.setDate(today.getDate() - 7);
 
-      setUsers(list);
-      if (loading) {
-        setLoading(false);
-      }
-    });
-  }, []);
+  var getDateArray = function (startdate, today) {
+    var arr = new Array(),
+      dt = new Date(startdate);
+
+    while (dt <= today) {
+      arr.push(new Date(dt));
+      dt.setDate(dt.getDate() + 1);
+    }
+
+    return arr;
+  };
+
+  var dateArr = getDateArray(startdate, today);
+
+  var [day1, day2, day3, day4, day5, day6, day7] = dateArr;
+
+
+  console.log(day7);
+  
+ 
 
   return (
-    <View>
-      <Text style={styles.header}>Welcome Back!</Text>
+    <PaperProvider>
+      <View>
+        <Button title="Fitbit id" onPress={() => getDateArray()}></Button>
+        <Text style={styles.header}>Welcome Back!</Text>
 
-      <View style={styles.container}>
-        <View>
-          <Text style={styles.name}>
+        <View style={styles.container}>
+          <View>
+            <Text style={styles.name}>
+
             {firstname} {lastname}
-          </Text>
+          
+            </Text>
 
-          <Text style={styles.info}>
-            {age} | {gender}
-          </Text>
+            <Text style={styles.info}>
+              {age} | {gender}
+            </Text>
+          </View>
         </View>
-      </View>
 
-      <View style={styles.sele}>
-        <View style={styles.selection}>
-          <Text style={styles.header}>Activity Logs</Text>
+        <View style={styles.sele}>
+          <View style={styles.selection}>
+            <Text style={styles.header}>Activity Logs</Text>
+          </View>
+          <View style={styles.selector}>
+            <SwitchSelector
+              options={options}
+              initial={0}
+              onPress={value => console.log(`Selected: ${value}`)}
+            />
+          </View>
         </View>
-        <View style={styles.selector}>
-          <SwitchSelector
-            options={options}
-            initial={0}
-            onPress={value => console.log(`Selected: ${value}`)}
-          />
-        </View>
-      </View>
 
-      <Grid>
-        <Col>
-          <Text>1</Text>
-        </Col>
-        <Col>
-          <Row>
-            <Text>2</Text>
-          </Row>
-          <Row>
-            <Text>3</Text>
-          </Row>
-        </Col>
-      </Grid>
+        <DataTable>
+          <DataTable.Header>
+            <DataTable.Title>Day</DataTable.Title>
+            <DataTable.Title numeric>Sleep</DataTable.Title>
+            <DataTable.Title numeric>Steps</DataTable.Title>
+            <DataTable.Title numeric>Calories</DataTable.Title>
+          </DataTable.Header>
 
-      {/* <Button title="Fitbit id" onPress={() => fetchUserId(userId)}></Button>
+          <DataTable.Row>
+            <DataTable.Cell>{Moment(day7).format("DD.MM.")}</DataTable.Cell>
+            <DataTable.Cell numeric>237</DataTable.Cell>
+            <DataTable.Cell numeric>8.0</DataTable.Cell>
+            <DataTable.Cell numeric>8.0</DataTable.Cell>
+          </DataTable.Row>
+
+          <DataTable.Row>
+            <DataTable.Cell>{Moment(day6).format("DD.MM.")}</DataTable.Cell>
+            <DataTable.Cell numeric>159</DataTable.Cell>
+            <DataTable.Cell numeric>6.0</DataTable.Cell>
+            <DataTable.Cell numeric>8.0</DataTable.Cell>
+          </DataTable.Row>
+
+          <DataTable.Row>
+            <DataTable.Cell>{Moment(day5).format(("DD.MM."))}</DataTable.Cell>
+            <DataTable.Cell numeric>237</DataTable.Cell>
+            <DataTable.Cell numeric>8.0</DataTable.Cell>
+            <DataTable.Cell numeric>8.0</DataTable.Cell>
+          </DataTable.Row>
+
+          <DataTable.Row>
+            <DataTable.Cell>{Moment(day4).format("DD.MM.")}</DataTable.Cell>
+            <DataTable.Cell numeric>237</DataTable.Cell>
+            <DataTable.Cell numeric>8.0</DataTable.Cell>
+            <DataTable.Cell numeric>8.0</DataTable.Cell>
+          </DataTable.Row>
+
+          <DataTable.Row>
+            <DataTable.Cell>{Moment(day3).format("DD.MM.")}</DataTable.Cell>
+            <DataTable.Cell numeric>237</DataTable.Cell>
+            <DataTable.Cell numeric>8.0</DataTable.Cell>
+            <DataTable.Cell numeric>8.0</DataTable.Cell>
+          </DataTable.Row>
+
+          <DataTable.Row>
+            <DataTable.Cell>{Moment(day2).format("DD.MM.")}</DataTable.Cell>
+            <DataTable.Cell numeric>237</DataTable.Cell>
+            <DataTable.Cell numeric>8.0</DataTable.Cell>
+            <DataTable.Cell numeric>8.0</DataTable.Cell>
+          </DataTable.Row>
+
+          <DataTable.Row>
+            <DataTable.Cell>{Moment(day1).format("DD.MM.")}</DataTable.Cell>
+            <DataTable.Cell numeric>237</DataTable.Cell>
+            <DataTable.Cell numeric>8.0</DataTable.Cell>
+            <DataTable.Cell numeric>8.0</DataTable.Cell>
+          </DataTable.Row>
+        </DataTable>
+
+        {/* <Button title="Fitbit id" onPress={() => fetchUserId(userId)}></Button>
         <Button title="polarId" onPress={() => fetchUserIdP(userId)}></Button>
         <Button
           title="polarAccess"
@@ -174,23 +229,8 @@ const Dashboard = ({navigation}) => {
         <Button
           title="fitbit calories from db"
           onPress={() => fetchCaloriesLog(userId)}></Button> */}
-
-      <View>
-        <FlatList
-          style={{flex: 1}}
-          data={users}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={item => (
-            <View>
-              <Text>
-                {' '}
-                {item.item.user_id} {item.item.sleepMin} {item.item.sleepDate}{' '}
-              </Text>
-            </View>
-          )}
-        />
       </View>
-    </View>
+    </PaperProvider>
   );
 };
 
@@ -256,6 +296,11 @@ const styles = StyleSheet.create({
   },
   TableText: {
     margin: 10,
+  },
+
+  row: {
+    height: 40,
+    backgroundColor: 'red',
   },
 });
 
