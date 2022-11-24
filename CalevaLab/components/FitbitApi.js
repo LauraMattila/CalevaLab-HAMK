@@ -102,6 +102,7 @@ export async function getStepsFit(id) {
       const stepsDate =new Date(string);
       const steps = item.value;
       SaveStepsLog(stepsDate, steps, id, string);
+
     });
 
 

@@ -63,6 +63,7 @@ export async function SaveStepsLog(stepsDate, steps, id, string) {
       date: stepsDate,
       value: steps,
       user_id: id,
+      
     };
     const res = await firestore()
       .collection('fitbit_steps')
@@ -93,6 +94,7 @@ export async function fetchSleepLog(sleepDate, id) {
   }
 }
 
+
 export async function fetchStepsLog(id) {
   
   const today = new Date();
@@ -108,13 +110,18 @@ export async function fetchStepsLog(id) {
   console.log("STEPSDATE:     "+startdate);
   console.log("ID:     "+id);
 
+
   try {
     var response = await firestore()
       .collection('fitbit_steps')
+
       
       //.where('date', '==', (startdate))
       //.where('date', '>', (today.toISOString().split('T')[0]))
       .doc((startdate.toISOString().split('T')[0]) + '-' + id)
+
+      .doc('2022-11-22' + '-' + id)
+
       .get();
 
     if (!response.exists) {
@@ -122,10 +129,12 @@ export async function fetchStepsLog(id) {
       return;
     } else {
       console.log(response.data());
+
       //const responseList  = [];
 
       // responseList.push(response.data());
       //console.log(Object.keys(responseList));
+
     }
   } catch (error) {
     console.error(error);
