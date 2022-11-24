@@ -25,6 +25,7 @@ const App: () => Node = () => {
   const Drawer = createDrawerNavigator();
 
   return (
+    
     <NavigationContainer>
       <Drawer.Navigator>
         <Drawer.Screen name="Dashboard" component={Dashboard}/>
