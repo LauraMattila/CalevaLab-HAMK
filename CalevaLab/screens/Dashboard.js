@@ -13,13 +13,12 @@ import {
 
 import firestore from '@react-native-firebase/firestore';
 
+import {fetchUserIdP, fetchAccessTokenP, fetchSleepP, fetchStepsP} from '../db/PolarDb';
 
 import {fetchUserId, fetchAccessToken, fetchStepsLog,fetchSleepLog } from '../db/FitbitDb';
 
-
-
-import {fetchUserIdP, fetchAccessTokenP} from '../db/PolarDb';
 import {getSleepDataFit, getStepsFit, getCalsFit} from '../components/FitbitApi';
+
 import {
   getSleep,
   postSomething,
@@ -64,12 +63,7 @@ const Dashboard = ({navigation}) => {
 
 
 
-  useEffect(() => {
-    //getSleep();
-    //postSomething();
-    //putSomething();
-    //getActivity();
-  }, []);
+
 
 
 
@@ -127,6 +121,12 @@ const Dashboard = ({navigation}) => {
         <Button
           title="polarAccess"
           onPress={() => fetchAccessTokenP(userId)}></Button>
+
+        <Button title="Set polar sleep" onPress={() => getSleep(userId)}></Button>
+        <Button title="POlar Activities" onPress={() => getActivity(userId)}></Button>
+        <Button title="Get polar Sleep" onPress={() => fetchSleepP(userId)}></Button>
+        <Button title="Get polar steps" onPress={() => fetchStepsP(userId)}></Button>
+
         <Button title="polar sleep" onPress={() => getSleep(userId)}></Button>
 
         <Button title="fitbit sleep" onPress={() => getSleepDataFit(userId)}></Button>
@@ -139,6 +139,7 @@ const Dashboard = ({navigation}) => {
       </View>
 
       <View>
+        
         <FlatList
           style={{flex: 1}}
           data={users}
@@ -146,8 +147,10 @@ const Dashboard = ({navigation}) => {
           renderItem={item => (
             <View>
               <Text>
+
+                
                 {' '}
-                {item.item.id} {item.item.fname} {item.item.lname}{' '}
+                {item.item.user_id} {item.item.sleepMin} {item.item.sleepDate}{' '}
               </Text>
             </View>
           )}

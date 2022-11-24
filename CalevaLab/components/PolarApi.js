@@ -145,7 +145,7 @@ export async function getActivity(id) {
     for (const link of activityLink) {
       const jsonObj = await activity(link, accessTokenP, id);
 
-      activitySummary.push(jsonObj);
+      activitySummary.push(...jsonObj);
     }
 
     activitySummary.sort(function (a, b) {
@@ -159,6 +159,7 @@ export async function getActivity(id) {
       var calories = item.calories;
       var steps = item['active-steps'];
       index += 1;
+
       if (activitySummary[index]!== undefined) {
         console.log('hevosenseiväs ')
       if (date == activitySummary[index].date) {
