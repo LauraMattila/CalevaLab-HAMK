@@ -6,6 +6,8 @@ import {
   fetchStepsLog,
   saveSleepLog,
   SaveStepsLog,
+  SaveCaloriesLog,
+  fetchCaloriesLog
 } from '../db/FitbitDb';
 
 
@@ -159,13 +161,13 @@ export async function getCalsFit(id) {
       const caloriesDate = new Date(string);
       const calories = item.value;
       SaveCaloriesLog(caloriesDate, calories, string, id);
-      //console.log("total: "+JSON.stringify(item)+ "   date: " +item.timeDate);
+      console.log("total: "+JSON.stringify(item)+ "   date: " +item.timeDate);
 
-      //console.log('Calories: ' + item.value + '     Date: ' + item.dateTime);
+      console.log('Calories: ' + item.value + '     Date: ' + item.dateTime);
       
     });
 
-    fetchCaloriesLog(string, id)
+    //fetchCaloriesLog(string, id)
 
    
   } catch (error) {

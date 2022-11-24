@@ -15,7 +15,7 @@ import {
 import firestore from '@react-native-firebase/firestore';
 
 
-import {fetchUserId, fetchAccessToken, fetchStepsLog,fetchSleepLog} from '../db/FitbitDb';
+import {fetchUserId, fetchAccessToken, fetchStepsLog,fetchSleepLog } from '../db/FitbitDb';
 
 
 
@@ -131,6 +131,7 @@ const Dashboard = ({navigation}) => {
         <Button title="fitbit sleep" onPress={() => getSleepDataFit(userId)}></Button>
         <Button title='fitbit sleep log' onPress={() => fetchSleepLog(date, userId)}></Button>
         <Button title="fitbit steps" onPress={() => getStepsFit(userId)}></Button>
+        <Button title="fitbit steps log" onPress={() => fetchStepsLog(userId)}></Button>
         <Button title="FitBit Calories" onPress={() => getCalsFit(userId)}></Button>
 
 
