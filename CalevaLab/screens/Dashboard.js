@@ -14,12 +14,7 @@ import {
 
 import firestore from '@react-native-firebase/firestore';
 
-import {
-  fetchUserIdP,
-  fetchAccessTokenP,
-  fetchSleepP,
-  fetchStepsP,
-} from '../db/PolarDb';
+import {fetchUserIdP, fetchAccessTokenP, fetchSleepP, fetchStepsP, fetchCaloriesP} from '../db/PolarDb';
 
 import {
   fetchUserId,
@@ -67,8 +62,7 @@ const Dashboard = ({navigation}) => {
   const [loading, setLoading] = useState(true);
 
 
-
-  const [userId, setUserId] = useState('1');
+  const [userId, setUserId] = useState('3');
 
 
   const [accessToken, setAccessToken] = useState('');
@@ -135,24 +129,17 @@ const Dashboard = ({navigation}) => {
         </Col>
       </Grid>
 
-      {/* <Button title="Fitbit id" onPress={() => fetchUserId(userId)}></Button>
+       {/* <Button title="Fitbit id" onPress={() => fetchUserId(userId)}></Button>
         <Button title="polarId" onPress={() => fetchUserIdP(userId)}></Button>
         <Button
           title="polarAccess"
           onPress={() => fetchAccessTokenP(userId)}></Button>
 
-        <Button
-          title="Set polar sleep"
-          onPress={() => getSleep(userId)}></Button>
-        <Button
-          title="Polar Activities"
-          onPress={() => getActivity(userId)}></Button>
-        <Button
-          title="Get polar Sleep"
-          onPress={() => fetchSleepP(userId)}></Button>
-        <Button
-          title="Get polar steps"
-          onPress={() => fetchStepsP(userId)}></Button>
+        <Button title="Set polar sleep" onPress={() => getSleep(userId)}></Button>
+        <Button title="POlar Activities" onPress={() => getActivity(userId)}></Button>
+        <Button title="Get polar Sleep" onPress={() => fetchSleepP(userId)}></Button>
+        <Button title="Get polar steps" onPress={() => fetchStepsP(userId)}></Button>
+        <Button title="Get polar Calories" onPress={() => fetchCaloriesP(userId)}></Button>
         <Button title="polar sleep" onPress={() => getSleep(userId)}></Button>
 
         <Button
@@ -173,7 +160,7 @@ const Dashboard = ({navigation}) => {
           onPress={() => fetchSleepLog(userId)}></Button>
         <Button
           title="fitbit calories from db"
-          onPress={() => fetchCaloriesLog(userId)}></Button> */}
+          onPress={() => fetchCaloriesLog(userId)}></Button>  */}
 
       <View>
         <FlatList
