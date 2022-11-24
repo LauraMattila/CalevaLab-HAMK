@@ -13,7 +13,12 @@ import {
 } from 'react-native';
 
 import firestore from '@react-native-firebase/firestore';
-import {fetchUserId, fetchAccessToken, fetchSleepLog, fetchCaloriesLog} from '../db/FitbitDb';
+
+
+import {fetchUserId, fetchAccessToken, fetchStepsLog,fetchSleepLog} from '../db/FitbitDb';
+
+
+
 import {fetchUserIdP, fetchAccessTokenP} from '../db/PolarDb';
 import {getSleepDataFit, getStepsFit, getCalsFit} from '../components/FitbitApi';
 import {
@@ -37,6 +42,7 @@ const Dashboard = ({navigation}) => {
 
   const [user, setUser] = useState('');
   const ref = firestore().collection('users');
+  const ref2 = firestore().collection('fitbit_steps');
   const [summary, setSummary] = useState();
   const [sleep, setSleep] = useState();
   const [users, setUsers] = useState([]);
@@ -46,8 +52,14 @@ const Dashboard = ({navigation}) => {
 
 
   const [userId, setUserId] = useState('4');
-  const [date, setDate]= useState('2022-11-18');
+
+  
+  const [date, setDate]= useState("");
   const [accessToken, setAccessToken] = useState('');
+  
+  
+ 
+ 
 
 
 
@@ -115,10 +127,12 @@ const Dashboard = ({navigation}) => {
           title="polarAccess"
           onPress={() => fetchAccessTokenP(userId)}></Button>
         <Button title="polar sleep" onPress={() => getSleep(userId)}></Button>
+
         <Button title="fitbit sleep" onPress={() => getSleepDataFit(userId)}></Button>
         <Button title='fitbit sleep log' onPress={() => fetchSleepLog(date, userId)}></Button>
         <Button title="fitbit steps" onPress={() => getStepsFit(userId)}></Button>
         <Button title="FitBit Calories" onPress={() => getCalsFit(userId)}></Button>
+
 
       </View>
 
