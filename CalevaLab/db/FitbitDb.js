@@ -60,8 +60,6 @@ export async function saveSleepLog(sleepDate, sleepMin, id) {
 
           
 
-
-
 export async function SaveStepsLog(stepsDate, steps, id, string) {
   try {
     const stepsData = {
@@ -151,7 +149,7 @@ export async function fetchStepsLog(id) {
   
 
   const startdate = new Date();
-  startdate.setDate(today.getDate()-5);
+  startdate.setDate(today.getDate()-7);
   
   console.log("TODAY:     "+today);
   console.log("STEPSDATE:     "+startdate);
@@ -161,16 +159,13 @@ export async function fetchStepsLog(id) {
   try {
     var response = await firestore()
       .collection('fitbit_steps')
-
-      
-      //.where('date', '==', (startdate))
-      //.where('date', '>', (today.toISOString().split('T')[0]))
-      .doc((startdate.toISOString().split('T')[0]) + '-' + id)
-
-      .doc('2022-11-22' + '-' + id)
-
+      .where('date', '>=', (startdate))
       .get();
 
+      response.forEach(doc=> {
+        console.log(doc.data().date.toDate());
+      })
+      
     if (!response.exists) {
       console.log('EI ole');
       return;
