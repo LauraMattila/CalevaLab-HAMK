@@ -76,7 +76,10 @@ export async function saveSleepLog(sleepDate, sleepMin, id) {
         try {
           console.log(id);
           console.log(sleepDate);
-          var response= await firestore().collection('fitbit_sleep').doc(sleepDate + '-' + id).get();
+          var response= await firestore()
+          .collection('fitbit_sleep')
+          .doc(sleepDate + '-' + id)
+          .get();
           //console.log(sleepLog);
             if (!response.exists) {
               console.log("EI ole");   
@@ -89,6 +92,47 @@ export async function saveSleepLog(sleepDate, sleepMin, id) {
             console.error(error);
           } 
         };
+
+
+        export async function SaveCaloriesLog(caloriesDate, calories, string, id) {
+          try {
+            const caloriesData = {
+              date: caloriesDate,
+              burned_calories: calories,
+              user_id: id,
+            };
+            const res = await firestore()
+              .collection('fitbit_calories')
+              .doc(string + '-' + id)
+              .set(caloriesData);
+              } catch(error) {
+                console.error(error);
+              }
+            };
+
+
+        export async function fetchCaloriesLog(string, id) {
+          try {
+            //console.log(id);
+            //console.log(caloriesDate);
+            //const today = new Date()
+            //const priorDate = new Date().setDate(today.getDate() - 7)
+            var response= await firestore()
+            .collection('fitbit_calories')
+            .doc(string + '-' + id)
+            .get();
+            //console.log(sleepLog);
+              if (!response.exists) {
+                console.log("EI ole");   
+                return;
+              } else {
+                  console.log(response.data);
+              }
+              
+            }catch(error){
+              console.error(error);
+            } 
+          };
 
 
 

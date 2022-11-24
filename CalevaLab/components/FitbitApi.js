@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {fetchUserId, fetchAccessToken, saveSleepLog, SaveStepsLog} from '../db/FitbitDb';
+import {fetchUserId, fetchAccessToken, saveSleepLog, SaveStepsLog, SaveCaloriesLog, fetchCaloriesLog} from '../db/FitbitDb';
 
 export async function getSleepDataFit(id) {
   try {
@@ -57,8 +57,8 @@ export async function getSleepDataFit(id) {
 export async function getStepsFit(id) {
   try {
     var user_id = await fetchUserId(id);
-    const startdate = new Date('2022-11-17').toISOString().slice(0, 10);
-    const enddate = new Date('2022-11-22').toISOString().slice(0, 10);
+    const startdate = new Date('2022-11-15').toISOString().slice(0, 10);
+    const enddate = new Date('2022-11-26').toISOString().slice(0, 10);
 
     const URL =
       'https://api.fitbit.com/1.2/user/' +
@@ -101,24 +101,60 @@ export async function getStepsFit(id) {
   }
 }
 
-export const getCalsFit = async () => {
+export async function getCalsFit(id) {
   try {
-    const response = await fetch(
-      'https://api.fitbit.com/1.2/user/B8HWHQ/activities/date/2022-11-18.json',
-      {
+    var user_id = await fetchUserId(id);
+
+    const enddate = new Date();
+    let day = enddate.getDate();
+    let month = enddate.getMonth() + 1;
+    let year = enddate.getFullYear();
+    let currentDate = `${year}-${month}-${day}`;
+    console.log(currentDate);
+
+    const startdate = new Date();
+    startdate.setDate(enddate.getDate() - 28);
+
+    const URL = 
+      'https://api.fitbit.com/1.2/user/' +
+      user_id +
+      '/activities/calories/date/' +
+      startdate.toISOString().split('T')[0] + 
+      '/' +
+      currentDate +
+      '.json';
+      const accessToken = await fetchAccessToken(id);
+
+      console.log('');
+      console.log('URL = ' + URL);
+      console.log('USER ID = ' + user_id);
+      console.log('ACCESSTOKEN = ' + accessToken);
+      console.log('');
+
+    const response = await fetch(URL, {
         method: 'GET',
         headers: {
-          authorization:
-            'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMzhUWDciLCJzdWIiOiJCOEhXSFEiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJ3aHIgd3BybyB3c2xlIHdhY3QiLCJleHAiOjE3MDAxMzA4NzksImlhdCI6MTY2ODc2MjM1OX0._RBCDMv1gvOW8SIVHWfXierFREvyy2S_PYwA44jefJg',
+          authorization: 'Bearer ' + accessToken,
           accept: 'application/json',
         },
       },
     );
     const json = await response.json();
+    json['activities-calories'].forEach(item => {
+      const string = item.dateTime;
+      const caloriesDate = new Date(string);
+      const calories = item.value;
+      SaveCaloriesLog(caloriesDate, calories, string, id);
+      //console.log("total: "+JSON.stringify(item)+ "   date: " +item.timeDate);
 
-    console.log('Calories = ' + json.summary.calories['total']);
-    setCalories(json.summary.calories['total']);
+      //console.log('Calories: ' + item.value + '     Date: ' + item.dateTime);
+      
+    });
+
+    fetchCaloriesLog(string, id)
+
+   
   } catch (error) {
     console.error(error);
   }
-};
+}
