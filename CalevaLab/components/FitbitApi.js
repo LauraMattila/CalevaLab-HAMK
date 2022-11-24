@@ -14,7 +14,6 @@ import {
 export async function getSleepDataFit(id) {
   try {
     var user_id = await fetchUserId(id);
-    console.log(user_id);
     //const date = new Date().toISOString().slice(0, 10);
     const date = new Date('2022-11-10').toISOString().slice(0, 10);
     console.log(date);
