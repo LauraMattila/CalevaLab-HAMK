@@ -74,7 +74,7 @@ const Dashboard = ({navigation}) => {
   var startdate = new Date();
   startdate.setDate(today.getDate() - 7);
 
-  const [userId, setUserId] = useState('3');
+ 
 
 
   var getDateArray = function (startdate, today) {
@@ -243,6 +243,8 @@ const Dashboard = ({navigation}) => {
             </View>
           )}
         />
+
+      </View>
 
       </View>
     </PaperProvider>
