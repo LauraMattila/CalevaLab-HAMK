@@ -229,7 +229,7 @@ const Dashboard = ({navigation}) => {
 
 
 
-          onPress={() => fetchCaloriesLog(userId)}></Button>  */}
+          onPress={() => fetchCaloriesLog(userId)}></Button> 
 
       <View>
         <FlatList
