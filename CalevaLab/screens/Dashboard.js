@@ -76,8 +76,7 @@ const Dashboard = ({navigation}) => {
 
   var today = new Date();
   var startdate = new Date();
-  startdate.setDate(today.getDate() - 7);
-
+  startdate.setDate(today.getDate() - 6);
 
   var getDateArray = function (startdate, today) {
     var arr = new Array(),
@@ -95,7 +94,7 @@ const Dashboard = ({navigation}) => {
 
   var [day1, day2, day3, day4, day5, day6, day7] = dateArr;
 
-  console.log(day7);
+  console.log("TODAY:" +day7);
 
   return (
     <PaperProvider>
@@ -186,7 +185,6 @@ const Dashboard = ({navigation}) => {
         </DataTable> */}
 
         <Button title="Fitbit id" onPress={() => fetchUserId(userId)}></Button>
-
         <Button title="polarId" onPress={() => fetchUserIdP(userId)}></Button>
         <Button
           title="polarAccess"
@@ -226,34 +224,25 @@ const Dashboard = ({navigation}) => {
         <Button
           title="fitbit calories from db"
 
+          onPress={() => fetchCaloriesLog(userId)}></Button>
 
-
-
-          onPress={() => fetchCaloriesLog(userId)}></Button>  */}
-
-      <View>
-        <FlatList
-          style={{flex: 1}}
-          data={users}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={item => (
-            <View>
-              <Text>
-                {' '}
-                {item.item.user_id} {item.item.sleepMin} {item.item.sleepDate}{' '}
-              </Text>
-            </View>
-          )}
-        />
+        <View>
+          <FlatList
+            style={{flex: 1}}
+            data={users}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={item => (
+              <View>
+                <Text>
+                  {' '}
+                  {item.item.user_id} {item.item.sleepMin} {item.item.sleepDate}{' '}
+                </Text>
+              </View>
+            )}
+          />
+        </View>
       </View>
-
-
-      </View>
-
-
-
     </PaperProvider>
-   
   );
 };
 
