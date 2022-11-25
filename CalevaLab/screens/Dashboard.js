@@ -184,7 +184,7 @@ const Dashboard = ({navigation}) => {
           </DataTable.Row>
         </DataTable> */}
 
-        <Button title="Fitbit id" onPress={() => fetchUserId(userId)}></Button>
+        {/* <Button title="Fitbit id" onPress={() => fetchUserId(userId)}></Button>
         <Button title="polarId" onPress={() => fetchUserIdP(userId)}></Button>
         <Button
           title="polarAccess"
@@ -223,9 +223,7 @@ const Dashboard = ({navigation}) => {
           onPress={() => fetchSleepLog(userId)}></Button>
         <Button
           title="fitbit calories from db"
-
-
-          onPress={() => fetchCaloriesLog(userId)}></Button> 
+          onPress={() => fetchCaloriesLog(userId)}></Button>  */}
 
       <View>
         <FlatList
