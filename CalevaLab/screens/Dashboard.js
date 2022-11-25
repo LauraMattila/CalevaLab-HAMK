@@ -76,14 +76,23 @@ const Dashboard = ({navigation}) => {
   const [startTime, setStartTime] = useState();
   const [endTime, setEndTime] = useState();
   const [loading, setLoading] = useState(true);
+
   const [userId, setUserId] = useState('');
+
+  const [stepsDayList, setStepsDayList] = useState(['']);
+
+  const [dateArr, setDateArr] = useState([]);
+
 
   const [accessToken, setAccessToken] = useState('');
 
-  var today = new Date();
+  
+
+  
+  useEffect(()=> {
+    var today = new Date();
   var startdate = new Date();
   startdate.setDate(today.getDate() - 6);
-
   var getDateArray = function (startdate, today) {
     var arr = new Array(),
       dt = new Date(startdate);
@@ -95,13 +104,56 @@ const Dashboard = ({navigation}) => {
 
     return arr;
   };
+  var dateArray = getDateArray(startdate, today);
+  setDateArr(dateArray);
 
-  var dateArr = getDateArray(startdate, today);
-
+    
+    const fetchSteps = async ()=> {
+      await getStepsFit(userId);
+      const data = await fetchStepsLog(userId);
+      console.log("Tässä stepsit" +data);
+      dayIndex= 0;
+      dbIndex = 0;
+      var dbDate;
+      var currentDate;
+      dateList = [];
+      console.log(dateArray);
+      dateArray.forEach(date => {
+        try {
+        currentDate = date.toISOString().slice(0,10);
+        if (data[dbIndex] != undefined) {
+        dbDate = data[dbIndex].date.toDate().toISOString().slice(0,10);
+        }
+        } catch (error) {
+          console.error(error);
+        }
+        if(dbDate == currentDate) {
+            dateList[dayIndex]=data[dbIndex].value;
+            dbIndex +=1;
+        } else {
+          dateList[dayIndex] = "NA";
+        
+        }
+        dayIndex += 1;
+      }); 
+      setStepsDayList(dateList);
+    }
+    fetchSteps();
+  },[]);
   var [day1, day2, day3, day4, day5, day6, day7] = dateArr;
+  
+  
 
- // console.log('TODAY:' + day7);
+
   console.log('User:   ' + userId);
+
+
+
+  console.log("TODAY:" +day7);
+  if (stepsDayList == ['']) {
+    sleep(1000);
+    return null;
+  }
 
 
   return (
@@ -150,49 +202,49 @@ const Dashboard = ({navigation}) => {
           <DataTable.Row>
             <DataTable.Cell>{Moment(day7).format('DD.MM.')}</DataTable.Cell>
             <DataTable.Cell numeric>237</DataTable.Cell>
-            <DataTable.Cell numeric>8.0</DataTable.Cell>
+            <DataTable.Cell numeric>{stepsDayList[6]}</DataTable.Cell>
             <DataTable.Cell numeric>8.0</DataTable.Cell>
           </DataTable.Row>
 
           <DataTable.Row>
             <DataTable.Cell>{Moment(day6).format('DD.MM.')}</DataTable.Cell>
             <DataTable.Cell numeric>159</DataTable.Cell>
-            <DataTable.Cell numeric>6.0</DataTable.Cell>
+            <DataTable.Cell numeric>{stepsDayList[5]}</DataTable.Cell>
             <DataTable.Cell numeric>8.0</DataTable.Cell>
           </DataTable.Row>
 
           <DataTable.Row>
             <DataTable.Cell>{Moment(day5).format('DD.MM.')}</DataTable.Cell>
             <DataTable.Cell numeric>237</DataTable.Cell>
-            <DataTable.Cell numeric>8.0</DataTable.Cell>
+            <DataTable.Cell numeric>{stepsDayList[4]}</DataTable.Cell>
             <DataTable.Cell numeric>8.0</DataTable.Cell>
           </DataTable.Row>
 
           <DataTable.Row>
             <DataTable.Cell>{Moment(day4).format('DD.MM.')}</DataTable.Cell>
             <DataTable.Cell numeric>237</DataTable.Cell>
-            <DataTable.Cell numeric>8.0</DataTable.Cell>
+            <DataTable.Cell numeric>{stepsDayList[3]}</DataTable.Cell>
             <DataTable.Cell numeric>8.0</DataTable.Cell>
           </DataTable.Row>
 
           <DataTable.Row>
             <DataTable.Cell>{Moment(day3).format('DD.MM.')}</DataTable.Cell>
             <DataTable.Cell numeric>237</DataTable.Cell>
-            <DataTable.Cell numeric>8.0</DataTable.Cell>
+            <DataTable.Cell numeric>{stepsDayList[2]}</DataTable.Cell>
             <DataTable.Cell numeric>8.0</DataTable.Cell>
           </DataTable.Row>
 
           <DataTable.Row>
             <DataTable.Cell>{Moment(day2).format('DD.MM.')}</DataTable.Cell>
             <DataTable.Cell numeric>237</DataTable.Cell>
-            <DataTable.Cell numeric>8.0</DataTable.Cell>
+            <DataTable.Cell numeric>{stepsDayList[1]}</DataTable.Cell>
             <DataTable.Cell numeric>8.0</DataTable.Cell>
           </DataTable.Row>
 
           <DataTable.Row>
             <DataTable.Cell>{Moment(day1).format('DD.MM.')}</DataTable.Cell>
             <DataTable.Cell numeric>237</DataTable.Cell>
-            <DataTable.Cell numeric>8.0</DataTable.Cell>
+            <DataTable.Cell numeric>{stepsDayList[0]}</DataTable.Cell>
             <DataTable.Cell numeric>8.0</DataTable.Cell>
           </DataTable.Row>
         </DataTable>
@@ -236,6 +288,7 @@ const Dashboard = ({navigation}) => {
           onPress={() => fetchSleepLog(userId)}></Button>
         <Button
           title="fitbit calories from db"
+
           onPress={() => fetchCaloriesLog(userId)}></Button>  */}
 
         <View>
@@ -253,6 +306,7 @@ const Dashboard = ({navigation}) => {
             )}
           />
         </View>
+
       </View>
     </PaperProvider>
   );
