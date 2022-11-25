@@ -55,6 +55,13 @@ const Dashboard = ({navigation}) => {
     {label: 'months', value: 'months'},
   ];
 
+  const kuka = [
+    {label: 'Sampo', value: '1'},
+    {label: 'Jere', value: '2'},
+    {label: 'Janette', value: '3'},
+    {label: 'Laura', value: '4'},
+  ];
+
   const [firstname, setFirstname] = useState('Matti');
   const [lastname, setLastname] = useState('Meikäläinen');
   const [age, setAge] = useState('55');
@@ -69,8 +76,7 @@ const Dashboard = ({navigation}) => {
   const [startTime, setStartTime] = useState();
   const [endTime, setEndTime] = useState();
   const [loading, setLoading] = useState(true);
-
-  const [userId, setUserId] = useState('1');
+  const [userId, setUserId] = useState('');
 
   const [accessToken, setAccessToken] = useState('');
 
@@ -94,12 +100,19 @@ const Dashboard = ({navigation}) => {
 
   var [day1, day2, day3, day4, day5, day6, day7] = dateArr;
 
-  console.log('TODAY:' + day7);
+ // console.log('TODAY:' + day7);
+  console.log('User:   ' + userId);
+
 
   return (
     <PaperProvider>
+      <SwitchSelector
+        options={kuka}
+        initial={0}
+        onPress={value => setUserId(value)}
+      />
       <View>
-        <Text style={styles.header}>Welcome Back!</Text>
+        <Text style={styles.header}>Welcome Back, {userId}!</Text>
 
         <View style={styles.infocont}>
           <View>
