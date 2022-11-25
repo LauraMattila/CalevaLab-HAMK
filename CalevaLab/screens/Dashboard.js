@@ -17,7 +17,13 @@ import {
 
 import firestore from '@react-native-firebase/firestore';
 
-import {fetchUserIdP, fetchAccessTokenP, fetchSleepP, fetchStepsP, fetchCaloriesP} from '../db/PolarDb';
+import {
+  fetchUserIdP,
+  fetchAccessTokenP,
+  fetchSleepP,
+  fetchStepsP,
+  fetchCaloriesP,
+} from '../db/PolarDb';
 
 import {
   fetchUserId,
@@ -41,7 +47,6 @@ import {
   listActivity,
   testActivity,
 } from '../components/PolarApi';
-
 
 const Dashboard = ({navigation}) => {
   const options = [
@@ -67,15 +72,11 @@ const Dashboard = ({navigation}) => {
 
   const [userId, setUserId] = useState('4');
 
-
   const [accessToken, setAccessToken] = useState('');
 
   var today = new Date();
   var startdate = new Date();
   startdate.setDate(today.getDate() - 7);
-
-  const [userId, setUserId] = useState('3');
-
 
   var getDateArray = function (startdate, today) {
     var arr = new Array(),
@@ -93,23 +94,17 @@ const Dashboard = ({navigation}) => {
 
   var [day1, day2, day3, day4, day5, day6, day7] = dateArr;
 
-
   console.log(day7);
-  
- 
 
   return (
     <PaperProvider>
       <View>
-        <Button title="Fitbit id" onPress={() => getDateArray()}></Button>
         <Text style={styles.header}>Welcome Back!</Text>
 
         <View style={styles.container}>
           <View>
             <Text style={styles.name}>
-
-            {firstname} {lastname}
-          
+              {firstname} {lastname}
             </Text>
 
             <Text style={styles.info}>
@@ -131,8 +126,7 @@ const Dashboard = ({navigation}) => {
           </View>
         </View>
 
-
-        <DataTable>
+        {/* <DataTable>
           <DataTable.Header>
             <DataTable.Title>Day</DataTable.Title>
             <DataTable.Title numeric>Sleep</DataTable.Title>
@@ -141,71 +135,78 @@ const Dashboard = ({navigation}) => {
           </DataTable.Header>
 
           <DataTable.Row>
-            <DataTable.Cell>{Moment(day7).format("DD.MM.")}</DataTable.Cell>
+            <DataTable.Cell>{Moment(day7).format('DD.MM.')}</DataTable.Cell>
             <DataTable.Cell numeric>237</DataTable.Cell>
             <DataTable.Cell numeric>8.0</DataTable.Cell>
             <DataTable.Cell numeric>8.0</DataTable.Cell>
           </DataTable.Row>
 
           <DataTable.Row>
-            <DataTable.Cell>{Moment(day6).format("DD.MM.")}</DataTable.Cell>
+            <DataTable.Cell>{Moment(day6).format('DD.MM.')}</DataTable.Cell>
             <DataTable.Cell numeric>159</DataTable.Cell>
             <DataTable.Cell numeric>6.0</DataTable.Cell>
             <DataTable.Cell numeric>8.0</DataTable.Cell>
           </DataTable.Row>
 
           <DataTable.Row>
-            <DataTable.Cell>{Moment(day5).format(("DD.MM."))}</DataTable.Cell>
+            <DataTable.Cell>{Moment(day5).format('DD.MM.')}</DataTable.Cell>
             <DataTable.Cell numeric>237</DataTable.Cell>
             <DataTable.Cell numeric>8.0</DataTable.Cell>
             <DataTable.Cell numeric>8.0</DataTable.Cell>
           </DataTable.Row>
 
           <DataTable.Row>
-            <DataTable.Cell>{Moment(day4).format("DD.MM.")}</DataTable.Cell>
+            <DataTable.Cell>{Moment(day4).format('DD.MM.')}</DataTable.Cell>
             <DataTable.Cell numeric>237</DataTable.Cell>
             <DataTable.Cell numeric>8.0</DataTable.Cell>
             <DataTable.Cell numeric>8.0</DataTable.Cell>
           </DataTable.Row>
 
           <DataTable.Row>
-            <DataTable.Cell>{Moment(day3).format("DD.MM.")}</DataTable.Cell>
+            <DataTable.Cell>{Moment(day3).format('DD.MM.')}</DataTable.Cell>
             <DataTable.Cell numeric>237</DataTable.Cell>
             <DataTable.Cell numeric>8.0</DataTable.Cell>
             <DataTable.Cell numeric>8.0</DataTable.Cell>
           </DataTable.Row>
 
           <DataTable.Row>
-            <DataTable.Cell>{Moment(day2).format("DD.MM.")}</DataTable.Cell>
+            <DataTable.Cell>{Moment(day2).format('DD.MM.')}</DataTable.Cell>
             <DataTable.Cell numeric>237</DataTable.Cell>
             <DataTable.Cell numeric>8.0</DataTable.Cell>
             <DataTable.Cell numeric>8.0</DataTable.Cell>
           </DataTable.Row>
 
           <DataTable.Row>
-            <DataTable.Cell>{Moment(day1).format("DD.MM.")}</DataTable.Cell>
+            <DataTable.Cell>{Moment(day1).format('DD.MM.')}</DataTable.Cell>
             <DataTable.Cell numeric>237</DataTable.Cell>
             <DataTable.Cell numeric>8.0</DataTable.Cell>
             <DataTable.Cell numeric>8.0</DataTable.Cell>
           </DataTable.Row>
-        </DataTable>
+        </DataTable> */}
 
-      
-
-       {/* <Button title="Fitbit id" onPress={() => fetchUserId(userId)}></Button>
+        <Button title="Fitbit id" onPress={() => fetchUserId(userId)}></Button>
 
         <Button title="polarId" onPress={() => fetchUserIdP(userId)}></Button>
         <Button
           title="polarAccess"
           onPress={() => fetchAccessTokenP(userId)}></Button>
 
-        <Button title="Set polar sleep" onPress={() => getSleep(userId)}></Button>
-        <Button title="POlar Activities" onPress={() => getActivity(userId)}></Button>
-        <Button title="Get polar Sleep" onPress={() => fetchSleepP(userId)}></Button>
-        <Button title="Get polar steps" onPress={() => fetchStepsP(userId)}></Button>
-        <Button title="Get polar Calories" onPress={() => fetchCaloriesP(userId)}></Button>
+        <Button
+          title="Set polar sleep"
+          onPress={() => getSleep(userId)}></Button>
+        <Button
+          title="POlar Activities"
+          onPress={() => getActivity(userId)}></Button>
+        <Button
+          title="Get polar Sleep"
+          onPress={() => fetchSleepP(userId)}></Button>
+        <Button
+          title="Get polar steps"
+          onPress={() => fetchStepsP(userId)}></Button>
+        <Button
+          title="Get polar Calories"
+          onPress={() => fetchCaloriesP(userId)}></Button>
         <Button title="polar sleep" onPress={() => getSleep(userId)}></Button>
-
         <Button
           title="fitbit sleep"
           onPress={() => getSleepDataFit(userId)}></Button>
@@ -215,7 +216,6 @@ const Dashboard = ({navigation}) => {
         <Button
           title="fitbit steps"
           onPress={() => getStepsFit(userId)}></Button>
-
         <Button
           title="fitbit steps from db"
           onPress={() => fetchStepsLog(userId)}></Button>
@@ -224,26 +224,23 @@ const Dashboard = ({navigation}) => {
           onPress={() => fetchSleepLog(userId)}></Button>
         <Button
           title="fitbit calories from db"
+          onPress={() => fetchCaloriesLog(userId)}></Button>
 
-
-
-          onPress={() => fetchCaloriesLog(userId)}></Button>  */}
-
-      <View>
-        <FlatList
-          style={{flex: 1}}
-          data={users}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={item => (
-            <View>
-              <Text>
-                {' '}
-                {item.item.user_id} {item.item.sleepMin} {item.item.sleepDate}{' '}
-              </Text>
-            </View>
-          )}
-        />
-
+        <View>
+          <FlatList
+            style={{flex: 1}}
+            data={users}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={item => (
+              <View>
+                <Text>
+                  {' '}
+                  {item.item.user_id} {item.item.sleepMin} {item.item.sleepDate}{' '}
+                </Text>
+              </View>
+            )}
+          />
+        </View>
       </View>
     </PaperProvider>
   );
