@@ -69,15 +69,19 @@ const Dashboard = ({navigation}) => {
   const [startTime, setStartTime] = useState();
   const [endTime, setEndTime] = useState();
   const [loading, setLoading] = useState(true);
-  const [stepsDayList, setStepsDayList] = useState([]);
+  const [stepsDayList, setStepsDayList] = useState(['']);
   const [userId, setUserId] = useState('4');
+  const [dateArr, setDateArr] = useState([]);
 
   const [accessToken, setAccessToken] = useState('');
 
-  var today = new Date();
+  
+
+  
+  useEffect(()=> {
+    var today = new Date();
   var startdate = new Date();
   startdate.setDate(today.getDate() - 6);
-
   var getDateArray = function (startdate, today) {
     var arr = new Array(),
       dt = new Date(startdate);
@@ -89,27 +93,49 @@ const Dashboard = ({navigation}) => {
 
     return arr;
   };
-  useEffect(()=> {
+  var dateArray = getDateArray(startdate, today);
+  setDateArr(dateArray);
+
+    
     const fetchSteps = async ()=> {
       await getStepsFit(userId);
       const data = await fetchStepsLog(userId);
-      console.log("Tässä stepsit" +data); 
-      setStepsDayList(data);
+      console.log("Tässä stepsit" +data);
+      dayIndex= 0;
+      dbIndex = 0;
+      var dbDate;
+      var currentDate;
+      dateList = [];
+      console.log(dateArray);
+      dateArray.forEach(date => {
+        try {
+        currentDate = date.toISOString().slice(0,10);
+        if (data[dbIndex] != undefined) {
+        dbDate = data[dbIndex].date.toDate().toISOString().slice(0,10);
+        }
+        } catch (error) {
+          console.error(error);
+        }
+        if(dbDate == currentDate) {
+            dateList[dayIndex]=data[dbIndex].value;
+            dbIndex +=1;
+        } else {
+          dateList[dayIndex] = "NA";
+        
+        }
+        dayIndex += 1;
+      }); 
+      setStepsDayList(dateList);
     }
     fetchSteps();
-    if (loading) {
-      setLoading(false);
-    }
   },[]);
-  
-  console.log(stepsDayList);
-  var step = "8025";
-  var dateArr = getDateArray(startdate, today);
-
   var [day1, day2, day3, day4, day5, day6, day7] = dateArr;
+  
+  
 
   console.log("TODAY:" +day7);
-  if (loading) {
+  if (stepsDayList == ['']) {
+    sleep(1000);
     return null;
   }
   return (
@@ -160,7 +186,7 @@ const Dashboard = ({navigation}) => {
           <DataTable.Row>
             <DataTable.Cell>{Moment(day6).format('DD.MM.')}</DataTable.Cell>
             <DataTable.Cell numeric>159</DataTable.Cell>
-            <DataTable.Cell numeric>{stepsDayList[5].value}</DataTable.Cell>
+            <DataTable.Cell numeric>{stepsDayList[5]}</DataTable.Cell>
             <DataTable.Cell numeric>8.0</DataTable.Cell>
           </DataTable.Row>
 

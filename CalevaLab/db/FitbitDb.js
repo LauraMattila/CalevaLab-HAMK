@@ -166,12 +166,7 @@ export async function fetchStepsLog(id) {
       response.forEach(doc => {
         stepsData.push(doc.data());
       });
-      //console.log(stepsData);
-      
       return stepsData;
-      //const responseList  = [];
-      // responseList.push(response.data());
-      //console.log(Object.keys(responseList));
     }
   } catch (error) {
     console.error(error);
