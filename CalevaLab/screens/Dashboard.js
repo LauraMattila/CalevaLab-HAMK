@@ -76,6 +76,7 @@ const Dashboard = ({navigation}) => {
 
 
 
+
   var getDateArray = function (startdate, today) {
     var arr = new Array(),
       dt = new Date(startdate);
@@ -243,8 +244,12 @@ const Dashboard = ({navigation}) => {
           )}
         />
       </View>
+
       </View>
-    
+
+
+      </View>
+
     </PaperProvider>
    
   );
