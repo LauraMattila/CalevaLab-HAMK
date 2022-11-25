@@ -94,14 +94,14 @@ const Dashboard = ({navigation}) => {
 
   var [day1, day2, day3, day4, day5, day6, day7] = dateArr;
 
-  console.log("TODAY:" +day7);
+  console.log('TODAY:' + day7);
 
   return (
     <PaperProvider>
       <View>
         <Text style={styles.header}>Welcome Back!</Text>
 
-        <View style={styles.container}>
+        <View style={styles.infocont}>
           <View>
             <Text style={styles.name}>
               {firstname} {lastname}
@@ -113,7 +113,7 @@ const Dashboard = ({navigation}) => {
           </View>
         </View>
 
-        <View style={styles.sele}>
+        <View style={styles.selectioncont}>
           <View style={styles.selection}>
             <Text style={styles.header}>Activity Logs</Text>
           </View>
@@ -126,7 +126,7 @@ const Dashboard = ({navigation}) => {
           </View>
         </View>
 
-        {/* <DataTable>
+        <DataTable>
           <DataTable.Header>
             <DataTable.Title>Day</DataTable.Title>
             <DataTable.Title numeric>Sleep</DataTable.Title>
@@ -182,7 +182,7 @@ const Dashboard = ({navigation}) => {
             <DataTable.Cell numeric>8.0</DataTable.Cell>
             <DataTable.Cell numeric>8.0</DataTable.Cell>
           </DataTable.Row>
-        </DataTable> */}
+        </DataTable>
 
         {/* <Button title="Fitbit id" onPress={() => fetchUserId(userId)}></Button>
         <Button title="polarId" onPress={() => fetchUserIdP(userId)}></Button>
@@ -225,42 +225,38 @@ const Dashboard = ({navigation}) => {
           title="fitbit calories from db"
           onPress={() => fetchCaloriesLog(userId)}></Button>  */}
 
-      <View>
-        <FlatList
-          style={{flex: 1}}
-          data={users}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={item => (
-            <View>
-              <Text>
-                {' '}
-                {item.item.user_id} {item.item.sleepMin} {item.item.sleepDate}{' '}
-              </Text>
-            </View>
-          )}
-        />
-      </View>
-
-
-
+        <View>
+          <FlatList
+            style={{flex: 1}}
+            data={users}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={item => (
+              <View>
+                <Text>
+                  {' '}
+                  {item.item.user_id} {item.item.sleepMin} {item.item.sleepDate}{' '}
+                </Text>
+              </View>
+            )}
+          />
+        </View>
       </View>
     </PaperProvider>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    margin: 10,
-    width: '100%',
-    flexDirection: 'row',
-    height: 70,
-  },
-
   header: {
     fontSize: 20,
     margin: 15,
     textAlign: 'left',
     fontWeight: 'bold',
+  },
+  infocont: {
+    margin: 10,
+    width: '100%',
+    flexDirection: 'row',
+    height: 70,
   },
 
   name: {
@@ -277,6 +273,10 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
 
+  selectioncont: {
+    flexDirection: 'row',
+  },
+
   selection: {
     margin: 2,
     marginVertical: -5,
@@ -287,34 +287,6 @@ const styles = StyleSheet.create({
     margin: 2,
     marginVertical: 2,
     width: 230,
-  },
-
-  sele: {
-    flexDirection: 'row',
-  },
-
-  app: {
-    margin: 2,
-  },
-
-  container2: {
-    flex: 1,
-    padding: 18,
-    paddingTop: 35,
-    backgroundColor: '#ffffff',
-  },
-  HeadStyle: {
-    height: 50,
-    alignContent: 'center',
-    backgroundColor: '#ffe0f0',
-  },
-  TableText: {
-    margin: 10,
-  },
-
-  row: {
-    height: 40,
-    backgroundColor: 'red',
   },
 });
 
