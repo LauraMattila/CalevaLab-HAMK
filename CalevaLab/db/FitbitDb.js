@@ -114,6 +114,7 @@ export async function fetchCaloriesLog(id) {
       return;
     } else {
       console.log(response.data);
+      
     }
   } catch (error) {
     console.error(error);
@@ -154,19 +155,20 @@ export async function fetchStepsLog(id) {
     var response = await firestore()
       .collection('fitbit_steps')
       .where('user_id','==', id)
-      .where('date', '>=', (startdate))
+      .where('date', '>=', startdate)
       .get();
 
-    response.forEach(doc => {
-      console.log(doc.data().date.toDate());
-    });
-
-    if (!response.exists) {
+    if (response.empty) {
       console.log('EI OLE STEPS');
       return;
     } else {
-      console.log(response.data());
-
+      stepsData = [];
+      response.forEach(doc => {
+        stepsData.push(doc.data());
+      });
+      //console.log(stepsData);
+      
+      return stepsData;
       //const responseList  = [];
       // responseList.push(response.data());
       //console.log(Object.keys(responseList));

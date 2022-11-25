@@ -69,8 +69,8 @@ const Dashboard = ({navigation}) => {
   const [startTime, setStartTime] = useState();
   const [endTime, setEndTime] = useState();
   const [loading, setLoading] = useState(true);
-
-  const [userId, setUserId] = useState('1');
+  const [stepsDayList, setStepsDayList] = useState([]);
+  const [userId, setUserId] = useState('4');
 
   const [accessToken, setAccessToken] = useState('');
 
@@ -89,13 +89,29 @@ const Dashboard = ({navigation}) => {
 
     return arr;
   };
-
+  useEffect(()=> {
+    const fetchSteps = async ()=> {
+      await getStepsFit(userId);
+      const data = await fetchStepsLog(userId);
+      console.log("Tässä stepsit" +data); 
+      setStepsDayList(data);
+    }
+    fetchSteps();
+    if (loading) {
+      setLoading(false);
+    }
+  },[]);
+  
+  console.log(stepsDayList);
+  var step = "8025";
   var dateArr = getDateArray(startdate, today);
 
   var [day1, day2, day3, day4, day5, day6, day7] = dateArr;
 
   console.log("TODAY:" +day7);
-
+  if (loading) {
+    return null;
+  }
   return (
     <PaperProvider>
       <View>
@@ -126,7 +142,7 @@ const Dashboard = ({navigation}) => {
           </View>
         </View>
 
-        {/* <DataTable>
+        <DataTable>
           <DataTable.Header>
             <DataTable.Title>Day</DataTable.Title>
             <DataTable.Title numeric>Sleep</DataTable.Title>
@@ -137,54 +153,54 @@ const Dashboard = ({navigation}) => {
           <DataTable.Row>
             <DataTable.Cell>{Moment(day7).format('DD.MM.')}</DataTable.Cell>
             <DataTable.Cell numeric>237</DataTable.Cell>
-            <DataTable.Cell numeric>8.0</DataTable.Cell>
+            <DataTable.Cell numeric>{stepsDayList[6]}</DataTable.Cell>
             <DataTable.Cell numeric>8.0</DataTable.Cell>
           </DataTable.Row>
 
           <DataTable.Row>
             <DataTable.Cell>{Moment(day6).format('DD.MM.')}</DataTable.Cell>
             <DataTable.Cell numeric>159</DataTable.Cell>
-            <DataTable.Cell numeric>6.0</DataTable.Cell>
+            <DataTable.Cell numeric>{stepsDayList[5].value}</DataTable.Cell>
             <DataTable.Cell numeric>8.0</DataTable.Cell>
           </DataTable.Row>
 
           <DataTable.Row>
             <DataTable.Cell>{Moment(day5).format('DD.MM.')}</DataTable.Cell>
             <DataTable.Cell numeric>237</DataTable.Cell>
-            <DataTable.Cell numeric>8.0</DataTable.Cell>
+            <DataTable.Cell numeric>{stepsDayList[4]}</DataTable.Cell>
             <DataTable.Cell numeric>8.0</DataTable.Cell>
           </DataTable.Row>
 
           <DataTable.Row>
             <DataTable.Cell>{Moment(day4).format('DD.MM.')}</DataTable.Cell>
             <DataTable.Cell numeric>237</DataTable.Cell>
-            <DataTable.Cell numeric>8.0</DataTable.Cell>
+            <DataTable.Cell numeric>{stepsDayList[3]}</DataTable.Cell>
             <DataTable.Cell numeric>8.0</DataTable.Cell>
           </DataTable.Row>
 
           <DataTable.Row>
             <DataTable.Cell>{Moment(day3).format('DD.MM.')}</DataTable.Cell>
             <DataTable.Cell numeric>237</DataTable.Cell>
-            <DataTable.Cell numeric>8.0</DataTable.Cell>
+            <DataTable.Cell numeric>{stepsDayList[2]}</DataTable.Cell>
             <DataTable.Cell numeric>8.0</DataTable.Cell>
           </DataTable.Row>
 
           <DataTable.Row>
             <DataTable.Cell>{Moment(day2).format('DD.MM.')}</DataTable.Cell>
             <DataTable.Cell numeric>237</DataTable.Cell>
-            <DataTable.Cell numeric>8.0</DataTable.Cell>
+            <DataTable.Cell numeric>{stepsDayList[1]}</DataTable.Cell>
             <DataTable.Cell numeric>8.0</DataTable.Cell>
           </DataTable.Row>
 
           <DataTable.Row>
             <DataTable.Cell>{Moment(day1).format('DD.MM.')}</DataTable.Cell>
             <DataTable.Cell numeric>237</DataTable.Cell>
-            <DataTable.Cell numeric>8.0</DataTable.Cell>
+            <DataTable.Cell numeric>{stepsDayList[0]}</DataTable.Cell>
             <DataTable.Cell numeric>8.0</DataTable.Cell>
           </DataTable.Row>
-        </DataTable> */}
+        </DataTable>
 
-        <Button title="Fitbit id" onPress={() => fetchUserId(userId)}></Button>
+        {/* <Button title="Fitbit id" onPress={() => fetchUserId(userId)}></Button>
         <Button title="polarId" onPress={() => fetchUserIdP(userId)}></Button>
         <Button
           title="polarAccess"
@@ -225,7 +241,7 @@ const Dashboard = ({navigation}) => {
           title="fitbit calories from db"
 
 
-          onPress={() => fetchCaloriesLog(userId)}></Button> 
+          onPress={() => fetchCaloriesLog(userId)}></Button>  */}
 
       <View>
         <FlatList
