@@ -50,6 +50,7 @@ export async function fetchSleepP(id) {
 
     var sleepMins = await firestore()
       .collection('polar_sleep')
+      .where('user_id','==', id)
       .where('date', '>=', today)
       .get(); 
 
@@ -81,6 +82,7 @@ export async function fetchStepsP(id) {
   
       var steps = await firestore()
         .collection('polar_steps')
+        .where('user_id','==', id)
         .where('date', '>=', today)
         .get(); 
   
@@ -113,6 +115,7 @@ export async function fetchStepsP(id) {
   
       var calories = await firestore()
         .collection('polar_calories')
+        .where('user_id','==', id)
         .where('date', '>=', today)
         .get(); 
   
