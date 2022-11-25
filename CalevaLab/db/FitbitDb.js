@@ -1,5 +1,5 @@
 import firestore, {firebase} from '@react-native-firebase/firestore';
-import {string} from 'prop-types';
+import {string} from 'prop-types'; 
 
 export async function fetchUserId(id) {
   try {
@@ -149,7 +149,10 @@ export async function fetchSleepLog(id) {
 export async function fetchStepsLog(id) {
   const today = new Date();
   const startdate = new Date();
+  //var dateFormat = require('dateformat');
+  //dateFormat(today, "yyyy, mm, dddd");
   startdate.setDate(today.getDate() - 7);
+  
   try {
     var response = await firestore()
       .collection('fitbit_steps')
@@ -158,7 +161,7 @@ export async function fetchStepsLog(id) {
       .get();
 
     response.forEach(doc => {
-      console.log(doc.data().date.toDate());
+      console.log(doc.data().date.toDate().getDate());
     });
 
     if (!response.exists) {
