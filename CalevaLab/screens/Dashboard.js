@@ -248,7 +248,6 @@ const Dashboard = ({navigation}) => {
       </View>
 
 
-      </View>
 
     </PaperProvider>
    
