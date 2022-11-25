@@ -70,13 +70,14 @@ const Dashboard = ({navigation}) => {
   const [endTime, setEndTime] = useState();
   const [loading, setLoading] = useState(true);
 
-  const [userId, setUserId] = useState('4');
+  const [userId, setUserId] = useState('1');
 
   const [accessToken, setAccessToken] = useState('');
 
   var today = new Date();
   var startdate = new Date();
   startdate.setDate(today.getDate() - 7);
+
 
   var getDateArray = function (startdate, today) {
     var arr = new Array(),
@@ -224,25 +225,35 @@ const Dashboard = ({navigation}) => {
           onPress={() => fetchSleepLog(userId)}></Button>
         <Button
           title="fitbit calories from db"
-          onPress={() => fetchCaloriesLog(userId)}></Button>
 
-        <View>
-          <FlatList
-            style={{flex: 1}}
-            data={users}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={item => (
-              <View>
-                <Text>
-                  {' '}
-                  {item.item.user_id} {item.item.sleepMin} {item.item.sleepDate}{' '}
-                </Text>
-              </View>
-            )}
-          />
-        </View>
+
+
+
+          onPress={() => fetchCaloriesLog(userId)}></Button>  */}
+
+      <View>
+        <FlatList
+          style={{flex: 1}}
+          data={users}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={item => (
+            <View>
+              <Text>
+                {' '}
+                {item.item.user_id} {item.item.sleepMin} {item.item.sleepDate}{' '}
+              </Text>
+            </View>
+          )}
+        />
       </View>
+
+
+      </View>
+
+
+
     </PaperProvider>
+   
   );
 };
 
