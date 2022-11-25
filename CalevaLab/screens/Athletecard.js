@@ -1,19 +1,11 @@
-import React, {useState, useEffect, Component} from 'react';
+import React, {useState, useEffect} from 'react';
 //import Icon from 'react-native-vector-icons/AntDesign';
 import SwitchSelector from 'react-native-switch-selector';
 import {Provider as PaperProvider, Title} from 'react-native-paper';
 import {DataTable} from 'react-native-paper';
 import Moment from 'moment';
 
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  FlatList,
-  Button,
-  Pressable,
-} from 'react-native';
+import {StyleSheet, Text, View, Pressable} from 'react-native';
 
 import firestore from '@react-native-firebase/firestore';
 
@@ -59,20 +51,7 @@ const Athletecard = ({navigation}) => {
   const [lastname, setLastname] = useState('Meikäläinen');
   const [age, setAge] = useState('55');
   const [gender, setGender] = useState('Male');
-
-  const [user, setUser] = useState('');
-  const ref = firestore().collection('users');
-  const ref2 = firestore().collection('fitbit_steps');
-  const [summary, setSummary] = useState();
-  const [sleep, setSleep] = useState();
-  const [users, setUsers] = useState([]);
-  const [startTime, setStartTime] = useState();
-  const [endTime, setEndTime] = useState();
-  const [loading, setLoading] = useState(true);
-
   const [userId, setUserId] = useState('1');
-
-  const [accessToken, setAccessToken] = useState('');
 
   var today = new Date();
   var startdate = new Date();
@@ -91,15 +70,12 @@ const Athletecard = ({navigation}) => {
   };
 
   var dateArr = getDateArray(startdate, today);
-
   var [day1, day2, day3, day4, day5, day6, day7] = dateArr;
-
-  console.log('TODAY:' + day7);
 
   return (
     <PaperProvider>
       <View>
-        <View style={styles.container}>
+        <View style={styles.infocont}>
           <View>
             <Text style={styles.name}>
               {firstname} {lastname}
@@ -110,11 +86,13 @@ const Athletecard = ({navigation}) => {
             </Text>
           </View>
         </View>
-        <View style={styles.datatablecont}>
-          <View style={styles.sele}>
-            <View style={styles.selection}>
-              <Text style={styles.header}>Stats</Text>
+
+        <View style={styles.datacont}>
+          <View style={styles.selectioncont}>
+            <View style={styles.selectionheader}>
+              <Text style={styles.selectiontext}>Stats</Text>
             </View>
+
             <View style={styles.selector}>
               <SwitchSelector
                 options={options}
@@ -125,7 +103,7 @@ const Athletecard = ({navigation}) => {
           </View>
 
           <DataTable>
-            <DataTable.Header style={styles.Title}>
+            <DataTable.Header style={styles.weekdays}>
               <DataTable.Title></DataTable.Title>
               <DataTable.Title>MON</DataTable.Title>
               <DataTable.Title>TUE</DataTable.Title>
@@ -136,7 +114,7 @@ const Athletecard = ({navigation}) => {
               <DataTable.Title>SUN</DataTable.Title>
             </DataTable.Header>
 
-            <DataTable.Row style={styles.Row}>
+            <DataTable.Row style={styles.row}>
               <DataTable.Cell>STEPS</DataTable.Cell>
               <DataTable.Cell numeric>10000</DataTable.Cell>
               <DataTable.Cell numeric>10000</DataTable.Cell>
@@ -147,7 +125,7 @@ const Athletecard = ({navigation}) => {
               <DataTable.Cell numeric>10000</DataTable.Cell>
             </DataTable.Row>
 
-            <DataTable.Row style={styles.Row}>
+            <DataTable.Row style={styles.row}>
               <DataTable.Cell>KCAL</DataTable.Cell>
               <DataTable.Cell numeric>2000</DataTable.Cell>
               <DataTable.Cell numeric>2000</DataTable.Cell>
@@ -158,7 +136,7 @@ const Athletecard = ({navigation}) => {
               <DataTable.Cell numeric>2000</DataTable.Cell>
             </DataTable.Row>
 
-            <DataTable.Row style={styles.Row}>
+            <DataTable.Row style={styles.row}>
               <DataTable.Cell>SLEEP</DataTable.Cell>
               <DataTable.Cell numeric>8.0</DataTable.Cell>
               <DataTable.Cell numeric>8.0</DataTable.Cell>
@@ -172,7 +150,7 @@ const Athletecard = ({navigation}) => {
         </View>
       </View>
       <View style={styles.sharecont}>
-        <Pressable style={styles.share}>
+        <Pressable style={styles.sharebutton}>
           <Text style={styles.sharetext}>Share</Text>
         </Pressable>
       </View>
@@ -181,14 +159,39 @@ const Athletecard = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  infocont: {
     marginVertical: 20,
-    width: '100%',
     flexDirection: 'row',
     height: 70,
   },
+  name: {
+    textAlign: 'left',
+    marginHorizontal: 20,
+    marginVertical: 20,
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  info: {
+    textAlign: 'left',
+    marginHorizontal: 20,
+    fontSize: 13,
+  },
 
-  header: {
+  datacont: {
+    marginVertical: 40,
+  },
+
+  selectioncont: {
+    flexDirection: 'row',
+    marginVertical: 20,
+  },
+
+  selectionheader: {
+    marginVertical: -10,
+    width: 150,
+  },
+
+  selectiontext: {
     fontSize: 20,
     margin: 15,
     textAlign: 'left',
@@ -196,42 +199,23 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
 
-  name: {
-    
-    textAlign: 'left',
-    marginHorizontal: 20,
-    marginVertical: 20,
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-
-  info: {
-    textAlign: 'left',
-    marginHorizontal: 20,
-    fontSize: 13,
-  },
-
-  selection: {
-    margin: 2,
-    marginVertical: -5,
-    width: 150,
-  },
-
   selector: {
-    margin: 2,
-    marginVertical: 2,
     width: 230,
   },
 
-  sele: {
-    flexDirection: 'row',
+  weekdays: {
+    marginLeft: 10,
+    marginHorizontal: -35,
+  },
+  row: {
+    marginHorizontal: -10,
+    marginVertical: 10,
+  },
+  sharecont: {
+    alignItems: 'center',
   },
 
-  sharetext: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  share: {
+  sharebutton: {
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 12,
@@ -241,23 +225,9 @@ const styles = StyleSheet.create({
     width: 200,
     height: 75,
   },
-
-  sharecont: {
-    alignItems: 'center',
-  },
-
-  datatablecont: {
-    marginVertical: 40,
-  },
-
-  Row: {
-    marginHorizontal: -10,
-    marginVertical: 10,
-  },
-
-  Title: {
-    marginLeft: 10,
-    marginHorizontal: -35,
+  sharetext: {
+    fontSize: 20,
+    fontWeight: 'bold',
   },
 });
 
