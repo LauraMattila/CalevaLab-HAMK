@@ -224,23 +224,27 @@ const Dashboard = ({navigation}) => {
         <Button
           title="fitbit calories from db"
 
-          onPress={() => fetchCaloriesLog(userId)}></Button>
 
-        <View>
-          <FlatList
-            style={{flex: 1}}
-            data={users}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={item => (
-              <View>
-                <Text>
-                  {' '}
-                  {item.item.user_id} {item.item.sleepMin} {item.item.sleepDate}{' '}
-                </Text>
-              </View>
-            )}
-          />
-        </View>
+          onPress={() => fetchCaloriesLog(userId)}></Button> 
+
+      <View>
+        <FlatList
+          style={{flex: 1}}
+          data={users}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={item => (
+            <View>
+              <Text>
+                {' '}
+                {item.item.user_id} {item.item.sleepMin} {item.item.sleepDate}{' '}
+              </Text>
+            </View>
+          )}
+        />
+      </View>
+
+
+
       </View>
     </PaperProvider>
   );
