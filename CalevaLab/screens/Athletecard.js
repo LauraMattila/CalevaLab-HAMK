@@ -40,7 +40,7 @@ import {
   testActivity,
 } from '../components/PolarApi';
 
-import {fetchStepPreference, fetchCaloriesPreference} from '../db/UserDb';
+import {fetchStepPreference, fetchCaloriesPreference, fetchSleepPreference} from '../db/UserDb';
 
 const Athletecard = ({navigation}) => {
   const options = [
@@ -63,6 +63,7 @@ const Athletecard = ({navigation}) => {
   const [dateArr, setDateArr] = useState([]);
   const [stepsDayList, setStepsDayList] = useState(['']);
   const [caloriesDayList, setCaloriesDayList] = useState(['']);
+  const [sleepDayList, setSleepDayList] = useState(['']);
   const [userId, setUserId] = useState('1');
 
   useEffect(() => {
@@ -169,11 +170,58 @@ const Athletecard = ({navigation}) => {
           dayIndex += 1;
         });
         setCaloriesDayList(dateList);
-     
-  
-      
+       
     };
 
+    const fetchSleep = async () => {
+      var data = [];
+      var preference = await fetchSleepPreference(userId);
+      console.log(preference);
+      switch (preference) {
+        case 'Polar':
+          //await getSleep(userId);
+          data = await fetchSleepP(userId);
+          console.log(data);
+          break;
+        case 'Fitbit':
+          // await getSleepDataFit(userId);
+          data = await fetchSleepLog(userId);
+          break;
+      }
+
+      console.log('Tässä SLeepit' + data);
+      dayIndex = 0;
+      dbIndex = 0;
+      var dbDate;
+      var currentDate;
+      dateList = [];
+      console.log(dateArray);
+      dateArray.forEach(date => {
+        try {
+          currentDate = date.toISOString().slice(0, 10);
+          if (data[dbIndex] != undefined) {
+            dbDate = data[dbIndex].date.toDate().toISOString().slice(0, 10);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+        if (dbDate == currentDate) {
+          var totalMinutes = data[dbIndex].sleep_min;
+          const hours = Math.floor(totalMinutes / 60);
+          const minutes = Math.floor(totalMinutes % 60);
+
+          dateList[dayIndex] = hours + '.' + minutes;
+
+          dbIndex += 1;
+        } else {
+          dateList[dayIndex] = 'NA';
+        }
+        dayIndex += 1;
+      });
+      setSleepDayList(dateList);
+    };
+
+    fetchSleep();
     fetchCalories();
     fetchSteps();
   }, [userId]);
@@ -251,13 +299,13 @@ const Athletecard = ({navigation}) => {
 
             <DataTable.Row style={styles.row}>
               <DataTable.Cell>SLEEP</DataTable.Cell>
-              <DataTable.Cell numeric>8.0</DataTable.Cell>
-              <DataTable.Cell numeric>8.0</DataTable.Cell>
-              <DataTable.Cell numeric>8.0</DataTable.Cell>
-              <DataTable.Cell numeric>8.0</DataTable.Cell>
-              <DataTable.Cell numeric>8.0</DataTable.Cell>
-              <DataTable.Cell numeric>8.0</DataTable.Cell>
-              <DataTable.Cell numeric>8.0</DataTable.Cell>
+              <DataTable.Cell numeric>{sleepDayList[0]}</DataTable.Cell>
+              <DataTable.Cell numeric>{sleepDayList[1]}</DataTable.Cell>
+              <DataTable.Cell numeric>{sleepDayList[2]}</DataTable.Cell>
+              <DataTable.Cell numeric>{sleepDayList[3]}</DataTable.Cell>
+              <DataTable.Cell numeric>{sleepDayList[4]}</DataTable.Cell>
+              <DataTable.Cell numeric>{sleepDayList[5]}</DataTable.Cell>
+              <DataTable.Cell numeric>{sleepDayList[6]}</DataTable.Cell>
             </DataTable.Row>
           </DataTable>
         </View>
