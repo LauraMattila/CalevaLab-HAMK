@@ -40,11 +40,20 @@ import {
   testActivity,
 } from '../components/PolarApi';
 
+import {fetchStepPreference, fetchCaloriesPreference} from '../db/UserDb';
+
 const Athletecard = ({navigation}) => {
   const options = [
     {label: 'days', value: 'days'},
     {label: 'weeks', value: 'weeks'},
     {label: 'months', value: 'months'},
+  ];
+
+  const kuka = [
+    {label: 'Sampo', value: '1'},
+    {label: 'Jere', value: '2'},
+    {label: 'Janette', value: '3'},
+    {label: 'Laura', value: '4'},
   ];
 
   const [firstname, setFirstname] = useState('Matti');
@@ -53,6 +62,7 @@ const Athletecard = ({navigation}) => {
   const [gender, setGender] = useState('Male');
   const [dateArr, setDateArr] = useState([]);
   const [stepsDayList, setStepsDayList] = useState(['']);
+  const [caloriesDayList, setCaloriesDayList] = useState(['']);
   const [userId, setUserId] = useState('1');
 
   useEffect(() => {
@@ -74,9 +84,22 @@ const Athletecard = ({navigation}) => {
     setDateArr(dateArray);
 
     const fetchSteps = async () => {
-      await getStepsFit(userId);
-      const data = await fetchStepsLog(userId);
-      console.log('Tässä stepsit ' + data);
+      var data = [];
+      var preference = await fetchStepPreference(userId);
+      console.log(preference);
+      switch (preference) {
+        case 'Polar':
+          await getActivity(userId);
+          data = await fetchStepsP(userId);
+          console.log(data);
+          break;
+        case 'Fitbit':
+          await getStepsFit(userId);
+          data = await fetchStepsLog(userId);
+          break;
+      }
+
+      console.log('Tässä stepsit' + data);
       dayIndex = 0;
       dbIndex = 0;
       var dbDate;
@@ -93,7 +116,8 @@ const Athletecard = ({navigation}) => {
           console.error(error);
         }
         if (dbDate == currentDate) {
-          dateList[dayIndex] = data[dbIndex].value;
+          dateList[dayIndex] = data[dbIndex].steps;
+
           dbIndex += 1;
         } else {
           dateList[dayIndex] = 'NA';
@@ -101,15 +125,68 @@ const Athletecard = ({navigation}) => {
         dayIndex += 1;
       });
       setStepsDayList(dateList);
-    };
-    fetchSteps();
-  }, []);
 
- 
+    };
+
+      const fetchCalories = async () => {
+        var data = [];
+        var preference = await fetchCaloriesPreference(userId);
+        console.log(preference);
+        switch (preference) {
+          case 'Polar':
+            await getActivity(userId);
+            data = await fetchCaloriesP(userId);
+            console.log(data);
+            break;
+          case 'Fitbit':
+            await getCalsFit(userId);
+            data = await fetchCaloriesLog(userId);
+            break;
+        }
+  
+        console.log('Tässä calories' + data);
+        dayIndex = 0;
+        dbIndex = 0;
+        var dbDate;
+        var currentDate;
+        dateList = [];
+        console.log(dateArray);
+        dateArray.forEach(date => {
+          try {
+            currentDate = date.toISOString().slice(0, 10);
+            if (data[dbIndex] != undefined) {
+              dbDate = data[dbIndex].date.toDate().toISOString().slice(0, 10);
+            }
+          } catch (error) {
+            console.error(error);
+          }
+          if (dbDate == currentDate) {
+            dateList[dayIndex] = data[dbIndex].calories;
+            dbIndex += 1;
+          } else {
+            dateList[dayIndex] = 'NA';
+          }
+          dayIndex += 1;
+        });
+        setCaloriesDayList(dateList);
+     
+  
+      
+    };
+
+    fetchCalories();
+    fetchSteps();
+  }, [userId]);
+
   var [day1, day2, day3, day4, day5, day6, day7] = dateArr;
 
   return (
     <PaperProvider>
+      <SwitchSelector
+        options={kuka}
+        initial={0}
+        onPress={value => setUserId(value)}
+      />
       <View>
         <View style={styles.infocont}>
           <View>
@@ -141,13 +218,13 @@ const Athletecard = ({navigation}) => {
           <DataTable>
             <DataTable.Header style={styles.weekdays}>
               <DataTable.Title></DataTable.Title>
-              <DataTable.Title>{Moment(day1).format('DD.MM.')}</DataTable.Title>
-              <DataTable.Title>{Moment(day2).format('DD.MM.')}</DataTable.Title>
-              <DataTable.Title>{Moment(day3).format('DD.MM.')}</DataTable.Title>
-              <DataTable.Title>{Moment(day4).format('DD.MM.')}</DataTable.Title>
-              <DataTable.Title>{Moment(day5).format('DD.MM.')}</DataTable.Title>
-              <DataTable.Title>{Moment(day6).format('DD.MM.')}</DataTable.Title>
-              <DataTable.Title>{Moment(day7).format('DD.MM.')}</DataTable.Title>
+              <DataTable.Title>{Moment(day1).format('ddd')}</DataTable.Title>
+              <DataTable.Title>{Moment(day2).format('ddd')}</DataTable.Title>
+              <DataTable.Title>{Moment(day3).format('ddd')}</DataTable.Title>
+              <DataTable.Title>{Moment(day4).format('ddd')}</DataTable.Title>
+              <DataTable.Title>{Moment(day5).format('ddd')}</DataTable.Title>
+              <DataTable.Title>{Moment(day6).format('ddd')}</DataTable.Title>
+              <DataTable.Title>{Moment(day7).format('ddd')}</DataTable.Title>
             </DataTable.Header>
 
             <DataTable.Row style={styles.row}>
@@ -163,13 +240,13 @@ const Athletecard = ({navigation}) => {
 
             <DataTable.Row style={styles.row}>
               <DataTable.Cell>KCAL</DataTable.Cell>
-              <DataTable.Cell numeric>2000</DataTable.Cell>
-              <DataTable.Cell numeric>2000</DataTable.Cell>
-              <DataTable.Cell numeric>2000</DataTable.Cell>
-              <DataTable.Cell numeric>2000</DataTable.Cell>
-              <DataTable.Cell numeric>2000</DataTable.Cell>
-              <DataTable.Cell numeric>2000</DataTable.Cell>
-              <DataTable.Cell numeric>2000</DataTable.Cell>
+              <DataTable.Cell numeric>{caloriesDayList[0]}</DataTable.Cell>
+              <DataTable.Cell numeric>{caloriesDayList[1]}</DataTable.Cell>
+              <DataTable.Cell numeric>{caloriesDayList[2]}</DataTable.Cell>
+              <DataTable.Cell numeric>{caloriesDayList[3]}</DataTable.Cell>
+              <DataTable.Cell numeric>{caloriesDayList[4]}</DataTable.Cell>
+              <DataTable.Cell numeric>{caloriesDayList[5]}</DataTable.Cell>
+              <DataTable.Cell numeric>{caloriesDayList[6]}</DataTable.Cell>
             </DataTable.Row>
 
             <DataTable.Row style={styles.row}>

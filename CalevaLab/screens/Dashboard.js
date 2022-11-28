@@ -120,7 +120,9 @@ const Dashboard = ({navigation}) => {
       console.log(preference);
       switch (preference) {
         case 'Polar':
-          // await getActivity(userId);
+
+          //await getActivity(userId);
+
           data = await fetchStepsP(userId);
           console.log(data);
           break;
@@ -169,7 +171,9 @@ const Dashboard = ({navigation}) => {
           console.log(data);
           break;
         case 'Fitbit':
-          // await getCalsFit(userId);
+
+          //await getCalsFit(userId);
+
           data = await fetchCaloriesLog(userId);
           break;
       }
@@ -370,7 +374,7 @@ const Dashboard = ({navigation}) => {
           title="Get polar Sleep"
           onPress={() => fetchSleepP(userId)}></Button>
 
-        {/* <Button title="Fitbit id" onPress={() => fetchUserId(userId)}></Button>
+         <Button title="Fitbit id" onPress={() => fetchUserId(userId)}></Button>
         <Button title="polarId" onPress={() => fetchUserIdP(userId)}></Button>
         <Button
           title="polarAccess"
@@ -410,7 +414,7 @@ const Dashboard = ({navigation}) => {
         <Button
           title="fitbit calories from db"
 
-          onPress={() => fetchCaloriesLog(userId)}></Button>  */}
+          onPress={() => fetchCaloriesLog(userId)}></Button>  
 
         <View>
           <FlatList
