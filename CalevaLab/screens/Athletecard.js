@@ -40,11 +40,20 @@ import {
   testActivity,
 } from '../components/PolarApi';
 
+import {fetchStepPreference} from '../db/UserDb';
+
 const Athletecard = ({navigation}) => {
   const options = [
     {label: 'days', value: 'days'},
     {label: 'weeks', value: 'weeks'},
     {label: 'months', value: 'months'},
+  ];
+
+  const kuka = [
+    {label: 'Sampo', value: '1'},
+    {label: 'Jere', value: '2'},
+    {label: 'Janette', value: '3'},
+    {label: 'Laura', value: '4'},
   ];
 
   const [firstname, setFirstname] = useState('Matti');
@@ -74,9 +83,22 @@ const Athletecard = ({navigation}) => {
     setDateArr(dateArray);
 
     const fetchSteps = async () => {
-      await getStepsFit(userId);
-      const data = await fetchStepsLog(userId);
-      console.log('Tässä stepsit ' + data);
+      var data = [];
+      var preference = await fetchStepPreference(userId);
+      console.log(preference);
+      switch (preference) {
+        case 'Polar':
+          await getActivity(userId);
+          data = await fetchStepsP(userId);
+          console.log(data);
+          break;
+        case 'Fitbit':
+          await getStepsFit(userId);
+          data = await fetchStepsLog(userId);
+          break;
+      }
+
+      console.log('Tässä stepsit' + data);
       dayIndex = 0;
       dbIndex = 0;
       var dbDate;
@@ -93,7 +115,8 @@ const Athletecard = ({navigation}) => {
           console.error(error);
         }
         if (dbDate == currentDate) {
-          dateList[dayIndex] = data[dbIndex].value;
+          dateList[dayIndex] = data[dbIndex].steps;
+
           dbIndex += 1;
         } else {
           dateList[dayIndex] = 'NA';
@@ -103,13 +126,17 @@ const Athletecard = ({navigation}) => {
       setStepsDayList(dateList);
     };
     fetchSteps();
-  }, []);
+  }, [userId]);
 
- 
   var [day1, day2, day3, day4, day5, day6, day7] = dateArr;
 
   return (
     <PaperProvider>
+      <SwitchSelector
+        options={kuka}
+        initial={0}
+        onPress={value => setUserId(value)}
+      />
       <View>
         <View style={styles.infocont}>
           <View>
@@ -141,13 +168,13 @@ const Athletecard = ({navigation}) => {
           <DataTable>
             <DataTable.Header style={styles.weekdays}>
               <DataTable.Title></DataTable.Title>
-              <DataTable.Title>{Moment(day1).format('DD.MM.')}</DataTable.Title>
-              <DataTable.Title>{Moment(day2).format('DD.MM.')}</DataTable.Title>
-              <DataTable.Title>{Moment(day3).format('DD.MM.')}</DataTable.Title>
-              <DataTable.Title>{Moment(day4).format('DD.MM.')}</DataTable.Title>
-              <DataTable.Title>{Moment(day5).format('DD.MM.')}</DataTable.Title>
-              <DataTable.Title>{Moment(day6).format('DD.MM.')}</DataTable.Title>
-              <DataTable.Title>{Moment(day7).format('DD.MM.')}</DataTable.Title>
+              <DataTable.Title>{Moment(day1).format('ddd')}</DataTable.Title>
+              <DataTable.Title>{Moment(day2).format('ddd')}</DataTable.Title>
+              <DataTable.Title>{Moment(day3).format('ddd')}</DataTable.Title>
+              <DataTable.Title>{Moment(day4).format('ddd')}</DataTable.Title>
+              <DataTable.Title>{Moment(day5).format('ddd')}</DataTable.Title>
+              <DataTable.Title>{Moment(day6).format('ddd')}</DataTable.Title>
+              <DataTable.Title>{Moment(day7).format('ddd')}</DataTable.Title>
             </DataTable.Header>
 
             <DataTable.Row style={styles.row}>
