@@ -51,25 +51,61 @@ const Athletecard = ({navigation}) => {
   const [lastname, setLastname] = useState('Meikäläinen');
   const [age, setAge] = useState('55');
   const [gender, setGender] = useState('Male');
+  const [dateArr, setDateArr] = useState([]);
+  const [stepsDayList, setStepsDayList] = useState(['']);
   const [userId, setUserId] = useState('1');
 
-  var today = new Date();
-  var startdate = new Date();
-  startdate.setDate(today.getDate() - 6);
+  useEffect(() => {
+    var today = new Date();
+    var startdate = new Date();
+    startdate.setDate(today.getDate() - 6);
+    var getDateArray = function (startdate, today) {
+      var arr = new Array(),
+        dt = new Date(startdate);
 
-  var getDateArray = function (startdate, today) {
-    var arr = new Array(),
-      dt = new Date(startdate);
+      while (dt <= today) {
+        arr.push(new Date(dt));
+        dt.setDate(dt.getDate() + 1);
+      }
 
-    while (dt <= today) {
-      arr.push(new Date(dt));
-      dt.setDate(dt.getDate() + 1);
-    }
+      return arr;
+    };
+    var dateArray = getDateArray(startdate, today);
+    setDateArr(dateArray);
 
-    return arr;
-  };
+    const fetchSteps = async () => {
+      await getStepsFit(userId);
+      const data = await fetchStepsLog(userId);
+      console.log('Tässä stepsit ' + data);
+      dayIndex = 0;
+      dbIndex = 0;
+      var dbDate;
+      var currentDate;
+      dateList = [];
+      console.log(dateArray);
+      dateArray.forEach(date => {
+        try {
+          currentDate = date.toISOString().slice(0, 10);
+          if (data[dbIndex] != undefined) {
+            dbDate = data[dbIndex].date.toDate().toISOString().slice(0, 10);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+        if (dbDate == currentDate) {
+          dateList[dayIndex] = data[dbIndex].value;
+          dbIndex += 1;
+        } else {
+          dateList[dayIndex] = 'NA';
+        }
+        dayIndex += 1;
+      });
+      setStepsDayList(dateList);
+    };
+    fetchSteps();
+  }, []);
 
-  var dateArr = getDateArray(startdate, today);
+ 
   var [day1, day2, day3, day4, day5, day6, day7] = dateArr;
 
   return (
@@ -105,24 +141,24 @@ const Athletecard = ({navigation}) => {
           <DataTable>
             <DataTable.Header style={styles.weekdays}>
               <DataTable.Title></DataTable.Title>
-              <DataTable.Title>MON</DataTable.Title>
-              <DataTable.Title>TUE</DataTable.Title>
-              <DataTable.Title>WED</DataTable.Title>
-              <DataTable.Title>THU</DataTable.Title>
-              <DataTable.Title>FRI</DataTable.Title>
-              <DataTable.Title>SAT</DataTable.Title>
-              <DataTable.Title>SUN</DataTable.Title>
+              <DataTable.Title>{Moment(day1).format('DD.MM.')}</DataTable.Title>
+              <DataTable.Title>{Moment(day2).format('DD.MM.')}</DataTable.Title>
+              <DataTable.Title>{Moment(day3).format('DD.MM.')}</DataTable.Title>
+              <DataTable.Title>{Moment(day4).format('DD.MM.')}</DataTable.Title>
+              <DataTable.Title>{Moment(day5).format('DD.MM.')}</DataTable.Title>
+              <DataTable.Title>{Moment(day6).format('DD.MM.')}</DataTable.Title>
+              <DataTable.Title>{Moment(day7).format('DD.MM.')}</DataTable.Title>
             </DataTable.Header>
 
             <DataTable.Row style={styles.row}>
               <DataTable.Cell>STEPS</DataTable.Cell>
-              <DataTable.Cell numeric>10000</DataTable.Cell>
-              <DataTable.Cell numeric>10000</DataTable.Cell>
-              <DataTable.Cell numeric>10000</DataTable.Cell>
-              <DataTable.Cell numeric>10000</DataTable.Cell>
-              <DataTable.Cell numeric>10000</DataTable.Cell>
-              <DataTable.Cell numeric>10000</DataTable.Cell>
-              <DataTable.Cell numeric>10000</DataTable.Cell>
+              <DataTable.Cell numeric>{stepsDayList[0]}</DataTable.Cell>
+              <DataTable.Cell numeric>{stepsDayList[1]}</DataTable.Cell>
+              <DataTable.Cell numeric>{stepsDayList[2]}</DataTable.Cell>
+              <DataTable.Cell numeric>{stepsDayList[3]}</DataTable.Cell>
+              <DataTable.Cell numeric>{stepsDayList[4]}</DataTable.Cell>
+              <DataTable.Cell numeric>{stepsDayList[5]}</DataTable.Cell>
+              <DataTable.Cell numeric>{stepsDayList[6]}</DataTable.Cell>
             </DataTable.Row>
 
             <DataTable.Row style={styles.row}>
