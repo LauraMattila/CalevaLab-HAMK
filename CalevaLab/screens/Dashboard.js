@@ -55,6 +55,13 @@ const Dashboard = ({navigation}) => {
     {label: 'months', value: 'months'},
   ];
 
+  const kuka = [
+    {label: 'Sampo', value: '1'},
+    {label: 'Jere', value: '2'},
+    {label: 'Janette', value: '3'},
+    {label: 'Laura', value: '4'},
+  ];
+
   const [firstname, setFirstname] = useState('Matti');
   const [lastname, setLastname] = useState('Meikäläinen');
   const [age, setAge] = useState('55');
@@ -70,14 +77,22 @@ const Dashboard = ({navigation}) => {
   const [endTime, setEndTime] = useState();
   const [loading, setLoading] = useState(true);
 
-  const [userId, setUserId] = useState('1');
+  const [userId, setUserId] = useState('');
+
+  const [stepsDayList, setStepsDayList] = useState(['']);
+
+  const [dateArr, setDateArr] = useState([]);
+
 
   const [accessToken, setAccessToken] = useState('');
 
-  var today = new Date();
+  
+
+  
+  useEffect(()=> {
+    var today = new Date();
   var startdate = new Date();
   startdate.setDate(today.getDate() - 6);
-
   var getDateArray = function (startdate, today) {
     var arr = new Array(),
       dt = new Date(startdate);
@@ -89,19 +104,69 @@ const Dashboard = ({navigation}) => {
 
     return arr;
   };
+  var dateArray = getDateArray(startdate, today);
+  setDateArr(dateArray);
 
-  var dateArr = getDateArray(startdate, today);
-
+    
+    const fetchSteps = async ()=> {
+      await getStepsFit(userId);
+      const data = await fetchStepsLog(userId);
+      console.log("Tässä stepsit" +data);
+      dayIndex= 0;
+      dbIndex = 0;
+      var dbDate;
+      var currentDate;
+      dateList = [];
+      console.log(dateArray);
+      dateArray.forEach(date => {
+        try {
+        currentDate = date.toISOString().slice(0,10);
+        if (data[dbIndex] != undefined) {
+        dbDate = data[dbIndex].date.toDate().toISOString().slice(0,10);
+        }
+        } catch (error) {
+          console.error(error);
+        }
+        if(dbDate == currentDate) {
+            dateList[dayIndex]=data[dbIndex].value;
+            dbIndex +=1;
+        } else {
+          dateList[dayIndex] = "NA";
+        
+        }
+        dayIndex += 1;
+      }); 
+      setStepsDayList(dateList);
+    }
+    fetchSteps();
+  },[]);
   var [day1, day2, day3, day4, day5, day6, day7] = dateArr;
+  
+  
+
+
+  console.log('User:   ' + userId);
+
+
 
   console.log("TODAY:" +day7);
+  if (stepsDayList == ['']) {
+    sleep(1000);
+    return null;
+  }
+
 
   return (
     <PaperProvider>
+      <SwitchSelector
+        options={kuka}
+        initial={0}
+        onPress={value => setUserId(value)}
+      />
       <View>
-        <Text style={styles.header}>Welcome Back!</Text>
+        <Text style={styles.header}>Welcome Back, {userId}!</Text>
 
-        <View style={styles.container}>
+        <View style={styles.infocont}>
           <View>
             <Text style={styles.name}>
               {firstname} {lastname}
@@ -113,7 +178,7 @@ const Dashboard = ({navigation}) => {
           </View>
         </View>
 
-        <View style={styles.sele}>
+        <View style={styles.selectioncont}>
           <View style={styles.selection}>
             <Text style={styles.header}>Activity Logs</Text>
           </View>
@@ -126,7 +191,7 @@ const Dashboard = ({navigation}) => {
           </View>
         </View>
 
-        {/* <DataTable>
+        <DataTable>
           <DataTable.Header>
             <DataTable.Title>Day</DataTable.Title>
             <DataTable.Title numeric>Sleep</DataTable.Title>
@@ -137,54 +202,54 @@ const Dashboard = ({navigation}) => {
           <DataTable.Row>
             <DataTable.Cell>{Moment(day7).format('DD.MM.')}</DataTable.Cell>
             <DataTable.Cell numeric>237</DataTable.Cell>
-            <DataTable.Cell numeric>8.0</DataTable.Cell>
+            <DataTable.Cell numeric>{stepsDayList[6]}</DataTable.Cell>
             <DataTable.Cell numeric>8.0</DataTable.Cell>
           </DataTable.Row>
 
           <DataTable.Row>
             <DataTable.Cell>{Moment(day6).format('DD.MM.')}</DataTable.Cell>
             <DataTable.Cell numeric>159</DataTable.Cell>
-            <DataTable.Cell numeric>6.0</DataTable.Cell>
+            <DataTable.Cell numeric>{stepsDayList[5]}</DataTable.Cell>
             <DataTable.Cell numeric>8.0</DataTable.Cell>
           </DataTable.Row>
 
           <DataTable.Row>
             <DataTable.Cell>{Moment(day5).format('DD.MM.')}</DataTable.Cell>
             <DataTable.Cell numeric>237</DataTable.Cell>
-            <DataTable.Cell numeric>8.0</DataTable.Cell>
+            <DataTable.Cell numeric>{stepsDayList[4]}</DataTable.Cell>
             <DataTable.Cell numeric>8.0</DataTable.Cell>
           </DataTable.Row>
 
           <DataTable.Row>
             <DataTable.Cell>{Moment(day4).format('DD.MM.')}</DataTable.Cell>
             <DataTable.Cell numeric>237</DataTable.Cell>
-            <DataTable.Cell numeric>8.0</DataTable.Cell>
+            <DataTable.Cell numeric>{stepsDayList[3]}</DataTable.Cell>
             <DataTable.Cell numeric>8.0</DataTable.Cell>
           </DataTable.Row>
 
           <DataTable.Row>
             <DataTable.Cell>{Moment(day3).format('DD.MM.')}</DataTable.Cell>
             <DataTable.Cell numeric>237</DataTable.Cell>
-            <DataTable.Cell numeric>8.0</DataTable.Cell>
+            <DataTable.Cell numeric>{stepsDayList[2]}</DataTable.Cell>
             <DataTable.Cell numeric>8.0</DataTable.Cell>
           </DataTable.Row>
 
           <DataTable.Row>
             <DataTable.Cell>{Moment(day2).format('DD.MM.')}</DataTable.Cell>
             <DataTable.Cell numeric>237</DataTable.Cell>
-            <DataTable.Cell numeric>8.0</DataTable.Cell>
+            <DataTable.Cell numeric>{stepsDayList[1]}</DataTable.Cell>
             <DataTable.Cell numeric>8.0</DataTable.Cell>
           </DataTable.Row>
 
           <DataTable.Row>
             <DataTable.Cell>{Moment(day1).format('DD.MM.')}</DataTable.Cell>
             <DataTable.Cell numeric>237</DataTable.Cell>
-            <DataTable.Cell numeric>8.0</DataTable.Cell>
+            <DataTable.Cell numeric>{stepsDayList[0]}</DataTable.Cell>
             <DataTable.Cell numeric>8.0</DataTable.Cell>
           </DataTable.Row>
-        </DataTable> */}
+        </DataTable>
 
-        <Button title="Fitbit id" onPress={() => fetchUserId(userId)}></Button>
+        {/* <Button title="Fitbit id" onPress={() => fetchUserId(userId)}></Button>
         <Button title="polarId" onPress={() => fetchUserIdP(userId)}></Button>
         <Button
           title="polarAccess"
@@ -224,26 +289,23 @@ const Dashboard = ({navigation}) => {
         <Button
           title="fitbit calories from db"
 
+          onPress={() => fetchCaloriesLog(userId)}></Button>  */}
 
-          onPress={() => fetchCaloriesLog(userId)}></Button> 
-
-      <View>
-        <FlatList
-          style={{flex: 1}}
-          data={users}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={item => (
-            <View>
-              <Text>
-                {' '}
-                {item.item.user_id} {item.item.sleepMin} {item.item.sleepDate}{' '}
-              </Text>
-            </View>
-          )}
-        />
-      </View>
-
-
+        <View>
+          <FlatList
+            style={{flex: 1}}
+            data={users}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={item => (
+              <View>
+                <Text>
+                  {' '}
+                  {item.item.user_id} {item.item.sleepMin} {item.item.sleepDate}{' '}
+                </Text>
+              </View>
+            )}
+          />
+        </View>
 
       </View>
     </PaperProvider>
@@ -251,18 +313,17 @@ const Dashboard = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    margin: 10,
-    width: '100%',
-    flexDirection: 'row',
-    height: 70,
-  },
-
   header: {
     fontSize: 20,
     margin: 15,
     textAlign: 'left',
     fontWeight: 'bold',
+  },
+  infocont: {
+    margin: 10,
+    width: '100%',
+    flexDirection: 'row',
+    height: 70,
   },
 
   name: {
@@ -279,6 +340,10 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
 
+  selectioncont: {
+    flexDirection: 'row',
+  },
+
   selection: {
     margin: 2,
     marginVertical: -5,
@@ -289,34 +354,6 @@ const styles = StyleSheet.create({
     margin: 2,
     marginVertical: 2,
     width: 230,
-  },
-
-  sele: {
-    flexDirection: 'row',
-  },
-
-  app: {
-    margin: 2,
-  },
-
-  container2: {
-    flex: 1,
-    padding: 18,
-    paddingTop: 35,
-    backgroundColor: '#ffffff',
-  },
-  HeadStyle: {
-    height: 50,
-    alignContent: 'center',
-    backgroundColor: '#ffe0f0',
-  },
-  TableText: {
-    margin: 10,
-  },
-
-  row: {
-    height: 40,
-    backgroundColor: 'red',
   },
 });
 

@@ -163,9 +163,9 @@ export async function getActivity(id) {
       index += 1;
 
       if (activitySummary[index]!== undefined) {
-        console.log('hevosenseiväs ')
+        
       if (date == activitySummary[index].date) {
-        console.log('kahen kilon siika ')
+        
         return;
       }
     }
