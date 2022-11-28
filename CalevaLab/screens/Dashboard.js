@@ -48,6 +48,10 @@ import {
   testActivity,
 } from '../components/PolarApi';
 
+import {
+  fetchStepPreference
+} from '../db/UserDb';
+
 const Dashboard = ({navigation}) => {
   const options = [
     {label: 'days', value: 'days'},
@@ -104,8 +108,23 @@ const Dashboard = ({navigation}) => {
     setDateArr(dateArray);
 
     const fetchSteps = async () => {
-      await getStepsFit(userId);
-      const data = await fetchStepsLog(userId);
+
+      
+      var data = [];
+      var preference = await fetchStepPreference(userId);
+      console.log(preference);
+      switch(preference) {
+        case "Polar":
+          await getActivity(userId);
+          data = await fetchStepsP(userId);
+          console.log(data);
+          break;
+        case "Fitbit":
+          await getStepsFit(userId);
+          data = await fetchStepsLog(userId);
+          break;
+      }
+
       console.log('Tässä stepsit' + data);
       dayIndex = 0;
       dbIndex = 0;
@@ -123,7 +142,9 @@ const Dashboard = ({navigation}) => {
           console.error(error);
         }
         if (dbDate == currentDate) {
-          dateList[dayIndex] = data[dbIndex].value;
+
+          dateList[dayIndex] = data[dbIndex].steps;
+
           dbIndex += 1;
         } else {
           dateList[dayIndex] = 'NA';
@@ -133,7 +154,9 @@ const Dashboard = ({navigation}) => {
       setStepsDayList(dateList);
     };
     fetchSteps();
-  }, []);
+
+  }, [userId]);
+
   var [day1, day2, day3, day4, day5, day6, day7] = dateArr;
 
   console.log('User:   ' + userId);

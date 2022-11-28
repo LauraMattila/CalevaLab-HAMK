@@ -62,7 +62,7 @@ export async function SaveStepsLog(stepsDate, steps, id, string) {
   try {
     const stepsData = {
       date: stepsDate,
-      value: steps,
+      steps: steps,
       user_id: id,
     };
     const res = await firestore()
@@ -80,7 +80,7 @@ export async function SaveCaloriesLog(caloriesDate, calories, string, id) {
   try {
     const caloriesData = {
       date: caloriesDate,
-      burned_calories: calories,
+      calories: calories,
       user_id: id,
     };
     const res = await firestore()
