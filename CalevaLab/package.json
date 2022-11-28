@@ -17,6 +17,8 @@
     "moment": "^2.29.4",
     "react": "18.1.0",
     "react-native": "0.70.5",
+    "react-native-camera": "^4.2.1",
+    "react-native-camera-kit": "^13.0.0",
     "react-native-easy-grid": "^0.2.2",
     "react-native-gesture-handler": "^2.1.1",
     "react-native-paper": "^5.0.0-rc.10",
