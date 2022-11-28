@@ -125,14 +125,13 @@ export async function fetchStepsP(id) {
         return;
       }
   
-      //const sleepListP = []
+      const caloriesListP = [];
   
       calories.forEach(doc => {
         
-        console.log(doc.data())
-        //sleepListP.push(doc.data());
+        caloriesListP.push(doc.data());
       });
-      //return sleepListP;
+      return caloriesListP;
   
     } catch (error) {
       console.error(error);

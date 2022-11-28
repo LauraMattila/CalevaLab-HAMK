@@ -1,5 +1,5 @@
 import firestore, {firebase} from '@react-native-firebase/firestore';
-import {string} from 'prop-types'; 
+import {string} from 'prop-types';
 
 export async function fetchUserId(id) {
   try {
@@ -101,20 +101,19 @@ export async function fetchCaloriesLog(id) {
   try {
     var response = await firestore()
       .collection('fitbit_calories')
-      .where('user_id','==', id)
+      .where('user_id', '==', id)
       .where('date', '>=', startdate)
       .get();
 
-    response.forEach(doc => {
-      console.log(doc.data().date.toDate());
-    });
-
-    if (!response.exists) {
+    if (response.empty) {
       console.log('EI OLE CALORIES');
       return;
     } else {
-      console.log(response.data);
-      
+      caloriesDatafit = [];
+      response.forEach(doc => {
+        caloriesDatafit.push(doc.data());
+      });
+      return caloriesDatafit;
     }
   } catch (error) {
     console.error(error);
@@ -128,8 +127,8 @@ export async function fetchSleepLog(id) {
   try {
     var response = await firestore()
       .collection('fitbit_sleep')
-      .where('user_id','==', id)
-      .where('date', '>=', (startdate))
+      .where('user_id', '==', id)
+      .where('date', '>=', startdate)
       .get();
 
     response.forEach(doc => {
@@ -153,17 +152,15 @@ export async function fetchStepsLog(id) {
   //var dateFormat = require('dateformat');
   //dateFormat(today, "yyyy, mm, dddd");
   startdate.setDate(today.getDate() - 7);
-  
+
   try {
     var response = await firestore()
       .collection('fitbit_steps')
-      .where('user_id','==', id)
+      .where('user_id', '==', id)
       .where('date', '>=', startdate)
       .get();
 
-
     if (response.empty) {
-
       console.log('EI OLE STEPS');
       return;
     } else {
