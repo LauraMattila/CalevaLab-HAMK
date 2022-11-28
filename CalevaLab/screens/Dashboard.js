@@ -108,6 +108,7 @@ const Dashboard = ({navigation}) => {
     setDateArr(dateArray);
 
     const fetchSteps = async () => {
+
       
       var data = [];
       var preference = await fetchStepPreference(userId);
@@ -123,6 +124,7 @@ const Dashboard = ({navigation}) => {
           data = await fetchStepsLog(userId);
           break;
       }
+
       console.log('Tässä stepsit' + data);
       dayIndex = 0;
       dbIndex = 0;
@@ -140,7 +142,9 @@ const Dashboard = ({navigation}) => {
           console.error(error);
         }
         if (dbDate == currentDate) {
+
           dateList[dayIndex] = data[dbIndex].steps;
+
           dbIndex += 1;
         } else {
           dateList[dayIndex] = 'NA';
@@ -150,7 +154,9 @@ const Dashboard = ({navigation}) => {
       setStepsDayList(dateList);
     };
     fetchSteps();
+
   }, [userId]);
+
   var [day1, day2, day3, day4, day5, day6, day7] = dateArr;
 
   console.log('User:   ' + userId);
