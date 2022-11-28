@@ -48,6 +48,10 @@ import {
   testActivity,
 } from '../components/PolarApi';
 
+import {
+  fetchStepPreference
+} from '../db/UserDb';
+
 const Dashboard = ({navigation}) => {
   const options = [
     {label: 'days', value: 'days'},
@@ -77,42 +81,50 @@ const Dashboard = ({navigation}) => {
   const [endTime, setEndTime] = useState();
   const [loading, setLoading] = useState(true);
 
-  const [userId, setUserId] = useState('');
+  const [userId, setUserId] = useState('1');
 
   const [stepsDayList, setStepsDayList] = useState(['']);
 
   const [dateArr, setDateArr] = useState([]);
 
-
   const [accessToken, setAccessToken] = useState('');
 
-  
-
-  
-  useEffect(()=> {
+  useEffect(() => {
     var today = new Date();
-  var startdate = new Date();
-  startdate.setDate(today.getDate() - 6);
-  var getDateArray = function (startdate, today) {
-    var arr = new Array(),
-      dt = new Date(startdate);
+    var startdate = new Date();
+    startdate.setDate(today.getDate() - 6);
+    var getDateArray = function (startdate, today) {
+      var arr = new Array(),
+        dt = new Date(startdate);
 
-    while (dt <= today) {
-      arr.push(new Date(dt));
-      dt.setDate(dt.getDate() + 1);
-    }
+      while (dt <= today) {
+        arr.push(new Date(dt));
+        dt.setDate(dt.getDate() + 1);
+      }
 
-    return arr;
-  };
-  var dateArray = getDateArray(startdate, today);
-  setDateArr(dateArray);
+      return arr;
+    };
+    var dateArray = getDateArray(startdate, today);
+    setDateArr(dateArray);
 
-    
-    const fetchSteps = async ()=> {
-      await getStepsFit(userId);
-      const data = await fetchStepsLog(userId);
-      console.log("Tässä stepsit" +data);
-      dayIndex= 0;
+    const fetchSteps = async () => {
+      
+      var data = [];
+      var preference = await fetchStepPreference(userId);
+      console.log(preference);
+      switch(preference) {
+        case "Polar":
+          await getActivity(userId);
+          data = await fetchStepsP(userId);
+          console.log(data);
+          break;
+        case "Fitbit":
+          await getStepsFit(userId);
+          data = await fetchStepsLog(userId);
+          break;
+      }
+      console.log('Tässä stepsit' + data);
+      dayIndex = 0;
       dbIndex = 0;
       var dbDate;
       var currentDate;
@@ -120,41 +132,34 @@ const Dashboard = ({navigation}) => {
       console.log(dateArray);
       dateArray.forEach(date => {
         try {
-        currentDate = date.toISOString().slice(0,10);
-        if (data[dbIndex] != undefined) {
-        dbDate = data[dbIndex].date.toDate().toISOString().slice(0,10);
-        }
+          currentDate = date.toISOString().slice(0, 10);
+          if (data[dbIndex] != undefined) {
+            dbDate = data[dbIndex].date.toDate().toISOString().slice(0, 10);
+          }
         } catch (error) {
           console.error(error);
         }
-        if(dbDate == currentDate) {
-            dateList[dayIndex]=data[dbIndex].value;
-            dbIndex +=1;
+        if (dbDate == currentDate) {
+          dateList[dayIndex] = data[dbIndex].steps;
+          dbIndex += 1;
         } else {
-          dateList[dayIndex] = "NA";
-        
+          dateList[dayIndex] = 'NA';
         }
         dayIndex += 1;
-      }); 
+      });
       setStepsDayList(dateList);
-    }
+    };
     fetchSteps();
-  },[]);
+  }, [userId]);
   var [day1, day2, day3, day4, day5, day6, day7] = dateArr;
-  
-  
-
 
   console.log('User:   ' + userId);
 
-
-
-  console.log("TODAY:" +day7);
+  console.log('TODAY:' + day7);
   if (stepsDayList == ['']) {
     sleep(1000);
     return null;
   }
-
 
   return (
     <PaperProvider>
@@ -306,7 +311,6 @@ const Dashboard = ({navigation}) => {
             )}
           />
         </View>
-
       </View>
     </PaperProvider>
   );

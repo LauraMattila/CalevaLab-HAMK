@@ -80,7 +80,7 @@ export async function fetchStepsP(id) {
       const today = new Date();
       today.setDate(today.getDate() - 7);
   
-      var steps = await firestore()
+      var response = await firestore()
         .collection('polar_steps')
         .where('user_id','==', id)
         .where('date', '>=', today)
@@ -88,19 +88,18 @@ export async function fetchStepsP(id) {
   
   
        
-      if (steps.empty) {
+      if (response.empty) {
         console.log('EI ole');
         return;
       }
   
       //const sleepListP = []
-  
-      steps.forEach(doc => {
-        result = doc.data().steps;
-        console.log(doc.data())
-        //sleepListP.push(doc.data());
+      var stepsData = [];
+      response.forEach(doc => {
+        stepsData.push(doc.data());
       });
-      //return sleepListP;
+      return stepsData;
+      
   
     } catch (error) {
       console.error(error);
@@ -162,7 +161,7 @@ export async function createSleep(sleepDate, sleepMin, id) {
 export async function createSteps(stepsDate, steps, id) {
   try {
     const stepData = {
-      date: firestore.Timestamp.fromDate(new Date(stepsDate)),
+      date: new Date(stepsDate),
       steps: steps,
       user_id: id,
     };
@@ -177,7 +176,7 @@ export async function createSteps(stepsDate, steps, id) {
 export async function createCalories(caloriesDate, calories, id) {
   try {
     const caloriesData = {
-      date: firestore.Timestamp.fromDate(new Date(caloriesDate)),
+      date: new Date(caloriesDate),
       calories: calories,
       user_id: id,
     };
