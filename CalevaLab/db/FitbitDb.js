@@ -131,16 +131,16 @@ export async function fetchSleepLog(id) {
       .where('date', '>=', startdate)
       .get();
 
-    response.forEach(doc => {
-      console.log(doc.data().date.toDate());
-    });
-
-    if (!response.exists) {
-      console.log('EI OLE SLEEP');
-      return;
-    } else {
-      console.log(response.data());
-    }
+    if (response.empty) {
+        console.log('EI OLE SLEEP');
+        return;
+      } else {
+        sleepDataFit = [];
+        response.forEach(doc => {
+          sleepDataFit.push(doc.data());
+        });
+        return sleepDataFit;
+      }
   } catch (error) {
     console.error(error);
   }

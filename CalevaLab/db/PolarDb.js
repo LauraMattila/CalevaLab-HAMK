@@ -48,7 +48,7 @@ export async function fetchSleepP(id) {
     const today = new Date();
     today.setDate(today.getDate() - 7);
 
-    var sleepMins = await firestore()
+    var response = await firestore()
       .collection('polar_sleep')
       .where('user_id','==', id)
       .where('date', '>=', today)
@@ -56,15 +56,14 @@ export async function fetchSleepP(id) {
 
 
      
-    if (sleepMins.empty) {
+    if (response.empty) {
       console.log('EI ole');
       return;
     }
 
     const sleepListP = []
 
-    sleepMins.forEach(doc => {
-      result = doc.data().sleepMin;
+    response.forEach(doc => {
       
       sleepListP.push(doc.data());
     });
@@ -138,14 +137,14 @@ export async function fetchStepsP(id) {
     }
   }
   
-
+ 
 
 export async function createSleep(sleepDate, sleepMin, id) {
   try {
        
     const sleepData = {
-      date:  firestore.Timestamp.fromDate(new Date(sleepDate)),
-      sleepMin: sleepMin,
+      date:  new Date(sleepDate),
+      sleep_min: sleepMin,
       user_id: id,
     };
     const ref = await firestore()
