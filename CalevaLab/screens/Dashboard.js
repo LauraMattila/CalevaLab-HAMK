@@ -242,7 +242,7 @@ const Dashboard = ({navigation}) => {
           const hours = Math.floor(totalMinutes / 60);
           const minutes = Math.floor(totalMinutes % 60);
 
-          dateList[dayIndex] = hours + 'h ' + minutes + 'm';
+          dateList[dayIndex] = hours + 'h' + minutes + 'm';
 
           dbIndex += 1;
         } else {
@@ -367,7 +367,7 @@ const Dashboard = ({navigation}) => {
           </DataTable.Row>
         </DataTable>
 
-        <Button
+{/*         <Button
           title="POlar Activities"
           onPress={() => getActivity(userId)}></Button>
         <Button
@@ -414,7 +414,7 @@ const Dashboard = ({navigation}) => {
         <Button
           title="fitbit calories from db"
 
-          onPress={() => fetchCaloriesLog(userId)}></Button>  
+          onPress={() => fetchCaloriesLog(userId)}></Button>  */} 
 
         <View>
           <FlatList
