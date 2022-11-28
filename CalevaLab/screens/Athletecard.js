@@ -40,7 +40,7 @@ import {
   testActivity,
 } from '../components/PolarApi';
 
-import {fetchStepPreference} from '../db/UserDb';
+import {fetchStepPreference, fetchCaloriesPreference} from '../db/UserDb';
 
 const Athletecard = ({navigation}) => {
   const options = [
@@ -62,6 +62,7 @@ const Athletecard = ({navigation}) => {
   const [gender, setGender] = useState('Male');
   const [dateArr, setDateArr] = useState([]);
   const [stepsDayList, setStepsDayList] = useState(['']);
+  const [caloriesDayList, setCaloriesDayList] = useState(['']);
   const [userId, setUserId] = useState('1');
 
   useEffect(() => {
@@ -124,7 +125,56 @@ const Athletecard = ({navigation}) => {
         dayIndex += 1;
       });
       setStepsDayList(dateList);
+
     };
+
+      const fetchCalories = async () => {
+        var data = [];
+        var preference = await fetchCaloriesPreference(userId);
+        console.log(preference);
+        switch (preference) {
+          case 'Polar':
+            await getActivity(userId);
+            data = await fetchCaloriesP(userId);
+            console.log(data);
+            break;
+          case 'Fitbit':
+            await getCalsFit(userId);
+            data = await fetchCaloriesLog(userId);
+            break;
+        }
+  
+        console.log('Tässä calories' + data);
+        dayIndex = 0;
+        dbIndex = 0;
+        var dbDate;
+        var currentDate;
+        dateList = [];
+        console.log(dateArray);
+        dateArray.forEach(date => {
+          try {
+            currentDate = date.toISOString().slice(0, 10);
+            if (data[dbIndex] != undefined) {
+              dbDate = data[dbIndex].date.toDate().toISOString().slice(0, 10);
+            }
+          } catch (error) {
+            console.error(error);
+          }
+          if (dbDate == currentDate) {
+            dateList[dayIndex] = data[dbIndex].calories;
+            dbIndex += 1;
+          } else {
+            dateList[dayIndex] = 'NA';
+          }
+          dayIndex += 1;
+        });
+        setCaloriesDayList(dateList);
+     
+  
+      
+    };
+
+    fetchCalories();
     fetchSteps();
   }, [userId]);
 
@@ -190,13 +240,13 @@ const Athletecard = ({navigation}) => {
 
             <DataTable.Row style={styles.row}>
               <DataTable.Cell>KCAL</DataTable.Cell>
-              <DataTable.Cell numeric>2000</DataTable.Cell>
-              <DataTable.Cell numeric>2000</DataTable.Cell>
-              <DataTable.Cell numeric>2000</DataTable.Cell>
-              <DataTable.Cell numeric>2000</DataTable.Cell>
-              <DataTable.Cell numeric>2000</DataTable.Cell>
-              <DataTable.Cell numeric>2000</DataTable.Cell>
-              <DataTable.Cell numeric>2000</DataTable.Cell>
+              <DataTable.Cell numeric>{caloriesDayList[0]}</DataTable.Cell>
+              <DataTable.Cell numeric>{caloriesDayList[1]}</DataTable.Cell>
+              <DataTable.Cell numeric>{caloriesDayList[2]}</DataTable.Cell>
+              <DataTable.Cell numeric>{caloriesDayList[3]}</DataTable.Cell>
+              <DataTable.Cell numeric>{caloriesDayList[4]}</DataTable.Cell>
+              <DataTable.Cell numeric>{caloriesDayList[5]}</DataTable.Cell>
+              <DataTable.Cell numeric>{caloriesDayList[6]}</DataTable.Cell>
             </DataTable.Row>
 
             <DataTable.Row style={styles.row}>
