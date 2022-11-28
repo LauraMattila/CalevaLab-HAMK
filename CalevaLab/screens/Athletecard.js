@@ -40,6 +40,8 @@ import {
   testActivity,
 } from '../components/PolarApi';
 
+import {fetchStepPreference} from '../db/UserDb';
+
 const Athletecard = ({navigation}) => {
   const options = [
     {label: 'days', value: 'days'},
@@ -47,33 +49,94 @@ const Athletecard = ({navigation}) => {
     {label: 'months', value: 'months'},
   ];
 
+  const kuka = [
+    {label: 'Sampo', value: '1'},
+    {label: 'Jere', value: '2'},
+    {label: 'Janette', value: '3'},
+    {label: 'Laura', value: '4'},
+  ];
+
   const [firstname, setFirstname] = useState('Matti');
   const [lastname, setLastname] = useState('Meikäläinen');
   const [age, setAge] = useState('55');
   const [gender, setGender] = useState('Male');
+  const [dateArr, setDateArr] = useState([]);
+  const [stepsDayList, setStepsDayList] = useState(['']);
   const [userId, setUserId] = useState('1');
 
-  var today = new Date();
-  var startdate = new Date();
-  startdate.setDate(today.getDate() - 6);
+  useEffect(() => {
+    var today = new Date();
+    var startdate = new Date();
+    startdate.setDate(today.getDate() - 6);
+    var getDateArray = function (startdate, today) {
+      var arr = new Array(),
+        dt = new Date(startdate);
 
-  var getDateArray = function (startdate, today) {
-    var arr = new Array(),
-      dt = new Date(startdate);
+      while (dt <= today) {
+        arr.push(new Date(dt));
+        dt.setDate(dt.getDate() + 1);
+      }
 
-    while (dt <= today) {
-      arr.push(new Date(dt));
-      dt.setDate(dt.getDate() + 1);
-    }
+      return arr;
+    };
+    var dateArray = getDateArray(startdate, today);
+    setDateArr(dateArray);
 
-    return arr;
-  };
+    const fetchSteps = async () => {
+      var data = [];
+      var preference = await fetchStepPreference(userId);
+      console.log(preference);
+      switch (preference) {
+        case 'Polar':
+          await getActivity(userId);
+          data = await fetchStepsP(userId);
+          console.log(data);
+          break;
+        case 'Fitbit':
+          await getStepsFit(userId);
+          data = await fetchStepsLog(userId);
+          break;
+      }
 
-  var dateArr = getDateArray(startdate, today);
+      console.log('Tässä stepsit' + data);
+      dayIndex = 0;
+      dbIndex = 0;
+      var dbDate;
+      var currentDate;
+      dateList = [];
+      console.log(dateArray);
+      dateArray.forEach(date => {
+        try {
+          currentDate = date.toISOString().slice(0, 10);
+          if (data[dbIndex] != undefined) {
+            dbDate = data[dbIndex].date.toDate().toISOString().slice(0, 10);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+        if (dbDate == currentDate) {
+          dateList[dayIndex] = data[dbIndex].steps;
+
+          dbIndex += 1;
+        } else {
+          dateList[dayIndex] = 'NA';
+        }
+        dayIndex += 1;
+      });
+      setStepsDayList(dateList);
+    };
+    fetchSteps();
+  }, [userId]);
+
   var [day1, day2, day3, day4, day5, day6, day7] = dateArr;
 
   return (
     <PaperProvider>
+      <SwitchSelector
+        options={kuka}
+        initial={0}
+        onPress={value => setUserId(value)}
+      />
       <View>
         <View style={styles.infocont}>
           <View>
@@ -105,24 +168,24 @@ const Athletecard = ({navigation}) => {
           <DataTable>
             <DataTable.Header style={styles.weekdays}>
               <DataTable.Title></DataTable.Title>
-              <DataTable.Title>MON</DataTable.Title>
-              <DataTable.Title>TUE</DataTable.Title>
-              <DataTable.Title>WED</DataTable.Title>
-              <DataTable.Title>THU</DataTable.Title>
-              <DataTable.Title>FRI</DataTable.Title>
-              <DataTable.Title>SAT</DataTable.Title>
-              <DataTable.Title>SUN</DataTable.Title>
+              <DataTable.Title>{Moment(day1).format('ddd')}</DataTable.Title>
+              <DataTable.Title>{Moment(day2).format('ddd')}</DataTable.Title>
+              <DataTable.Title>{Moment(day3).format('ddd')}</DataTable.Title>
+              <DataTable.Title>{Moment(day4).format('ddd')}</DataTable.Title>
+              <DataTable.Title>{Moment(day5).format('ddd')}</DataTable.Title>
+              <DataTable.Title>{Moment(day6).format('ddd')}</DataTable.Title>
+              <DataTable.Title>{Moment(day7).format('ddd')}</DataTable.Title>
             </DataTable.Header>
 
             <DataTable.Row style={styles.row}>
               <DataTable.Cell>STEPS</DataTable.Cell>
-              <DataTable.Cell numeric>10000</DataTable.Cell>
-              <DataTable.Cell numeric>10000</DataTable.Cell>
-              <DataTable.Cell numeric>10000</DataTable.Cell>
-              <DataTable.Cell numeric>10000</DataTable.Cell>
-              <DataTable.Cell numeric>10000</DataTable.Cell>
-              <DataTable.Cell numeric>10000</DataTable.Cell>
-              <DataTable.Cell numeric>10000</DataTable.Cell>
+              <DataTable.Cell numeric>{stepsDayList[0]}</DataTable.Cell>
+              <DataTable.Cell numeric>{stepsDayList[1]}</DataTable.Cell>
+              <DataTable.Cell numeric>{stepsDayList[2]}</DataTable.Cell>
+              <DataTable.Cell numeric>{stepsDayList[3]}</DataTable.Cell>
+              <DataTable.Cell numeric>{stepsDayList[4]}</DataTable.Cell>
+              <DataTable.Cell numeric>{stepsDayList[5]}</DataTable.Cell>
+              <DataTable.Cell numeric>{stepsDayList[6]}</DataTable.Cell>
             </DataTable.Row>
 
             <DataTable.Row style={styles.row}>

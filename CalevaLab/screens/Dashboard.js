@@ -48,6 +48,8 @@ import {
   testActivity,
 } from '../components/PolarApi';
 
+import {fetchCaloriesPreference, fetchStepPreference} from '../db/UserDb';
+
 const Dashboard = ({navigation}) => {
   const options = [
     {label: 'days', value: 'days'},
@@ -72,47 +74,58 @@ const Dashboard = ({navigation}) => {
   const ref2 = firestore().collection('fitbit_steps');
   const [summary, setSummary] = useState();
   const [sleep, setSleep] = useState();
+  const [calories, setCalories] = useState();
   const [users, setUsers] = useState([]);
   const [startTime, setStartTime] = useState();
   const [endTime, setEndTime] = useState();
   const [loading, setLoading] = useState(true);
 
-  const [userId, setUserId] = useState('');
+  const [userId, setUserId] = useState('1');
 
   const [stepsDayList, setStepsDayList] = useState(['']);
 
-  const [dateArr, setDateArr] = useState([]);
+  const [caloriesDayList, setCaloriesDayList] = useState(['']);
 
+  const [dateArr, setDateArr] = useState([]);
 
   const [accessToken, setAccessToken] = useState('');
 
-  
-
-  
-  useEffect(()=> {
+  useEffect(() => {
     var today = new Date();
-  var startdate = new Date();
-  startdate.setDate(today.getDate() - 6);
-  var getDateArray = function (startdate, today) {
-    var arr = new Array(),
-      dt = new Date(startdate);
+    var startdate = new Date();
+    startdate.setDate(today.getDate() - 6);
+    var getDateArray = function (startdate, today) {
+      var arr = new Array(),
+        dt = new Date(startdate);
 
-    while (dt <= today) {
-      arr.push(new Date(dt));
-      dt.setDate(dt.getDate() + 1);
-    }
+      while (dt <= today) {
+        arr.push(new Date(dt));
+        dt.setDate(dt.getDate() + 1);
+      }
 
-    return arr;
-  };
-  var dateArray = getDateArray(startdate, today);
-  setDateArr(dateArray);
+      return arr;
+    };
+    var dateArray = getDateArray(startdate, today);
+    setDateArr(dateArray);
 
-    
-    const fetchSteps = async ()=> {
-      await getStepsFit(userId);
-      const data = await fetchStepsLog(userId);
-      console.log("Tässä stepsit" +data);
-      dayIndex= 0;
+    const fetchSteps = async () => {
+      var data = [];
+      var preference = await fetchStepPreference(userId);
+      console.log(preference);
+      switch (preference) {
+        case 'Polar':
+          await getActivity(userId);
+          data = await fetchStepsP(userId);
+          console.log(data);
+          break;
+        case 'Fitbit':
+          await getStepsFit(userId);
+          data = await fetchStepsLog(userId);
+          break;
+      }
+
+      console.log('Tässä stepsit' + data);
+      dayIndex = 0;
       dbIndex = 0;
       var dbDate;
       var currentDate;
@@ -120,41 +133,87 @@ const Dashboard = ({navigation}) => {
       console.log(dateArray);
       dateArray.forEach(date => {
         try {
-        currentDate = date.toISOString().slice(0,10);
-        if (data[dbIndex] != undefined) {
-        dbDate = data[dbIndex].date.toDate().toISOString().slice(0,10);
-        }
+          currentDate = date.toISOString().slice(0, 10);
+          if (data[dbIndex] != undefined) {
+            dbDate = data[dbIndex].date.toDate().toISOString().slice(0, 10);
+          }
         } catch (error) {
           console.error(error);
         }
-        if(dbDate == currentDate) {
-            dateList[dayIndex]=data[dbIndex].value;
-            dbIndex +=1;
+        if (dbDate == currentDate) {
+          dateList[dayIndex] = data[dbIndex].steps;
+
+          dbIndex += 1;
         } else {
-          dateList[dayIndex] = "NA";
-        
+          dateList[dayIndex] = 'NA';
         }
         dayIndex += 1;
-      }); 
+      });
       setStepsDayList(dateList);
-    }
-    fetchSteps();
-  },[]);
-  var [day1, day2, day3, day4, day5, day6, day7] = dateArr;
-  
-  
+    };
 
+    const fetchCalories = async () => {
+      var data = [];
+      var preference = await fetchCaloriesPreference(userId);
+      console.log(preference);
+      switch (preference) {
+        case 'Polar':
+          await getActivity(userId);
+          data = await fetchCaloriesP(userId);
+          console.log(data);
+          break;
+        case 'Fitbit':
+          await getCalsFit(userId);
+          data = await fetchCaloriesLog(userId);
+          break;
+      }
+
+      console.log('Tässä calories' + data);
+      dayIndex = 0;
+      dbIndex = 0;
+      var dbDate;
+      var currentDate;
+      dateList = [];
+      console.log(dateArray);
+      dateArray.forEach(date => {
+        try {
+          currentDate = date.toISOString().slice(0, 10);
+          if (data[dbIndex] != undefined) {
+            dbDate = data[dbIndex].date.toDate().toISOString().slice(0, 10);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+        if (dbDate == currentDate) {
+          dateList[dayIndex] = data[dbIndex].calories;
+          dbIndex += 1;
+        } else {
+          dateList[dayIndex] = 'NA';
+        }
+        dayIndex += 1;
+      });
+      setCaloriesDayList(dateList);
+    };
+
+    fetchCalories();
+
+    fetchSteps();
+  }, [userId]);
+
+  var [day1, day2, day3, day4, day5, day6, day7] = dateArr;
 
   console.log('User:   ' + userId);
 
-
-
-  console.log("TODAY:" +day7);
+  console.log('TODAY:' + day7);
   if (stepsDayList == ['']) {
     sleep(1000);
     return null;
   }
 
+  if (caloriesDayList == ['']) {
+    calories(1000);
+    return null;
+  }
 
   return (
     <PaperProvider>
@@ -203,51 +262,55 @@ const Dashboard = ({navigation}) => {
             <DataTable.Cell>{Moment(day7).format('DD.MM.')}</DataTable.Cell>
             <DataTable.Cell numeric>237</DataTable.Cell>
             <DataTable.Cell numeric>{stepsDayList[6]}</DataTable.Cell>
-            <DataTable.Cell numeric>8.0</DataTable.Cell>
+            <DataTable.Cell numeric>{caloriesDayList[6]}</DataTable.Cell>
           </DataTable.Row>
 
           <DataTable.Row>
             <DataTable.Cell>{Moment(day6).format('DD.MM.')}</DataTable.Cell>
             <DataTable.Cell numeric>159</DataTable.Cell>
             <DataTable.Cell numeric>{stepsDayList[5]}</DataTable.Cell>
-            <DataTable.Cell numeric>8.0</DataTable.Cell>
+            <DataTable.Cell numeric>{caloriesDayList[5]}</DataTable.Cell>
           </DataTable.Row>
 
           <DataTable.Row>
             <DataTable.Cell>{Moment(day5).format('DD.MM.')}</DataTable.Cell>
             <DataTable.Cell numeric>237</DataTable.Cell>
             <DataTable.Cell numeric>{stepsDayList[4]}</DataTable.Cell>
-            <DataTable.Cell numeric>8.0</DataTable.Cell>
+            <DataTable.Cell numeric>{caloriesDayList[4]}</DataTable.Cell>
           </DataTable.Row>
 
           <DataTable.Row>
             <DataTable.Cell>{Moment(day4).format('DD.MM.')}</DataTable.Cell>
             <DataTable.Cell numeric>237</DataTable.Cell>
             <DataTable.Cell numeric>{stepsDayList[3]}</DataTable.Cell>
-            <DataTable.Cell numeric>8.0</DataTable.Cell>
+            <DataTable.Cell numeric>{caloriesDayList[3]}</DataTable.Cell>
           </DataTable.Row>
 
           <DataTable.Row>
             <DataTable.Cell>{Moment(day3).format('DD.MM.')}</DataTable.Cell>
             <DataTable.Cell numeric>237</DataTable.Cell>
             <DataTable.Cell numeric>{stepsDayList[2]}</DataTable.Cell>
-            <DataTable.Cell numeric>8.0</DataTable.Cell>
+            <DataTable.Cell numeric>{caloriesDayList[2]}</DataTable.Cell>
           </DataTable.Row>
 
           <DataTable.Row>
             <DataTable.Cell>{Moment(day2).format('DD.MM.')}</DataTable.Cell>
             <DataTable.Cell numeric>237</DataTable.Cell>
             <DataTable.Cell numeric>{stepsDayList[1]}</DataTable.Cell>
-            <DataTable.Cell numeric>8.0</DataTable.Cell>
+            <DataTable.Cell numeric>{caloriesDayList[1]}</DataTable.Cell>
           </DataTable.Row>
 
           <DataTable.Row>
             <DataTable.Cell>{Moment(day1).format('DD.MM.')}</DataTable.Cell>
             <DataTable.Cell numeric>237</DataTable.Cell>
             <DataTable.Cell numeric>{stepsDayList[0]}</DataTable.Cell>
-            <DataTable.Cell numeric>8.0</DataTable.Cell>
+            <DataTable.Cell numeric>{caloriesDayList[0]}</DataTable.Cell>
           </DataTable.Row>
         </DataTable>
+
+        <Button
+          title="POlar Activities"
+          onPress={() => getActivity(userId)}></Button>
 
         {/* <Button title="Fitbit id" onPress={() => fetchUserId(userId)}></Button>
         <Button title="polarId" onPress={() => fetchUserIdP(userId)}></Button>
@@ -306,7 +369,6 @@ const Dashboard = ({navigation}) => {
             )}
           />
         </View>
-
       </View>
     </PaperProvider>
   );
