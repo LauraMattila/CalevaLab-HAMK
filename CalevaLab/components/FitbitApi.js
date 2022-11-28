@@ -74,7 +74,7 @@ export async function getStepsFit(id) {
     let year = enddate.getFullYear();
     console.log(enddate)
     const startdate = new Date();
-    startdate.setDate(enddate.getDate() - 5);
+    startdate.setDate(enddate.getDate() - 6);
 
 
     const URL =
