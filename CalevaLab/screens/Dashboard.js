@@ -23,6 +23,7 @@ import {
   fetchSleepP,
   fetchStepsP,
   fetchCaloriesP,
+  fetchStepsWeeklyP,
 } from '../db/PolarDb';
 
 import {
@@ -96,21 +97,177 @@ const Dashboard = ({navigation}) => {
 
   const [accessToken, setAccessToken] = useState('');
 
+  // Returns the ISO week of the date.
+Date.prototype.getWeek = function() {
+  var date = new Date(this.getTime());
+  date.setHours(0, 0, 0, 0);
+  // Thursday in current week decides the year.
+  date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
+  // January 4 is always in week 1.
+  var week1 = new Date(date.getFullYear(), 0, 4);
+  // Adjust to Thursday in week 1 and count number of weeks from date to week1.
+  return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000
+                        - 3 + (week1.getDay() + 6) % 7) / 7);
+}
+
+// Returns the four-digit year corresponding to the ISO week of the date.
+Date.prototype.getWeekYear = function() {
+  var date = new Date(this.getTime());
+  date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
+  return date.getFullYear();
+}
+
+  var getDateArray = function (startdate, today) {
+    var arr = new Array(),
+      dt = new Date(startdate);
+
+    while (dt <= today) {
+      arr.push(new Date(dt));
+      dt.setDate(dt.getDate() + 1);
+    }
+
+    return arr;
+  };
+  var getWeekDataList = async queryDate => {
+    var today = new Date();
+    var data = [];
+    var date = queryDate;
+    date.setDate(queryDate.getDate() + 1);
+    const dateArray = getDateArray(date, today);
+    data = await fetchStepsWeeklyP(userId, queryDate);
+    console.log(queryDate);
+    var dateIndex = 0;
+    var dbIndex = 0;
+    var weeklySteps = 0;
+    var currentDate;
+    var dbDate;
+    var weeklyStepsList = [];
+    var currentDateObj;
+    for (let y = 0; y < 7; y++) {
+      weeklySteps = 0;
+      for (let i = 0; i < 7; i++) {
+        if (dateArray[dateIndex] != undefined) {
+          currentDateObj = dateArray[dateIndex];
+          currentDate= currentDateObj.toISOString().slice(0, 10)
+        } else {
+          break;
+        }
+        if (data[dbIndex] != undefined) {
+          dbDate = data[dbIndex].date.toDate().toISOString().slice(0, 10);
+        }
+        console.log(currentDate);
+        console.log(dbDate);
+        if (currentDate == dbDate) {
+          weeklySteps += data[dbIndex].steps;
+          dbIndex++;
+        }
+        dateIndex++;
+      }
+      console.log(currentDateObj.getWeek());
+      weeklyStepsList.push(weeklySteps);
+    }
+    return weeklyStepsList;
+  };
+
+  const fetchWeeklySteps = async () => {
+    var today = new Date();
+    var weekday = today.getDay();
+    var queryDate = new Date();
+    var weeklyStepList = [];
+    switch (weekday) {
+      case 0:
+        queryDate.setDate(today.getDate() - 49);
+        weeklyStepList = await getWeekDataList(queryDate);
+        console.log(weeklyStepList);
+        weeklyStepList.forEach(week => {
+          if (week != weeklyStepList[6]) {
+            console.log(week / 7);
+          } else {
+            console.log(week / 7);
+          }
+        });
+        break;
+      case 1:
+        queryDate.setDate(today.getDate() - 43);
+        weeklyStepList = await getWeekDataList(queryDate);
+        console.log(weeklyStepList);
+        weeklyStepList.forEach(week => {
+          if (week != weeklyStepList[6]) {
+            console.log(week / 7);
+          } else {
+            console.log(week / 1);
+          }
+        });
+        break;
+      case 2:
+        queryDate.setDate(today.getDate() - 44);
+        weeklyStepList = await getWeekDataList(queryDate);
+        console.log(weeklyStepList);
+        weeklyStepList.forEach(week => {
+          if (week != weeklyStepList[6]) {
+            console.log(week / 7);
+          } else {
+            console.log(week / 2);
+          }
+        });
+        break;
+      case 3:
+        queryDate.setDate(today.getDate() - 45);
+        weeklyStepList = await getWeekDataList(queryDate);
+        console.log(weeklyStepList);
+        weeklyStepList.forEach(week => {
+          if (week != weeklyStepList[6]) {
+            console.log(week / 7);
+          } else {
+            console.log(week / 3);
+          }
+        });
+        break;
+      case 4:
+        queryDate.setDate(today.getDate() - 46);
+        weeklyStepList = await getWeekDataList(queryDate);
+        console.log(weeklyStepList);
+        weeklyStepList.forEach(week => {
+          if (week != weeklyStepList[6]) {
+            console.log(week / 7);
+          } else {
+            console.log(week / 4);
+          }
+        });
+        break;
+      case 5:
+        queryDate.setDate(today.getDate() - 47);
+        weeklyStepList = await getWeekDataList(queryDate);
+        console.log(weeklyStepList);
+        weeklyStepList.forEach(week => {
+          if (week != weeklyStepList[6]) {
+            console.log(week / 7);
+          } else {
+            console.log(week / 5);
+          }
+        });
+        break;
+
+      case 6:
+        queryDate.setDate(today.getDate() - 48);
+        weeklyStepList = await getWeekDataList(queryDate);
+        console.log(weeklyStepList);
+        weeklyStepList.forEach(week => {
+          if (week != weeklyStepList[6]) {
+            console.log(week / 7);
+          } else {
+            console.log(week / 6);
+          }
+        });
+        break;
+    }
+  };
+
   useEffect(() => {
     var today = new Date();
     var startdate = new Date();
     startdate.setDate(today.getDate() - 6);
-    var getDateArray = function (startdate, today) {
-      var arr = new Array(),
-        dt = new Date(startdate);
 
-      while (dt <= today) {
-        arr.push(new Date(dt));
-        dt.setDate(dt.getDate() + 1);
-      }
-
-      return arr;
-    };
     var dateArray = getDateArray(startdate, today);
     setDateArr(dateArray);
 
@@ -120,7 +277,6 @@ const Dashboard = ({navigation}) => {
       console.log(preference);
       switch (preference) {
         case 'Polar':
-
           //await getActivity(userId);
 
           data = await fetchStepsP(userId);
@@ -171,7 +327,6 @@ const Dashboard = ({navigation}) => {
           console.log(data);
           break;
         case 'Fitbit':
-
           //await getCalsFit(userId);
 
           data = await fetchCaloriesLog(userId);
@@ -241,9 +396,7 @@ const Dashboard = ({navigation}) => {
           var totalMinutes = data[dbIndex].sleep_min;
           const hours = Math.floor(totalMinutes / 60);
           const minutes = Math.floor(totalMinutes % 60);
-
-          dateList[dayIndex] = hours + 'h' + minutes + 'm';
-
+          dateList[dayIndex] = hours + 'h ' + minutes + 'm';
           dbIndex += 1;
         } else {
           dateList[dayIndex] = 'NA';
@@ -254,9 +407,8 @@ const Dashboard = ({navigation}) => {
     };
 
     fetchSleep();
-    fetchCalories();
-
     fetchSteps();
+    fetchCalories();
   }, [userId]);
 
   var [day1, day2, day3, day4, day5, day6, day7] = dateArr;
@@ -367,14 +519,14 @@ const Dashboard = ({navigation}) => {
           </DataTable.Row>
         </DataTable>
 
-{/*         <Button
+        <Button
           title="POlar Activities"
-          onPress={() => getActivity(userId)}></Button>
+          onPress={() => fetchWeeklySteps()}></Button>
         <Button
           title="Get polar Sleep"
           onPress={() => fetchSleepP(userId)}></Button>
 
-         <Button title="Fitbit id" onPress={() => fetchUserId(userId)}></Button>
+        <Button title="Fitbit id" onPress={() => fetchUserId(userId)}></Button>
         <Button title="polarId" onPress={() => fetchUserIdP(userId)}></Button>
         <Button
           title="polarAccess"
@@ -413,8 +565,7 @@ const Dashboard = ({navigation}) => {
           onPress={() => fetchSleepLog(userId)}></Button>
         <Button
           title="fitbit calories from db"
-
-          onPress={() => fetchCaloriesLog(userId)}></Button>  */} 
+          onPress={() => fetchCaloriesLog(userId)}></Button>
 
         <View>
           <FlatList

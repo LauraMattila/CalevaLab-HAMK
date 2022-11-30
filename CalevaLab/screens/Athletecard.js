@@ -42,7 +42,7 @@ import {
 
 import {fetchStepPreference, fetchCaloriesPreference, fetchSleepPreference} from '../db/UserDb';
 
-const Athletecard = ({navigation}) => {
+const Athletecard = ({route,navigation}) => {
   const options = [
     {label: 'days', value: 'days'},
     {label: 'weeks', value: 'weeks'},
@@ -64,7 +64,7 @@ const Athletecard = ({navigation}) => {
   const [stepsDayList, setStepsDayList] = useState(['']);
   const [caloriesDayList, setCaloriesDayList] = useState(['']);
   const [sleepDayList, setSleepDayList] = useState(['']);
-  const [userId, setUserId] = useState('1');
+  const [userId, setUserId] = useState("1");
 
   useEffect(() => {
     var today = new Date();
