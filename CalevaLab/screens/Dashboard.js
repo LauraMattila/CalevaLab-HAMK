@@ -117,17 +117,17 @@ Date.prototype.getWeekYear = function() {
   return date.getFullYear();
 }
 
-  var getDateArray = function (startdate, today) {
-    var arr = new Array(),
-      dt = new Date(startdate);
+    var getDateArray = function (startdate, today) {
+      var arr = new Array(),
+        dt = new Date(startdate);
 
-    while (dt <= today) {
-      arr.push(new Date(dt));
-      dt.setDate(dt.getDate() + 1);
-    }
+      while (dt <= today) {
+        arr.push(new Date(dt));
+        dt.setDate(dt.getDate() + 1);
+      }
 
-    return arr;
-  };
+      return arr;
+    };
   var getWeekDataList = async queryDate => {
     var today = new Date();
     var data = [];
@@ -518,7 +518,7 @@ Date.prototype.getWeekYear = function() {
             <DataTable.Cell numeric>{caloriesDayList[0]}</DataTable.Cell>
           </DataTable.Row>
         </DataTable>
-
+            
         <Button
           title="POlar Activities"
           onPress={() => fetchWeeklySteps()}></Button>
@@ -526,7 +526,7 @@ Date.prototype.getWeekYear = function() {
           title="Get polar Sleep"
           onPress={() => fetchSleepP(userId)}></Button>
 
-        <Button title="Fitbit id" onPress={() => fetchUserId(userId)}></Button>
+         <Button title="Fitbit id" onPress={() => fetchUserId(userId)}></Button>
         <Button title="polarId" onPress={() => fetchUserIdP(userId)}></Button>
         <Button
           title="polarAccess"
