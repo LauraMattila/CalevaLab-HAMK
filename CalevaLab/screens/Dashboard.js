@@ -461,7 +461,7 @@ const Dashboard = ({navigation}) => {
       <SwitchSelector
         options={kuka}
         initial={selection}
-        onPress={() => setUserId(value)}
+        onPress={value => setUserId(value)}
       />
       <View>
         <Text style={styles.header}>Welcome Back, {userId}!</Text>
