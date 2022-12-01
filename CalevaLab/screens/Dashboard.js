@@ -4,7 +4,8 @@ import SwitchSelector from 'react-native-switch-selector';
 import {Provider as PaperProvider} from 'react-native-paper';
 import {DataTable} from 'react-native-paper';
 import Moment from 'moment';
-
+import WeekData from '../components/WeekData';
+import MonthData from '../components/MonthData';
 import {
   StyleSheet,
   Text,
@@ -86,7 +87,7 @@ const Dashboard = ({navigation}) => {
   const [loading, setLoading] = useState(true);
 
   const [userId, setUserId] = useState('1');
-
+  const [selection, setSelection] = useState(1);
   const [stepsDayList, setStepsDayList] = useState(['']);
 
   const [caloriesDayList, setCaloriesDayList] = useState(['']);
@@ -96,38 +97,48 @@ const Dashboard = ({navigation}) => {
   const [dateArr, setDateArr] = useState([]);
 
   const [accessToken, setAccessToken] = useState('');
+  const [show, setShow] = useState(true);
+  const [show2, setShow2] = useState(false)
+  const [show3, setShow3] = useState(false);
 
   // Returns the ISO week of the date.
-Date.prototype.getWeek = function() {
-  var date = new Date(this.getTime());
-  date.setHours(0, 0, 0, 0);
-  // Thursday in current week decides the year.
-  date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
-  // January 4 is always in week 1.
-  var week1 = new Date(date.getFullYear(), 0, 4);
-  // Adjust to Thursday in week 1 and count number of weeks from date to week1.
-  return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000
-                        - 3 + (week1.getDay() + 6) % 7) / 7);
-}
+  Date.prototype.getWeek = function () {
+    var date = new Date(this.getTime());
+    date.setHours(0, 0, 0, 0);
+    // Thursday in current week decides the year.
+    date.setDate(date.getDate() + 3 - ((date.getDay() + 6) % 7));
+    // January 4 is always in week 1.
+    var week1 = new Date(date.getFullYear(), 0, 4);
+    // Adjust to Thursday in week 1 and count number of weeks from date to week1.
+    return (
+      1 +
+      Math.round(
+        ((date.getTime() - week1.getTime()) / 86400000 -
+          3 +
+          ((week1.getDay() + 6) % 7)) /
+          7,
+      )
+    );
+  };
 
-// Returns the four-digit year corresponding to the ISO week of the date.
-Date.prototype.getWeekYear = function() {
-  var date = new Date(this.getTime());
-  date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
-  return date.getFullYear();
-}
+  // Returns the four-digit year corresponding to the ISO week of the date.
+  Date.prototype.getWeekYear = function () {
+    var date = new Date(this.getTime());
+    date.setDate(date.getDate() + 3 - ((date.getDay() + 6) % 7));
+    return date.getFullYear();
+  };
 
-    var getDateArray = function (startdate, today) {
-      var arr = new Array(),
-        dt = new Date(startdate);
+  var getDateArray = function (startdate, today) {
+    var arr = new Array(),
+      dt = new Date(startdate);
 
-      while (dt <= today) {
-        arr.push(new Date(dt));
-        dt.setDate(dt.getDate() + 1);
-      }
+    while (dt <= today) {
+      arr.push(new Date(dt));
+      dt.setDate(dt.getDate() + 1);
+    }
 
-      return arr;
-    };
+    return arr;
+  };
   var getWeekDataList = async queryDate => {
     var today = new Date();
     var data = [];
@@ -148,7 +159,7 @@ Date.prototype.getWeekYear = function() {
       for (let i = 0; i < 7; i++) {
         if (dateArray[dateIndex] != undefined) {
           currentDateObj = dateArray[dateIndex];
-          currentDate= currentDateObj.toISOString().slice(0, 10)
+          currentDate = currentDateObj.toISOString().slice(0, 10);
         } else {
           break;
         }
@@ -426,12 +437,31 @@ Date.prototype.getWeekYear = function() {
     return null;
   }
 
+  const showTable = (value) =>{
+    if (value == 'days') {
+      setShow(true);
+      setShow2(false)
+      setShow3(false);
+   
+    } else if (value == 'weeks') {
+      setShow3(false);
+      setShow(false);
+      setShow2(true);
+      
+    }else if (value == 'months'){
+        setShow(false);
+        setShow2(false);
+        setShow3(true);
+        
+    }
+  };
+
   return (
     <PaperProvider>
       <SwitchSelector
         options={kuka}
-        initial={0}
-        onPress={value => setUserId(value)}
+        initial={selection}
+        onPress={() => setUserId(value)}
       />
       <View>
         <Text style={styles.header}>Welcome Back, {userId}!</Text>
@@ -456,10 +486,13 @@ Date.prototype.getWeekYear = function() {
             <SwitchSelector
               options={options}
               initial={0}
-              onPress={value => console.log(`Selected: ${value}`)}
+              onPress={value => showTable(value)}
             />
           </View>
         </View>
+
+
+   {show ? 
 
         <DataTable>
           <DataTable.Header>
@@ -518,7 +551,16 @@ Date.prototype.getWeekYear = function() {
             <DataTable.Cell numeric>{caloriesDayList[0]}</DataTable.Cell>
           </DataTable.Row>
         </DataTable>
-            
+   
+  : null}
+
+  {show2 ? 
+    <WeekData/>
+  :null}
+
+  {show3 ? 
+    <MonthData/>
+    :null}
         <Button
           title="POlar Activities"
           onPress={() => fetchWeeklySteps()}></Button>
@@ -526,7 +568,7 @@ Date.prototype.getWeekYear = function() {
           title="Get polar Sleep"
           onPress={() => fetchSleepP(userId)}></Button>
 
-         <Button title="Fitbit id" onPress={() => fetchUserId(userId)}></Button>
+        <Button title="Fitbit id" onPress={() => fetchUserId(userId)}></Button>
         <Button title="polarId" onPress={() => fetchUserIdP(userId)}></Button>
         <Button
           title="polarAccess"
