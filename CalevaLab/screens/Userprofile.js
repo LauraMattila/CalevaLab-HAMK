@@ -6,8 +6,21 @@ import {
   Text,
   View,
   Pressable,
-  SafeAreaView,
+
+  Image,
+  Platform,
+  PermissionsAndroid,
   TouchableHighlight,
+  TouchableOpacity,
+} from 'react-native';
+import ImagePicker from 'react-native-image-picker';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+
+//import Icon from 'react-native-vector-icons/AntDesign';
+import SwitchSelector from 'react-native-switch-selector';
+import {Button, Provider as PaperProvider} from 'react-native-paper';
+
+
 } from 'react-native';
 
 import {
@@ -19,8 +32,6 @@ import {
   setCaloriesPreference
 } from '../db/UserDb';
 
-//import Icon from 'react-native-vector-icons/AntDesign';
-import SwitchSelector from 'react-native-switch-selector';
 import {Modal, Provider as PaperProvider} from 'react-native-paper';
 import {DataTable} from 'react-native-paper';
 import Moment from 'moment';
@@ -28,11 +39,25 @@ import Moment from 'moment';
 import {RadioButton} from 'react-native-paper';
 import {CameraScreen} from 'react-native-camera-kit';
 
+import {
+  fetchCaloriesPreference,
+  fetchStepPreference,
+  fetchSleepPreference,
+} from '../db/UserDb';
+
 const Userprofile = ({navigation}) => {
+  const kuka = [
+    {label: 'Sampo', value: '1'},
+    {label: 'Jere', value: '2'},
+    {label: 'Janette', value: '3'},
+    {label: 'Laura', value: '4'},
+  ];
+
   const [firstname, setFirstname] = useState('Matti');
   const [lastname, setLastname] = useState('Meikäläinen');
   const [age, setAge] = useState('55');
   const [gender, setGender] = useState('Male');
+
 
   const [Sleepchecked, setSleepChecked] = React.useState('');
   const [Stepschecked, setStepsChecked] = React.useState('');
@@ -98,23 +123,169 @@ const Userprofile = ({navigation}) => {
 
 
 
+  const [filePath, setFilePath] = useState({});
+  const [filePathh, setFilePathh] = useState(
+    'file:///data/user/0/com.calevalab/cache/rn_image_picker_lib_temp_eb789d88-e013-49fe-8cee-7ff5df0ee410.jpg',
+  );
+
+  const requestCameraPermission = async () => {
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+          {
+            title: 'Camera Permission',
+            message: 'App needs camera permission',
+          },
+        );
+        // If CAMERA Permission is granted
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+      } catch (err) {
+        console.warn(err);
+        return false;
+      }
+    } else return true;
+  };
+
+  const requestExternalWritePermission = async () => {
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          {
+            title: 'External Storage Write Permission',
+            message: 'App needs write permission',
+          },
+        );
+        // If WRITE_EXTERNAL_STORAGE Permission is granted
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+      } catch (err) {
+        console.warn(err);
+        alert('Write permission err', err);
+      }
+      return false;
+    } else return true;
+  };
+
+  const captureImage = async type => {
+    let options = {
+      mediaType: type,
+      maxWidth: 300,
+      maxHeight: 550,
+      quality: 1,
+      videoQuality: 'low',
+      durationLimit: 30, //Video max duration in seconds
+      saveToPhotos: true,
+    };
+
+    let isCameraPermitted = await requestCameraPermission();
+    let isStoragePermitted = await requestExternalWritePermission();
+    if (isCameraPermitted && isStoragePermitted) {
+      launchCamera(options, response => {
+        if (response.didCancel) {
+          console.log('User cancelled image picker');
+        } else if (response.error) {
+          console.log('ImagePicker Error: ', response.error);
+        } else if (response.customButton) {
+          console.log('User tapped custom button: ', response.customButton);
+        } else
+          response['assets'].forEach(item => {
+            const base64 = item.base64;
+            const uri = item.uri;
+            const width = item.width;
+            const height = item.height;
+            const fileSize = item.fileSize;
+            const type = item.type;
+            const fileName = item.fileName;
+
+            setFilePathh(uri);
+
+            console.log('FILEPATH:                 ' + uri);
+          });
+      });
+    }
+  };
+
+  const chooseFile = type => {
+    let options = {
+      mediaType: type,
+      maxWidth: 300,
+      maxHeight: 550,
+      quality: 1,
+    };
+    launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      } else
+        response['assets'].forEach(item => {
+          const base64 = item.base64;
+          const uri = item.uri;
+          const width = item.width;
+          const height = item.height;
+          const fileSize = item.fileSize;
+          const type = item.type;
+          const fileName = item.fileName;
+
+          setFilePathh(uri);
+
+          console.log('FILEPATH:                 ' + filePathh);
+        });
+    });
+  };
+
   return (
     <View>
+
+      <SwitchSelector
+        options={kuka}
+        initial={0}
+        onPress={value => setUserId(value)}
+      />
+
     
 
       <View style={styles.infocont}>
+
         <View>
-          <Text style={styles.name}>
-            {firstname} {lastname}
-          </Text>
+          <View style={styles.container}>
+            <Image
+              style={{width: 120, height: 120, borderRadius: 75}}
+              source={{uri: filePathh}}
+              resizeMode={'cover'} // cover or contain its upto you view look
+            />
+            <TouchableOpacity
+              activeOpacity={0.5}
+              style={styles.buttonStyle}
+              onPress={() => captureImage('photo')}>
+              <Text style={styles.textStyle}> Take a photo</Text>
+            </TouchableOpacity>
 
-          <Text style={styles.info}>
-            {age} | {gender}
-          </Text>
+            <TouchableOpacity
+              activeOpacity={0.5}
+              style={styles.buttonStyle}
+              onPress={() => chooseFile('photo')}>
+              <Text style={styles.textStyle}> Choose Image</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+        <View style={styles.infocont}>
+          <View>
+            <Text style={styles.name}>
+              {firstname} {lastname}
+            </Text>
 
-      
+
+            <Text style={styles.info}>
+              {age} | {gender}
+            </Text>
+          </View>
+        </View>
+
+        
       <DataTable style={styles.datacont}>
         <DataTable.Header>
           <DataTable.Title>Service</DataTable.Title>
@@ -185,6 +356,7 @@ const Userprofile = ({navigation}) => {
           </DataTable.Cell>
         </DataTable.Row>
       </DataTable>
+
     </View>
   );
 };
@@ -215,9 +387,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   infocont: {
-    marginVertical: 150,
+    marginVertical: 100,
     flexDirection: 'row',
-    height: 70,
+    height: 20,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -230,6 +402,26 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginHorizontal: 20,
     fontSize: 13,
+  },
+
+  sharecont: {
+    alignItems: 'center',
+    marginVertical: 60,
+  },
+
+  sharebutton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 100,
+    backgroundColor: '#1e90ff',
+    width: 100,
+    height: 100,
+  },
+  sharetext: {
+    fontSize: 20,
+    fontWeight: 'bold',
   },
 });
 export default Userprofile;
