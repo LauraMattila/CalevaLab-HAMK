@@ -15,6 +15,8 @@ import {
   fetchStepPreference,
   fetchSleepPreference,
   setSleepPreference,
+  setStepsPreference,
+  setCaloriesPreference
 } from '../db/UserDb';
 
 //import Icon from 'react-native-vector-icons/AntDesign';
@@ -38,7 +40,7 @@ const Userprofile = ({navigation}) => {
 
   
   const [visibility, setVisibility] = useState(false);
-  const [doc, setDoc] = useState('sPuf8tq1glz8675jyJsA');
+  const [doc, setDoc] = useState('1');
   const [userId, setUserId] = useState('1');
 
 
@@ -62,6 +64,32 @@ const Userprofile = ({navigation}) => {
         var sleep = 'Polar';
         setSleepChecked('sleeppolar');
         await setSleepPreference(doc, sleep);
+
+        break;
+   
+    }
+  };
+
+  
+  const setSteps = async () => {
+    var preference = await fetchStepPreference(userId);
+    switch (preference) {
+      case 'Polar':
+        var steps = 'Fitbit';
+        setStepsChecked('stepsfit');
+        await setStepsPreference(doc, steps);
+
+        break;
+   
+    }
+  };
+  const setSteps2 = async () => {
+    var preference = await fetchSleepPreference(userId);
+    switch (preference) {
+      case 'Fitbit':
+        var steps = 'Polar';
+        setStepsChecked('stepspolar');
+        await setStepsPreference(doc, steps);
 
         break;
    
