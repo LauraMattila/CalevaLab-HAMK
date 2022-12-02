@@ -60,7 +60,7 @@ import {
 import {
   fetchWeeklyCalories,
   fetchWeeklySleep,
-  fetchWeeklySteps
+  fetchWeeklySteps,
 } from '../db/testing';
 
 const Dashboard = ({navigation}) => {
@@ -93,9 +93,11 @@ const Dashboard = ({navigation}) => {
   const [endTime, setEndTime] = useState();
   const [loading, setLoading] = useState(true);
 
+
   
 
   const [userId, setUserId] = useState('2');
+
 
 
   const [stepsDayList, setStepsDayList] = useState(['']);
@@ -110,7 +112,7 @@ const Dashboard = ({navigation}) => {
 
   const [accessToken, setAccessToken] = useState('');
   const [show, setShow] = useState(true);
-  const [show2, setShow2] = useState(false)
+  const [show2, setShow2] = useState(false);
   const [show3, setShow3] = useState(false);
 
   // Returns the ISO week of the date.
@@ -151,7 +153,6 @@ const Dashboard = ({navigation}) => {
 
     return arr;
   };
-  
 
   useEffect(() => {
     var today = new Date();
@@ -203,9 +204,8 @@ const Dashboard = ({navigation}) => {
         }
         dayIndex += 1;
       });
-      setStepsWeekList(await fetchWeeklySteps(userId)); 
+      setStepsWeekList(await fetchWeeklySteps(userId));
       setStepsDayList(dateList);
-
     };
 
     const fetchCalories = async () => {
@@ -298,7 +298,7 @@ const Dashboard = ({navigation}) => {
       setSleepDayList(dateList);
       setSleepWeekList(await fetchWeeklySleep(userId));
     };
-    
+
     fetchSleep();
     fetchSteps();
     fetchCalories();
@@ -319,22 +319,19 @@ const Dashboard = ({navigation}) => {
     return null;
   }
 
-  const showTable = (value) =>{
+  const showTable = value => {
     if (value == 'days') {
       setShow(true);
-      setShow2(false)
+      setShow2(false);
       setShow3(false);
-   
     } else if (value == 'weeks') {
       setShow3(false);
       setShow(false);
       setShow2(true);
-      
-    }else if (value == 'months'){
-        setShow(false);
-        setShow2(false);
-        setShow3(true);
-        
+    } else if (value == 'months') {
+      setShow(false);
+      setShow2(false);
+      setShow3(true);
     }
   };
 
@@ -342,8 +339,7 @@ const Dashboard = ({navigation}) => {
     <PaperProvider>
       <SwitchSelector
         options={kuka}
-
-        initial={userId-1}
+        initial={userId - 1}
         onPress={value => setUserId(value)}
       />
       <View>
@@ -374,76 +370,75 @@ const Dashboard = ({navigation}) => {
           </View>
         </View>
 
+        {show ? (
+          <DataTable>
+            <DataTable.Header>
+              <DataTable.Title>Day</DataTable.Title>
+              <DataTable.Title numeric>Sleep</DataTable.Title>
+              <DataTable.Title numeric>Steps</DataTable.Title>
+              <DataTable.Title numeric>Calories</DataTable.Title>
+            </DataTable.Header>
 
-   {show ? 
+            <DataTable.Row>
+              <DataTable.Cell>{Moment(day7).format('DD.MM.')}</DataTable.Cell>
+              <DataTable.Cell numeric>{sleepDayList[6]} </DataTable.Cell>
+              <DataTable.Cell numeric>{stepsDayList[6]}</DataTable.Cell>
+              <DataTable.Cell numeric>{caloriesDayList[6]}</DataTable.Cell>
+            </DataTable.Row>
 
-        <DataTable>
-          <DataTable.Header>
-            <DataTable.Title>Day</DataTable.Title>
-            <DataTable.Title numeric>Sleep</DataTable.Title>
-            <DataTable.Title numeric>Steps</DataTable.Title>
-            <DataTable.Title numeric>Calories</DataTable.Title>
-          </DataTable.Header>
+            <DataTable.Row>
+              <DataTable.Cell>{Moment(day6).format('DD.MM.')}</DataTable.Cell>
+              <DataTable.Cell numeric>{sleepDayList[5]} </DataTable.Cell>
+              <DataTable.Cell numeric>{stepsDayList[5]}</DataTable.Cell>
+              <DataTable.Cell numeric>{caloriesDayList[5]}</DataTable.Cell>
+            </DataTable.Row>
 
-          <DataTable.Row>
-            <DataTable.Cell>{Moment(day7).format('DD.MM.')}</DataTable.Cell>
-            <DataTable.Cell numeric>{sleepDayList[6]} </DataTable.Cell>
-            <DataTable.Cell numeric>{stepsDayList[6]}</DataTable.Cell>
-            <DataTable.Cell numeric>{caloriesDayList[6]}</DataTable.Cell>
-          </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell>{Moment(day5).format('DD.MM.')}</DataTable.Cell>
+              <DataTable.Cell numeric>{sleepDayList[4]} </DataTable.Cell>
+              <DataTable.Cell numeric>{stepsDayList[4]}</DataTable.Cell>
+              <DataTable.Cell numeric>{caloriesDayList[4]}</DataTable.Cell>
+            </DataTable.Row>
 
-          <DataTable.Row>
-            <DataTable.Cell>{Moment(day6).format('DD.MM.')}</DataTable.Cell>
-            <DataTable.Cell numeric>{sleepDayList[5]} </DataTable.Cell>
-            <DataTable.Cell numeric>{stepsDayList[5]}</DataTable.Cell>
-            <DataTable.Cell numeric>{caloriesDayList[5]}</DataTable.Cell>
-          </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell>{Moment(day4).format('DD.MM.')}</DataTable.Cell>
+              <DataTable.Cell numeric>{sleepDayList[3]} </DataTable.Cell>
+              <DataTable.Cell numeric>{stepsDayList[3]}</DataTable.Cell>
+              <DataTable.Cell numeric>{caloriesDayList[3]}</DataTable.Cell>
+            </DataTable.Row>
 
-          <DataTable.Row>
-            <DataTable.Cell>{Moment(day5).format('DD.MM.')}</DataTable.Cell>
-            <DataTable.Cell numeric>{sleepDayList[4]} </DataTable.Cell>
-            <DataTable.Cell numeric>{stepsDayList[4]}</DataTable.Cell>
-            <DataTable.Cell numeric>{caloriesDayList[4]}</DataTable.Cell>
-          </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell>{Moment(day3).format('DD.MM.')}</DataTable.Cell>
+              <DataTable.Cell numeric>{sleepDayList[2]} </DataTable.Cell>
+              <DataTable.Cell numeric>{stepsDayList[2]}</DataTable.Cell>
+              <DataTable.Cell numeric>{caloriesDayList[2]}</DataTable.Cell>
+            </DataTable.Row>
 
-          <DataTable.Row>
-            <DataTable.Cell>{Moment(day4).format('DD.MM.')}</DataTable.Cell>
-            <DataTable.Cell numeric>{sleepDayList[3]} </DataTable.Cell>
-            <DataTable.Cell numeric>{stepsDayList[3]}</DataTable.Cell>
-            <DataTable.Cell numeric>{caloriesDayList[3]}</DataTable.Cell>
-          </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell>{Moment(day2).format('DD.MM.')}</DataTable.Cell>
+              <DataTable.Cell numeric>{sleepDayList[1]} </DataTable.Cell>
+              <DataTable.Cell numeric>{stepsDayList[1]}</DataTable.Cell>
+              <DataTable.Cell numeric>{caloriesDayList[1]}</DataTable.Cell>
+            </DataTable.Row>
 
-          <DataTable.Row>
-            <DataTable.Cell>{Moment(day3).format('DD.MM.')}</DataTable.Cell>
-            <DataTable.Cell numeric>{sleepDayList[2]} </DataTable.Cell>
-            <DataTable.Cell numeric>{stepsDayList[2]}</DataTable.Cell>
-            <DataTable.Cell numeric>{caloriesDayList[2]}</DataTable.Cell>
-          </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell>{Moment(day1).format('DD.MM.')}</DataTable.Cell>
+              <DataTable.Cell numeric>{sleepDayList[0]} </DataTable.Cell>
+              <DataTable.Cell numeric>{stepsDayList[0]}</DataTable.Cell>
+              <DataTable.Cell numeric>{caloriesDayList[0]}</DataTable.Cell>
+            </DataTable.Row>
+          </DataTable>
+        ) : null}
 
-          <DataTable.Row>
-            <DataTable.Cell>{Moment(day2).format('DD.MM.')}</DataTable.Cell>
-            <DataTable.Cell numeric>{sleepDayList[1]} </DataTable.Cell>
-            <DataTable.Cell numeric>{stepsDayList[1]}</DataTable.Cell>
-            <DataTable.Cell numeric>{caloriesDayList[1]}</DataTable.Cell>
-          </DataTable.Row>
+        {show2 ? (
+          <WeekData
+            steps={stepsWeekList}
+            sleep={sleepWeekList}
+            calories={caloriesWeekList}
+          />
+        ) : null}
 
-          <DataTable.Row>
-            <DataTable.Cell>{Moment(day1).format('DD.MM.')}</DataTable.Cell>
-            <DataTable.Cell numeric>{sleepDayList[0]} </DataTable.Cell>
-            <DataTable.Cell numeric>{stepsDayList[0]}</DataTable.Cell>
-            <DataTable.Cell numeric>{caloriesDayList[0]}</DataTable.Cell>
-          </DataTable.Row>
-        </DataTable>
-   
-  : null}
-
-  {show2 ? 
-    <WeekData steps={stepsWeekList} sleep={sleepWeekList} calories={caloriesWeekList}  />
-  :null}
-
-  {show3 ? 
-    <MonthData/>
-    :null}
+        {show3 ? <MonthData /> : null}
         <Button
           title="POlar Activities"
           onPress={() => fetchWeeklySteps()}></Button>
