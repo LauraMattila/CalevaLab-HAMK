@@ -69,12 +69,8 @@ export async function getStepsFit(id) {
     var user_id = await fetchUserId(id);
 
     const enddate = new Date();
-    let day = enddate.getDate();
-    let month = enddate.getMonth() + 1;
-    let year = enddate.getFullYear();
-    console.log(enddate)
     const startdate = new Date();
-    startdate.setDate(enddate.getDate() - 6);
+    startdate.setDate(enddate.getDate() - 28);
 
 
     const URL =
@@ -122,12 +118,6 @@ export async function getCalsFit(id) {
     var user_id = await fetchUserId(id);
 
     const enddate = new Date();
-    let day = enddate.getDate();
-    let month = enddate.getMonth() + 1;
-    let year = enddate.getFullYear();
-    let currentDate = `${year}-${month}-${day}`;
-    console.log(currentDate);
-
     const startdate = new Date();
     startdate.setDate(enddate.getDate() - 28);
 
@@ -137,7 +127,7 @@ export async function getCalsFit(id) {
       '/activities/calories/date/' +
       startdate.toISOString().split('T')[0] + 
       '/' +
-      currentDate +
+      enddate.toISOString().split('T')[0] +
       '.json';
       const accessToken = await fetchAccessToken(id);
 

@@ -93,11 +93,11 @@ export async function fetchStepsP(id) {
       }
   
       //const sleepListP = []
-      var stepsData = [];
+      var caloriesData = [];
       response.forEach(doc => {
-        stepsData.push(doc.data());
+        caloriesData.push(doc.data());
       });
-      return stepsData;
+      return caloriesData;
       
   
     } catch (error) {
@@ -120,11 +120,65 @@ export async function fetchStepsP(id) {
         return;
       }
   
-      var stepsData = [];
+      var caloriesData = [];
       response.forEach(doc => {
-        stepsData.push(doc.data());
+        caloriesData.push(doc.data());
       });
-      return stepsData;
+      return caloriesData;
+      
+  
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  export async function fetchSleepWeeklyP(id, date) {
+    try {
+  
+      var response = await firestore()
+        .collection('polar_sleep')
+        .where('user_id','==', id)
+        .where('date', '>=', date)
+        .get(); 
+  
+  
+       
+      if (response.empty) {
+        console.log('EI ole');
+        return;
+      }
+  
+      var sleepData = [];
+      response.forEach(doc => {
+        sleepData.push(doc.data());
+      });
+      return sleepData;
+      
+  
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  export async function fetchCaloriesWeeklyP(id, date) {
+    try {
+  
+      var response = await firestore()
+        .collection('polar_calories')
+        .where('user_id','==', id)
+        .where('date', '>=', date)
+        .get(); 
+  
+  
+       
+      if (response.empty) {
+        console.log('EI ole');
+        return;
+      }
+  
+      var caloriesData = [];
+      response.forEach(doc => {
+        caloriesData.push(doc.data());
+      });
+      return caloriesData;
       
   
     } catch (error) {
