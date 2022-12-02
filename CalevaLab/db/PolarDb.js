@@ -104,6 +104,33 @@ export async function fetchStepsP(id) {
       console.error(error);
     }
   }
+  export async function fetchStepsWeeklyP(id, date) {
+    try {
+  
+      var response = await firestore()
+        .collection('polar_steps')
+        .where('user_id','==', id)
+        .where('date', '>=', date)
+        .get(); 
+  
+  
+       
+      if (response.empty) {
+        console.log('EI ole');
+        return;
+      }
+  
+      var stepsData = [];
+      response.forEach(doc => {
+        stepsData.push(doc.data());
+      });
+      return stepsData;
+      
+  
+    } catch (error) {
+      console.error(error);
+    }
+  }
   
   
   export async function fetchCaloriesP(id) {
