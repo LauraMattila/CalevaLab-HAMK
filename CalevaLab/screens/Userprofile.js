@@ -25,7 +25,7 @@ import {
   updateUserInfo
 } from '../db/UserDb';
 
-
+import {fetchAccessTokenP} from '../db/PolarDb'
 //import Icon from 'react-native-vector-icons/AntDesign';
 import SwitchSelector from 'react-native-switch-selector';
 import {Provider as PaperProvider} from 'react-native-paper';
@@ -100,6 +100,19 @@ const Userprofile = ({navigation}) => {
       return false;
     } else return true;
   };
+/*   
+
+const checkConnection = async () =>{
+   const accessTokenP = fetchAccessTokenP(userId);
+
+   console.log(accessTokenP);
+   if(accessTokenP== undefined ){
+    setConnection('red');
+    } else{
+    setConnection('green');
+   }
+
+} */
 
   const captureImage = async type => {
     let options = {
