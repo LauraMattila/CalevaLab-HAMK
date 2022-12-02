@@ -87,8 +87,7 @@ const Dashboard = ({navigation}) => {
   const [loading, setLoading] = useState(true);
 
 
-  const [userId, setUserId] = useState('2');
-
+  const [userId, setUserId] = useState('1');
 
   const [stepsDayList, setStepsDayList] = useState(['']);
 
