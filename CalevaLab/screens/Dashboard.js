@@ -86,8 +86,9 @@ const Dashboard = ({navigation}) => {
   const [endTime, setEndTime] = useState();
   const [loading, setLoading] = useState(true);
 
+
   const [userId, setUserId] = useState('1');
-  
+
   const [stepsDayList, setStepsDayList] = useState(['']);
 
   const [caloriesDayList, setCaloriesDayList] = useState(['']);
@@ -460,6 +461,7 @@ const Dashboard = ({navigation}) => {
     <PaperProvider>
       <SwitchSelector
         options={kuka}
+
         initial={userId-1}
         onPress={value => setUserId(value)}
       />
