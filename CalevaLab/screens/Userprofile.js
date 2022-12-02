@@ -10,6 +10,8 @@ import {
   Platform,
   PermissionsAndroid,
   TouchableOpacity,
+  Modal,
+  TextInput
 } from 'react-native';
 
 import {
@@ -18,13 +20,15 @@ import {
   fetchSleepPreference,
   setSleepPreference,
   setStepsPreference,
-  setCaloriesPreference
+  setCaloriesPreference,
+  fetchUserInfo,
+  updateUserInfo
 } from '../db/UserDb';
 
 
 //import Icon from 'react-native-vector-icons/AntDesign';
 import SwitchSelector from 'react-native-switch-selector';
-import {Modal, Provider as PaperProvider} from 'react-native-paper';
+import {Provider as PaperProvider} from 'react-native-paper';
 import ImagePicker from 'react-native-image-picker';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {DataTable} from 'react-native-paper';
@@ -194,8 +198,7 @@ const Userprofile = ({navigation}) => {
   }
 
   return (
-    <View>
-     
+    <View>  
         <View>
           <View style={styles.container}>
             <View style={styles.image}>
@@ -230,6 +233,10 @@ const Userprofile = ({navigation}) => {
               {age} | {gender}
             </Text>
           </View>
+          <Pressable style={styles.buttonEdit}
+          onPress = {() => showEditView()}>
+          <Text style={styles.buttonTextEdit}>Edit Your Profile</Text>
+        </Pressable>
         </View>
 
         <DataTable style={styles.datacont}>
@@ -306,17 +313,7 @@ const Userprofile = ({navigation}) => {
             </DataTable.Cell>
           </DataTable.Row>
         </DataTable>
-      </View>
-      <Pressable style={styles.buttonEdit}
-          onPress = {() => showEditView()}>
-          <Text style={styles.buttonTextEdit}>Edit Your Profile</Text>
-        </Pressable>
-      
-      
-        
-      
-    
-    <Modal visible={visibility} animationType='slide'>
+        <Modal visible={visibility} animationType='slide'>
       <View>
         <Text style={styles.text}>
           Edit Your Profile Information
@@ -381,8 +378,8 @@ const Userprofile = ({navigation}) => {
         </View>
       </View>
     </Modal>
-
-   
+  </View>    
+ 
   );
 };
 const styles = StyleSheet.create({

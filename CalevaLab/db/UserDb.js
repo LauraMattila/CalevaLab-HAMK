@@ -49,8 +49,15 @@ export async function fetchSleepPreference(id) {
       console.log('EI OLE USERID');
       return;
     }
-
+      userId.forEach(doc => {
+        result = doc.data().sleep_preference;
+      });
+      return result;
+   } catch (error) {
+      console.error(error);
+   }
   }
+
 
    export async function updateUserInfo(fname, lname, gender, age, id) {
     try {
