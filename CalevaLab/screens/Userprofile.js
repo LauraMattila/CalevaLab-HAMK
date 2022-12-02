@@ -1,5 +1,5 @@
 import React, {useState, useEffect, Component} from 'react';
-import {PermissionsAndroid} from 'react-native';
+import {PermissionsAndroid, Button} from 'react-native';
 
 import {
   StyleSheet,
@@ -16,9 +16,10 @@ import {
   fetchSleepPreference,
   setSleepPreference,
   setStepsPreference,
-  setCaloriesPreference
+  setCaloriesPreference,
 } from '../db/UserDb';
 
+import {fetchAccessTokenP} from '../db/PolarDb'
 //import Icon from 'react-native-vector-icons/AntDesign';
 import SwitchSelector from 'react-native-switch-selector';
 import {Modal, Provider as PaperProvider} from 'react-native-paper';
@@ -37,8 +38,7 @@ const Userprofile = ({navigation}) => {
   const [Sleepchecked, setSleepChecked] = React.useState('');
   const [Stepschecked, setStepsChecked] = React.useState('');
   const [Calschecked, setCalsChecked] = React.useState('');
-
-  
+    const [connection, setConnection] = useState('');
   const [visibility, setVisibility] = useState(false);
   const [doc, setDoc] = useState('1');
   const [userId, setUserId] = useState('1');
@@ -49,28 +49,35 @@ const Userprofile = ({navigation}) => {
     switch (preference) {
       case 'Polar':
         var sleep = 'Fitbit';
-        setSleepChecked('sleepfit');
+
         await setSleepPreference(doc, sleep);
+        setSleepChecked('sleepfit');
+        console.log('kOira');
+        
 
-        break;
-   
-    }
-  };
-
-  const setSleep2 = async () => {
-    var preference = await fetchSleepPreference(userId);
-    switch (preference) {
       case 'Fitbit':
         var sleep = 'Polar';
-        setSleepChecked('sleeppolar');
         await setSleepPreference(doc, sleep);
+        setSleepChecked('sleeppolar');
 
-        break;
-   
+       
     }
   };
+/*   
 
-  
+const checkConnection = async () =>{
+   const accessTokenP = fetchAccessTokenP(userId);
+
+   console.log(accessTokenP);
+   if(accessTokenP== undefined ){
+    setConnection('red');
+    } else{
+    setConnection('green');
+   }
+
+} */
+
+
   const setSteps = async () => {
     var preference = await fetchStepPreference(userId);
     switch (preference) {
@@ -80,28 +87,23 @@ const Userprofile = ({navigation}) => {
         await setStepsPreference(doc, steps);
 
         break;
-   
+
+        case 'Fitbit':
+            var steps = 'Polar';
+            setStepsChecked('stepspolar');
+            await setStepsPreference(doc, steps);
+    
+            break;
     }
   };
-  const setSteps2 = async () => {
-    var preference = await fetchSleepPreference(userId);
-    switch (preference) {
-      case 'Fitbit':
-        var steps = 'Polar';
-        setStepsChecked('stepspolar');
-        await setStepsPreference(doc, steps);
-
-        break;
-   
-    }
-  };
-
-
+  
 
   return (
     <View>
-    
 
+<Button
+          title="POlar Activities"
+          onPress={() => checkConnection()}></Button>
       <View style={styles.infocont}>
         <View>
           <Text style={styles.name}>
@@ -114,7 +116,6 @@ const Userprofile = ({navigation}) => {
         </View>
       </View>
 
-      
       <DataTable style={styles.datacont}>
         <DataTable.Header>
           <DataTable.Title>Service</DataTable.Title>
@@ -124,13 +125,13 @@ const Userprofile = ({navigation}) => {
         </DataTable.Header>
 
         <DataTable.Row>
-          <DataTable.Cell>POLAR</DataTable.Cell>
+          <DataTable.Cell><Text style={{color: connection}}>POLAR </Text> </DataTable.Cell>
           <DataTable.Cell>
             <View>
               <RadioButton
                 value="sleeppolar"
                 status={Sleepchecked === 'sleeppolar' ? 'checked' : 'unchecked'}
-                onPress={() => setSleep2()}
+                onPress={() => setSleep()}
               />
             </View>
           </DataTable.Cell>
