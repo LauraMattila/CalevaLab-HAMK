@@ -88,6 +88,10 @@ const Dashboard = ({navigation}) => {
 
   const [userId, setUserId] = useState('1');
   
+
+  const [userId, setUserId] = useState('2');
+
+
   const [stepsDayList, setStepsDayList] = useState(['']);
 
   const [caloriesDayList, setCaloriesDayList] = useState(['']);
