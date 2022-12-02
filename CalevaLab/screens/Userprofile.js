@@ -1,5 +1,4 @@
 import React, {useState, useEffect, Component} from 'react';
-import {PermissionsAndroid, Button} from 'react-native';
 
 import {
   StyleSheet,
@@ -21,7 +20,7 @@ import {
   fetchSleepPreference,
   setSleepPreference,
   setStepsPreference,
-  setCaloriesPreference,,
+  setCaloriesPreference,
   fetchUserInfo,
   updateUserInfo
 } from '../db/UserDb';
