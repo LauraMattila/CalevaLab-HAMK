@@ -9,7 +9,7 @@ import {
     Button,
     Pressable,
   } from 'react-native';
-const WeekData = () =>{
+const WeekData = (props) =>{
 
     return(
       
@@ -24,54 +24,54 @@ const WeekData = () =>{
 
         <DataTable.Row>
           <DataTable.Cell>Week 7</DataTable.Cell>
-          <DataTable.Cell numeric>Kissa </DataTable.Cell>
-          <DataTable.Cell numeric>Kissa</DataTable.Cell>
-          <DataTable.Cell numeric>Kissa</DataTable.Cell>
+          <DataTable.Cell numeric>{props.sleep[6]}</DataTable.Cell>
+          <DataTable.Cell numeric>{props.steps[6]}</DataTable.Cell>
+          <DataTable.Cell numeric>{props.calories[6]}</DataTable.Cell>
         </DataTable.Row>
 
         <DataTable.Row>
           <DataTable.Cell>Week 6</DataTable.Cell>
-          <DataTable.Cell numeric>Kissa </DataTable.Cell>
-          <DataTable.Cell numeric>Kissa</DataTable.Cell>
-          <DataTable.Cell numeric>Kissa</DataTable.Cell>
+          <DataTable.Cell numeric>{props.sleep[5]}</DataTable.Cell>
+          <DataTable.Cell numeric>{props.steps[5]}</DataTable.Cell>
+          <DataTable.Cell numeric>{props.calories[5]}</DataTable.Cell>
         </DataTable.Row>
 
 
         <DataTable.Row>
           <DataTable.Cell>Week 5</DataTable.Cell>
-          <DataTable.Cell numeric>Kissa </DataTable.Cell>
-          <DataTable.Cell numeric>Kissa</DataTable.Cell>
-          <DataTable.Cell numeric>Kissa</DataTable.Cell>
+          <DataTable.Cell numeric>{props.sleep[4]}</DataTable.Cell>
+          <DataTable.Cell numeric>{props.steps[4]}</DataTable.Cell>
+          <DataTable.Cell numeric>{props.calories[4]}</DataTable.Cell>
         </DataTable.Row>
 
         <DataTable.Row>
           <DataTable.Cell>Week 4</DataTable.Cell>
-          <DataTable.Cell numeric>Kissa </DataTable.Cell>
-          <DataTable.Cell numeric>Kissa</DataTable.Cell>
-          <DataTable.Cell numeric>Kissa</DataTable.Cell>
+          <DataTable.Cell numeric>{props.sleep[3]}</DataTable.Cell>
+          <DataTable.Cell numeric>{props.steps[3]}</DataTable.Cell>
+          <DataTable.Cell numeric>{props.calories[3]}</DataTable.Cell>
         </DataTable.Row>
 
         <DataTable.Row>
           <DataTable.Cell>Week 3</DataTable.Cell>
-          <DataTable.Cell numeric>Kissa </DataTable.Cell>
-          <DataTable.Cell numeric>Kissa</DataTable.Cell>
-          <DataTable.Cell numeric>Kissa</DataTable.Cell>
+          <DataTable.Cell numeric>{props.sleep[2]}</DataTable.Cell>
+          <DataTable.Cell numeric>{props.steps[2]}</DataTable.Cell>
+          <DataTable.Cell numeric>{props.calories[2]}</DataTable.Cell>
         </DataTable.Row>
 
 
         <DataTable.Row>
           <DataTable.Cell>Week 2</DataTable.Cell>
-          <DataTable.Cell numeric>Kissa </DataTable.Cell>
-          <DataTable.Cell numeric>Kissa</DataTable.Cell>
-          <DataTable.Cell numeric>Kissa</DataTable.Cell>
+          <DataTable.Cell numeric>{props.sleep[1]}</DataTable.Cell>
+          <DataTable.Cell numeric>{props.steps[1]}</DataTable.Cell>
+          <DataTable.Cell numeric>{props.calories[1]}</DataTable.Cell>
         </DataTable.Row>
 
 
         <DataTable.Row>
           <DataTable.Cell>Week 1</DataTable.Cell>
-          <DataTable.Cell numeric>Kissa </DataTable.Cell>
-          <DataTable.Cell numeric>Kissa</DataTable.Cell>
-          <DataTable.Cell numeric>Kissa</DataTable.Cell>
+          <DataTable.Cell numeric>{props.sleep[0]}</DataTable.Cell>
+          <DataTable.Cell numeric>{props.steps[0]}</DataTable.Cell>
+          <DataTable.Cell numeric>{props.calories[0]}</DataTable.Cell>
         </DataTable.Row>
         </DataTable>
 

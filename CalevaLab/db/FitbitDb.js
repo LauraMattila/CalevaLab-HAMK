@@ -62,7 +62,7 @@ export async function SaveStepsLog(stepsDate, steps, id, string) {
   try {
     const stepsData = {
       date: stepsDate,
-      steps: steps,
+      steps: parseInt(steps),
       user_id: id,
     };
     const res = await firestore()
@@ -80,7 +80,7 @@ export async function SaveCaloriesLog(caloriesDate, calories, string, id) {
   try {
     const caloriesData = {
       date: caloriesDate,
-      calories: calories,
+      calories: parseInt(calories),
       user_id: id,
     };
     const res = await firestore()
@@ -170,6 +170,87 @@ export async function fetchStepsLog(id) {
       });
       return stepsData;
     }
+  } catch (error) {
+    console.error(error);
+  }
+}
+export async function fetchStepsWeeklyF(id, date) {
+  try {
+
+    var response = await firestore()
+      .collection('fitbit_steps')
+      .where('user_id','==', id)
+      .where('date', '>=', date)
+      .get(); 
+
+
+     
+    if (response.empty) {
+      console.log('EI ole');
+      return;
+    }
+
+    var stepsData = [];
+    response.forEach(doc => {
+      stepsData.push(doc.data());
+    });
+    return stepsData;
+    
+
+  } catch (error) {
+    console.error(error);
+  }
+}
+export async function fetchSleepWeeklyF(id, date) {
+  try {
+
+    var response = await firestore()
+      .collection('fitbit_sleep')
+      .where('user_id','==', id)
+      .where('date', '>=', date)
+      .get(); 
+
+
+     
+    if (response.empty) {
+      console.log('EI ole');
+      return;
+    }
+
+    var sleepData = [];
+    response.forEach(doc => {
+      sleepData.push(doc.data());
+    });
+    return sleepData;
+    
+
+  } catch (error) {
+    console.error(error);
+  }
+}
+export async function fetchCaloriesWeeklyF(id, date) {
+  try {
+
+    var response = await firestore()
+      .collection('fitbit_calories')
+      .where('user_id','==', id)
+      .where('date', '>=', date)
+      .get(); 
+
+
+     
+    if (response.empty) {
+      console.log('EI ole');
+      return;
+    }
+
+    var caloriesData = [];
+    response.forEach(doc => {
+      caloriesData.push(doc.data());
+    });
+    return caloriesData;
+    
+
   } catch (error) {
     console.error(error);
   }
