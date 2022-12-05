@@ -13,6 +13,7 @@ import {
   Modal,
   TextInput,
   ActivityIndicator
+
 } from 'react-native';
 
 import {
@@ -38,6 +39,7 @@ import Moment from 'moment';
 import {RadioButton} from 'react-native-paper';
 
 const Userprofile = ({navigation}) => {
+
     const [ loading, setLoading ] = useState(true);
 
   const [firstname, setFirstname] = useState('');
@@ -280,7 +282,6 @@ const checkConnection = async () =>{
           const fileName = item.fileName;
 
           setFilePathh(uri);
-
           console.log('FILEPATH:                 ' + filePathh);
         });
     });
@@ -288,10 +289,13 @@ const checkConnection = async () =>{
 
   const [visibility, setVisibility] = useState(false);
 
+
   const [id, setUserId] = useState('1');
+
 
   const showEditView = async () => {
     var userInfo = await fetchUserInfo(id);
+
     setFirstname(userInfo.fname);
     setLastname(userInfo.lname);
     setGender(userInfo.gender);
@@ -308,31 +312,23 @@ const checkConnection = async () =>{
 
   const cancel = () => {
     setVisibility(false);
+
   };
 
   return (
     <View>
-      <View>
-        <View style={styles.container}>
-          <View style={styles.image}>
+
+      <View style={styles.image}>
+
             <Image
               style={{width: 120, height: 120, borderRadius: 75}}
               source={{uri: filePathh}}
               resizeMode={'cover'} // cover or contain its upto you view look
             />
           </View>
-          <TouchableOpacity
-            activeOpacity={0.5}
-            onPress={() => captureImage('photo')}>
-            <Text style={styles.info}> Take a photo</Text>
-          </TouchableOpacity>
 
-          <TouchableOpacity
-            activeOpacity={0.5}
-            onPress={() => chooseFile('photo')}>
-            <Text style={styles.info}> Choose Image</Text>
-          </TouchableOpacity>
-        </View>
+      <View>
+        <View style={styles.container}></View>
       </View>
       <View style={styles.infocont}>
         <View>
@@ -344,14 +340,13 @@ const checkConnection = async () =>{
             {age} | {gender}
           </Text>
         </View>
+
         <Pressable style={styles.buttonEdit} onPress={() => showEditView()}>
           <Text style={styles.buttonTextEdit}>Edit Your Profile</Text>
         </Pressable>
       </View>
 
 
-
-     
       <DataTable style={styles.datacont}>
         <DataTable.Header>
           <DataTable.Title>Service</DataTable.Title>
@@ -362,16 +357,19 @@ const checkConnection = async () =>{
 
         <DataTable.Row>
           <DataTable.Cell>POLAR</DataTable.Cell>
+
    
           <DataTable.Cell>
 
 
           { loading ?
       <ActivityIndicator /> :
+
             <View>
               <RadioButton
                 value="sleeppolar"
                 status={Sleepchecked === 'sleeppolar' ? 'checked' : 'unchecked'}
+
                 onPress={() => setSleep()}
               />
             </View>
@@ -380,10 +378,12 @@ const checkConnection = async () =>{
           <DataTable.Cell>
           { loading ?
       <ActivityIndicator /> :
+
             <View>
               <RadioButton
                 value="stepspolar"
                 status={Stepschecked === 'stepspolar' ? 'checked' : 'unchecked'}
+
                 onPress={() => setSteps()}
               />
             </View>
@@ -392,10 +392,12 @@ const checkConnection = async () =>{
           <DataTable.Cell>
           { loading ?
       <ActivityIndicator /> :
+
             <View>
               <RadioButton
                 value="calspolar"
                 status={Calschecked === 'calspolar' ? 'checked' : 'unchecked'}
+
                 onPress={() => setCals()}
               />
             </View>
@@ -410,10 +412,12 @@ const checkConnection = async () =>{
           <DataTable.Cell>
           { loading ?
       <ActivityIndicator /> :
+
             <View>
               <RadioButton
                 value="sleepfit"
                 status={Sleepchecked === 'sleepfit' ? 'checked' : 'unchecked'}
+
                 onPress={() => setSleep()}
               />
             </View>
@@ -422,10 +426,12 @@ const checkConnection = async () =>{
           <DataTable.Cell>
           { loading ?
       <ActivityIndicator /> :
+
             <View>
               <RadioButton
                 value="stepsfit"
                 status={Stepschecked === 'stepsfit' ? 'checked' : 'unchecked'}
+
                 onPress={() => setSteps()}
               />
             </View>
@@ -435,10 +441,12 @@ const checkConnection = async () =>{
 
           { loading ?
       <ActivityIndicator /> :
+
             <View>
               <RadioButton
                 value="calsfit"
                 status={Calschecked === 'calsfit' ? 'checked' : 'unchecked'}
+
                 onPress={() => setCals()}
               />
             </View>
@@ -446,7 +454,7 @@ const checkConnection = async () =>{
           
           </DataTable.Cell>
 
-          
+
         </DataTable.Row>
       </DataTable>
       <Modal visible={visibility} animationType="slide">
@@ -455,6 +463,28 @@ const checkConnection = async () =>{
         </View>
 
         <View style={styles.editView}>
+
+          <View style={styles.image}>
+            <Image
+              style={{width: 120, height: 120, borderRadius: 75}}
+              source={{uri: filePathh}}
+              resizeMode={'cover'} // cover or contain its upto you view look
+            />
+          </View>
+
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => captureImage('photo')}>
+            <Text style={styles.info}> Take a photo</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => chooseFile('photo')}>
+            <Text style={styles.info}> Choose Image</Text>
+          </TouchableOpacity>
+
+
           <Text style={styles.headers}>Firstname</Text>
           <TextInput
             style={styles.input}
@@ -534,19 +564,22 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   infocont: {
-    flexDirection: 'row',
     height: 20,
     alignItems: 'center',
     justifyContent: 'center',
+    margin: 20,
   },
   datacont: {
+
     marginVertical: 350,
     alignContent: 'flex-start',
+
   },
   name: {
     textAlign: 'center',
     fontSize: 16,
     fontWeight: 'bold',
+    
   },
   info: {
     textAlign: 'center',
@@ -625,11 +658,12 @@ const styles = StyleSheet.create({
   image: {
     alignItems: 'center',
     marginHorizontal: 20,
+
   },
 
   sharecont: {
     alignItems: 'center',
-    marginVertical: 60,
+    marginVertical: 6,
   },
 
   sharebutton: {
@@ -639,8 +673,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 100,
     backgroundColor: '#1e90ff',
-    width: 100,
-    height: 100,
+    width: 10,
+    height: 10,
   },
   sharetext: {
     fontSize: 20,
