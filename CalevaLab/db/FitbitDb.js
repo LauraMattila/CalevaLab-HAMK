@@ -1,6 +1,27 @@
 import firestore, {firebase} from '@react-native-firebase/firestore';
 import {string} from 'prop-types';
 
+
+// Returns the ISO week of the date.
+Date.prototype.getWeek = function () {
+  var date = new Date(this.getTime());
+  date.setHours(0, 0, 0, 0);
+  // Thursday in current week decides the year.
+  date.setDate(date.getDate() + 3 - ((date.getDay() + 6) % 7));
+  // January 4 is always in week 1.
+  var week1 = new Date(date.getFullYear(), 0, 4);
+  // Adjust to Thursday in week 1 and count number of weeks from date to week1.
+  return (
+    1 +
+    Math.round(
+      ((date.getTime() - week1.getTime()) / 86400000 -
+        3 +
+        ((week1.getDay() + 6) % 7)) /
+        7,
+    )
+  );
+};
+
 export async function fetchUserId(id) {
   try {
     console.log('KÄYTTÄJÄ: ' + id);
@@ -47,6 +68,9 @@ export async function saveSleepLog(sleepDate, sleepMin, id) {
       date: new Date(sleepDate),
       sleep_min: sleepMin,
       user_id: id,
+      month: new Date(sleepDate).getMonth(),
+      year: new Date(sleepDate).getFullYear(),
+      week: new Date(sleepDate).getWeek()
     };
     const res = await firestore()
       .collection('fitbit_sleep')
@@ -64,6 +88,9 @@ export async function SaveStepsLog(stepsDate, steps, id, string) {
       date: stepsDate,
       steps: parseInt(steps),
       user_id: id,
+      month: stepsDate.getMonth(),
+      year: stepsDate.getFullYear(),
+      week: stepsDate.getWeek()
     };
     const res = await firestore()
       .collection('fitbit_steps')
@@ -82,6 +109,9 @@ export async function SaveCaloriesLog(caloriesDate, calories, string, id) {
       date: caloriesDate,
       calories: parseInt(calories),
       user_id: id,
+      month: caloriesDate.getMonth(),
+      year: caloriesDate.getFullYear(),
+      week: caloriesDate.getWeek()
     };
     const res = await firestore()
       .collection('fitbit_calories')
@@ -249,6 +279,100 @@ export async function fetchCaloriesWeeklyF(id, date) {
       caloriesData.push(doc.data());
     });
     return caloriesData;
+    
+
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function fetchSleepMonthlyF (month, year, id) {
+  try {
+  
+    var response = await firestore()
+      .collection('fitbit_sleep')
+      .where('user_id','==', id)
+      .where('month', '==', month)
+      .where('year', '==', year)
+      .get(); 
+
+
+     
+    if (response.empty) {
+      console.log('EI ole');
+      return "NA";
+    }
+
+    var sleepData= 0;
+    var dataCount= 0;
+    response.forEach(doc => {
+      sleepData+=doc.data().sleep_min;
+      dataCount++;
+    });
+    totalMinutes = Math.round(sleepData / dataCount);
+    hours = Math.floor(totalMinutes / 60);
+    minutes = Math.floor(totalMinutes % 60);
+    return hours + "h " + minutes + "m";
+    
+
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function fetchStepsMonthlyF (month, year, id) {
+  try {
+  
+    var response = await firestore()
+      .collection('fitbit_steps')
+      .where('user_id','==', id)
+      .where('month', '==', month)
+      .where('year', '==', year)
+      .get(); 
+
+    if (response.empty) {
+      console.log('EI ole');
+      return "NA";
+    }
+
+    var stepData= 0;
+    var dataCount= 0;
+    response.forEach(doc => {
+      stepData+=doc.data().steps;
+      dataCount++;
+    });
+    stepData = Math.round(stepData / dataCount);
+    return stepData;
+    
+
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function fetchCaloriesMonthlyF (month, year, id) {
+  try {
+  
+    var response = await firestore()
+      .collection('fitbit_calories')
+      .where('user_id','==', id)
+      .where('month', '==', month)
+      .where('year', '==', year)
+      .get(); 
+
+    if (response.empty) {
+      console.log('EI ole');
+      return "NA";
+    }
+
+    var calsData= 0;
+    var dataCount= 0;
+    response.forEach(doc => {
+      calsData+=doc.data().calories;
+      dataCount++;
+    });
+    calsData = Math.round(calsData / dataCount);
+    return calsData;
     
 
   } catch (error) {
