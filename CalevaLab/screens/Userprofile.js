@@ -186,7 +186,7 @@ const checkConnection = async () =>{
 
   const [visibility, setVisibility] = useState(false);
 
-  const [id, setUserId] = useState('2')
+  const [id, setUserId] = useState('4')
 
 
   const showEditView = async() => {
@@ -422,19 +422,20 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   infocont: {
-    flexDirection: 'row',
     height: 20,
     alignItems: 'center',
     justifyContent: 'center',
+    margin: 20,
   },
   datacont: {
-    marginVertical: 350,
+    marginVertical: 150,
     alignContent: 'flex-start' 
   },
   name: {
     textAlign: 'center',
     fontSize: 16,
     fontWeight: 'bold',
+    
   },
   info: {
     textAlign: 'center',
@@ -512,30 +513,12 @@ const styles = StyleSheet.create({
     borderColor: "#696969"
   },
   image: {
-
     alignItems: 'center',
-    marginHorizontal: 20
-  },
-
-  sharecont: {
-    alignItems: 'center',
-    marginVertical: 60,
+    marginHorizontal: 20,
+    margin:25,
   },
 
-  sharebutton: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 100,
-    backgroundColor: '#1e90ff',
-    width: 100,
-    height: 100,
-  },
-  sharetext: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
+
 
 });
 export default Userprofile;
