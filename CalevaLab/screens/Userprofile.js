@@ -12,6 +12,8 @@ import {
   TouchableOpacity,
   Modal,
   TextInput,
+  ActivityIndicator
+
 } from 'react-native';
 
 import {
@@ -37,12 +39,18 @@ import Moment from 'moment';
 import {RadioButton} from 'react-native-paper';
 
 const Userprofile = ({navigation}) => {
+
   const [id, setUserId] = useState('1');
+
+
+    const [ loading, setLoading ] = useState(true);
+
+
   const [firstname, setFirstname] = useState('');
   const [lastname, setLastname] = useState('');
   const [age, setAge] = useState('');
   const [gender, setGender] = useState('');
-
+  const [doc, setDoc] = useState('1');
   const kuka = [
     {label: 'Sampo', value: '1'},
     {label: 'Jere', value: '2'},
@@ -130,6 +138,109 @@ const checkConnection = async () =>{
 
 } */
 
+  useEffect(() => {
+    const checkPrefSleep = async () => {
+      var preference = await fetchSleepPreference(id);
+
+      switch (preference) {
+        case 'Polar':
+          setSleepChecked('sleeppolar');
+          break;
+
+        case 'Fitbit':
+          setSleepChecked('sleepfit');
+          break;
+      }
+   
+    };
+
+    const checkPrefSteps = async () => {
+      var preference = await fetchStepPreference(id);
+
+      switch (preference) {
+        case 'Polar':
+          setStepsChecked('stepspolar');
+          break;
+
+        case 'Fitbit':
+          setStepsChecked('stepsfit');
+          break;
+      }
+
+    };
+
+    const checkPrefCals = async () => {
+      var preference = await fetchCaloriesPreference(id);
+
+      switch (preference) {
+        case 'Polar':
+          setCalsChecked('calspolar');
+          break;
+
+        case 'Fitbit':
+          setCalsChecked('calsfit');
+          break;
+
+      }
+      setLoading(false);
+    };
+
+    checkPrefSleep();
+    checkPrefSteps();
+    checkPrefCals();
+    
+  }, []);
+  const setSleep = async () => {
+    var preference = await fetchSleepPreference(id);
+    switch (preference) {
+      case 'Polar':
+        var sleep = 'Fitbit';
+        await setSleepPreference(doc, sleep);
+        setSleepChecked('sleepfit');
+        break;
+
+      case 'Fitbit':
+        var sleep = 'Polar';
+        await setSleepPreference(doc, sleep);
+        setSleepChecked('sleeppolar');
+        break;
+    }
+  };
+
+  const setSteps = async () => {
+    var preference = await fetchStepPreference(id);
+    switch (preference) {
+      case 'Polar':
+        var steps = 'Fitbit';
+        await setStepsPreference(doc, steps);
+        setStepsChecked('stepsfit');
+        break;
+
+      case 'Fitbit':
+        var steps = 'Polar';
+        await setStepsPreference(doc, steps);
+        setStepsChecked('stepspolar');
+        break;
+    }
+  };
+
+  const setCals = async () => {
+    var preference = await fetchCaloriesPreference(id);
+    switch (preference) {
+      case 'Polar':
+        var cals = 'Fitbit';
+        await setCaloriesPreference(doc, cals);
+        setCalsChecked('calsfit');
+        break;
+
+      case 'Fitbit':
+        var cals = 'Polar';
+        await setCaloriesPreference(doc, cals);
+        setCalsChecked('calspolar');
+        break;
+    }
+  };
+
   const captureImage = async type => {
     let options = {
       mediaType: type,
@@ -201,6 +312,7 @@ const checkConnection = async () =>{
 
   const [visibility, setVisibility] = useState(false);
 
+
   const showEditView = async () => {
     var userInfo = await fetchUserInfo(id);
 
@@ -220,10 +332,12 @@ const checkConnection = async () =>{
 
   const cancel = () => {
     setVisibility(false);
+
   };
 
   return (
     <View>
+
       <SwitchSelector
         options={kuka}
         initial={0}
@@ -236,6 +350,9 @@ const checkConnection = async () =>{
           resizeMode={'cover'} // cover or contain its upto you view look
         />
       </View>
+
+
+
       <View>
         <View style={styles.container}></View>
       </View>
@@ -248,12 +365,18 @@ const checkConnection = async () =>{
           <Text style={styles.info}>
             {age} | {gender}
           </Text>
+
           <Pressable style={styles.buttonEdit} onPress={() => showEditView()}>
+
+        </View>
+
+
           <Text style={styles.buttonTextEdit}>Edit Your Profile</Text>
         </Pressable>
         </View>
        
       </View>
+
 
       <DataTable style={styles.datacont}>
         <DataTable.Header>
@@ -265,64 +388,104 @@ const checkConnection = async () =>{
 
         <DataTable.Row>
           <DataTable.Cell>POLAR</DataTable.Cell>
+
+   
           <DataTable.Cell>
+
+
+          { loading ?
+      <ActivityIndicator /> :
+
             <View>
               <RadioButton
                 value="sleeppolar"
                 status={Sleepchecked === 'sleeppolar' ? 'checked' : 'unchecked'}
-                onPress={() => setSleepChecked('sleeppolar')}
+
+                onPress={() => setSleep()}
               />
             </View>
+}
           </DataTable.Cell>
           <DataTable.Cell>
+          { loading ?
+      <ActivityIndicator /> :
+
             <View>
               <RadioButton
                 value="stepspolar"
                 status={Stepschecked === 'stepspolar' ? 'checked' : 'unchecked'}
-                onPress={() => setStepsChecked('stepspolar')}
+
+                onPress={() => setSteps()}
               />
             </View>
+}
           </DataTable.Cell>
           <DataTable.Cell>
+          { loading ?
+      <ActivityIndicator /> :
+
             <View>
               <RadioButton
                 value="calspolar"
                 status={Calschecked === 'calspolar' ? 'checked' : 'unchecked'}
-                onPress={() => setCalsChecked('calspolar')}
+
+                onPress={() => setCals()}
               />
             </View>
+}
+          
+          
           </DataTable.Cell>
         </DataTable.Row>
-
+      
         <DataTable.Row>
           <DataTable.Cell>FITBIT</DataTable.Cell>
           <DataTable.Cell>
+          { loading ?
+      <ActivityIndicator /> :
+
             <View>
               <RadioButton
                 value="sleepfit"
                 status={Sleepchecked === 'sleepfit' ? 'checked' : 'unchecked'}
-                onPress={() => setSleepChecked('sleepfit')}
+
+                onPress={() => setSleep()}
               />
             </View>
+}
           </DataTable.Cell>
           <DataTable.Cell>
+          { loading ?
+      <ActivityIndicator /> :
+
             <View>
               <RadioButton
                 value="stepsfit"
                 status={Stepschecked === 'stepsfit' ? 'checked' : 'unchecked'}
-                onPress={() => setStepsChecked('stepsfit')}
+
+                onPress={() => setSteps()}
               />
             </View>
+}
           </DataTable.Cell>
           <DataTable.Cell>
+
+          { loading ?
+      <ActivityIndicator /> :
+
             <View>
               <RadioButton
                 value="calsfit"
                 status={Calschecked === 'calsfit' ? 'checked' : 'unchecked'}
-                onPress={() => setCalsChecked('calsfit')}
+
+                onPress={() => setCals()}
               />
             </View>
+}
+          
           </DataTable.Cell>
+
+
         </DataTable.Row>
       </DataTable>
       <Modal visible={visibility} animationType="slide">
@@ -331,6 +494,7 @@ const checkConnection = async () =>{
         </View>
 
         <View style={styles.editView}>
+
           <View style={styles.image}>
             <Image
               style={{width: 120, height: 120, borderRadius: 75}}
@@ -350,6 +514,7 @@ const checkConnection = async () =>{
             onPress={() => chooseFile('photo')}>
             <Text style={styles.info}> Choose Image</Text>
           </TouchableOpacity>
+
 
           <Text style={styles.headers}>Firstname</Text>
           <TextInput
