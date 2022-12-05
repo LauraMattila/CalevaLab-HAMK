@@ -40,7 +40,11 @@ import {RadioButton} from 'react-native-paper';
 
 const Userprofile = ({navigation}) => {
 
+  const [id, setUserId] = useState('1');
+
+
     const [ loading, setLoading ] = useState(true);
+
 
   const [firstname, setFirstname] = useState('');
   const [lastname, setLastname] = useState('');
@@ -53,6 +57,25 @@ const Userprofile = ({navigation}) => {
     {label: 'Janette', value: '3'},
     {label: 'Laura', value: '4'},
   ];
+
+  useEffect(() => {
+    const setUserInfo = async () => {
+      var userInfo = await fetchUserInfo(id);
+      setFirstname(userInfo.fname);
+      setLastname(userInfo.lname);
+      setGender(userInfo.gender);
+      setAge(userInfo.age);
+      console.log(
+        ' TOIMIIKOTOIMIIKOTOIMIIIIKOTOIMIIIKO :   ' + userInfo.gender,
+      );
+    };
+
+    setUserInfo();
+  }, [id]);
+
+  //fetchUserInfo(id);
+
+ 
 
   const [Sleepchecked, setSleepChecked] = React.useState('');
   const [Stepschecked, setStepsChecked] = React.useState('');
@@ -290,9 +313,6 @@ const checkConnection = async () =>{
   const [visibility, setVisibility] = useState(false);
 
 
-  const [id, setUserId] = useState('1');
-
-
   const showEditView = async () => {
     var userInfo = await fetchUserInfo(id);
 
@@ -305,7 +325,7 @@ const checkConnection = async () =>{
 
   const updateUser = async () => {
     var userInfo = await fetchUserInfo(id);
-    console.log('paskakulli' + userInfo);
+    console.log('UPDATE USER INFO:         ' + userInfo);
     updateUserInfo(firstname, lastname, gender, age, id);
     setVisibility(false);
   };
@@ -318,14 +338,20 @@ const checkConnection = async () =>{
   return (
     <View>
 
+      <SwitchSelector
+        options={kuka}
+        initial={0}
+        onPress={value => setUserId(value)}
+      />
       <View style={styles.image}>
+        <Image
+          style={{width: 120, height: 120, borderRadius: 75}}
+          source={{uri: filePathh}}
+          resizeMode={'cover'} // cover or contain its upto you view look
+        />
+      </View>
 
-            <Image
-              style={{width: 120, height: 120, borderRadius: 75}}
-              source={{uri: filePathh}}
-              resizeMode={'cover'} // cover or contain its upto you view look
-            />
-          </View>
+
 
       <View>
         <View style={styles.container}></View>
@@ -339,11 +365,16 @@ const checkConnection = async () =>{
           <Text style={styles.info}>
             {age} | {gender}
           </Text>
+
+          <Pressable style={styles.buttonEdit} onPress={() => showEditView()}>
+
         </View>
 
-        <Pressable style={styles.buttonEdit} onPress={() => showEditView()}>
+
           <Text style={styles.buttonTextEdit}>Edit Your Profile</Text>
         </Pressable>
+        </View>
+       
       </View>
 
 
@@ -564,22 +595,20 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   infocont: {
-    height: 20,
+    marginVertical: 50,
+    flexDirection: 'row',
+    height: 30,
     alignItems: 'center',
     justifyContent: 'center',
-    margin: 20,
   },
   datacont: {
-
-    marginVertical: 350,
-    alignContent: 'flex-start',
-
+    marginVertical: 100,
+    alignContent: 'center',
   },
   name: {
     textAlign: 'center',
     fontSize: 16,
     fontWeight: 'bold',
-    
   },
   info: {
     textAlign: 'center',
@@ -658,7 +687,7 @@ const styles = StyleSheet.create({
   image: {
     alignItems: 'center',
     marginHorizontal: 20,
-
+    marginVertical: 20,
   },
 
   sharecont: {

@@ -44,11 +44,10 @@ import {
   fetchStepPreference,
   fetchCaloriesPreference,
   fetchSleepPreference,
+  fetchUserInfo,
 } from '../db/UserDb';
 
 const Athletecard = ({route, navigation}) => {
-
-  
   const options = [
     {label: 'days', value: 'days'},
     {label: 'weeks', value: 'weeks'},
@@ -91,15 +90,26 @@ const Athletecard = ({route, navigation}) => {
     var dateArray = getDateArray(startdate, today);
     setDateArr(dateArray);
 
+    const setUserInfo = async () => {
+      var userInfo = await fetchUserInfo(userId);
+      setFirstname(userInfo.fname);
+      setLastname(userInfo.lname);
+      setGender(userInfo.gender);
+      setAge(userInfo.age);
+      console.log(
+        ' TOIMIIKOTOIMIIKOTOIMIIIIKOTOIMIIIKO :   ' + userInfo.gender,
+      );
+    };
+
     const fetchSteps = async () => {
       var data = [];
       var preference = await fetchStepPreference(userId);
-      console.log(preference);
+      console.log('STEPS PREFERENCE:   ' + preference);
       switch (preference) {
         case 'Polar':
           await getActivity(userId);
           data = await fetchStepsP(userId);
-          console.log(data);
+          //console.log(data);
           break;
         case 'Fitbit':
           await getStepsFit(userId);
@@ -107,13 +117,13 @@ const Athletecard = ({route, navigation}) => {
           break;
       }
 
-      console.log('Tässä stepsit' + data);
+      //console.log('Tässä stepsit' + data);
       dayIndex = 0;
       dbIndex = 0;
       var dbDate;
       var currentDate;
       dateList = [];
-      console.log(dateArray);
+      //console.log(dateArray);
       dateArray.forEach(date => {
         try {
           currentDate = date.toISOString().slice(0, 10);
@@ -138,12 +148,12 @@ const Athletecard = ({route, navigation}) => {
     const fetchCalories = async () => {
       var data = [];
       var preference = await fetchCaloriesPreference(userId);
-      console.log(preference);
+      console.log('CALS PREFERENCE:   ' + preference);
       switch (preference) {
         case 'Polar':
           await getActivity(userId);
           data = await fetchCaloriesP(userId);
-          console.log(data);
+          //console.log(data);
           break;
         case 'Fitbit':
           await getCalsFit(userId);
@@ -151,13 +161,13 @@ const Athletecard = ({route, navigation}) => {
           break;
       }
 
-      console.log('Tässä calories' + data);
+      //console.log('Tässä calories' + data);
       dayIndex = 0;
       dbIndex = 0;
       var dbDate;
       var currentDate;
       dateList = [];
-      console.log(dateArray);
+      // console.log(dateArray);
       dateArray.forEach(date => {
         try {
           currentDate = date.toISOString().slice(0, 10);
@@ -181,12 +191,12 @@ const Athletecard = ({route, navigation}) => {
     const fetchSleep = async () => {
       var data = [];
       var preference = await fetchSleepPreference(userId);
-      console.log(preference);
+      console.log('SLEEP PREFERENCE:   ' + preference);
       switch (preference) {
         case 'Polar':
           //await getSleep(userId);
           data = await fetchSleepP(userId);
-          console.log(data);
+          // console.log(data);
           break;
         case 'Fitbit':
           // await getSleepDataFit(userId);
@@ -194,13 +204,13 @@ const Athletecard = ({route, navigation}) => {
           break;
       }
 
-      console.log('Tässä SLeepit' + data);
+      //console.log('Tässä SLeepit' + data);
       dayIndex = 0;
       dbIndex = 0;
       var dbDate;
       var currentDate;
       dateList = [];
-      console.log(dateArray);
+      //console.log(dateArray);
       dateArray.forEach(date => {
         try {
           currentDate = date.toISOString().slice(0, 10);
@@ -225,6 +235,7 @@ const Athletecard = ({route, navigation}) => {
       setSleepDayList(dateList);
     };
 
+    setUserInfo();
     fetchSleep();
     fetchCalories();
     fetchSteps();
