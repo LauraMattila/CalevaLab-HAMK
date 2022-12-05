@@ -40,9 +40,15 @@ import {
   testActivity,
 } from '../components/PolarApi';
 
-import {fetchStepPreference, fetchCaloriesPreference, fetchSleepPreference} from '../db/UserDb';
+import {
+  fetchStepPreference,
+  fetchCaloriesPreference,
+  fetchSleepPreference,
+} from '../db/UserDb';
 
-const Athletecard = ({route,navigation}) => {
+const Athletecard = ({route, navigation}) => {
+
+  
   const options = [
     {label: 'days', value: 'days'},
     {label: 'weeks', value: 'weeks'},
@@ -56,15 +62,16 @@ const Athletecard = ({route,navigation}) => {
     {label: 'Laura', value: '4'},
   ];
 
-  const [firstname, setFirstname] = useState('Matti');
-  const [lastname, setLastname] = useState('Meikäläinen');
-  const [age, setAge] = useState('55');
-  const [gender, setGender] = useState('Male');
+  const [firstname, setFirstname] = useState('');
+  const [lastname, setLastname] = useState('');
+  const [age, setAge] = useState('');
+  const [gender, setGender] = useState('');
+
   const [dateArr, setDateArr] = useState([]);
   const [stepsDayList, setStepsDayList] = useState(['']);
   const [caloriesDayList, setCaloriesDayList] = useState(['']);
   const [sleepDayList, setSleepDayList] = useState(['']);
-  const [userId, setUserId] = useState("1");
+  const [userId, setUserId] = useState('1');
 
   useEffect(() => {
     var today = new Date();
@@ -126,51 +133,49 @@ const Athletecard = ({route,navigation}) => {
         dayIndex += 1;
       });
       setStepsDayList(dateList);
-
     };
 
-      const fetchCalories = async () => {
-        var data = [];
-        var preference = await fetchCaloriesPreference(userId);
-        console.log(preference);
-        switch (preference) {
-          case 'Polar':
-            await getActivity(userId);
-            data = await fetchCaloriesP(userId);
-            console.log(data);
-            break;
-          case 'Fitbit':
-            await getCalsFit(userId);
-            data = await fetchCaloriesLog(userId);
-            break;
+    const fetchCalories = async () => {
+      var data = [];
+      var preference = await fetchCaloriesPreference(userId);
+      console.log(preference);
+      switch (preference) {
+        case 'Polar':
+          await getActivity(userId);
+          data = await fetchCaloriesP(userId);
+          console.log(data);
+          break;
+        case 'Fitbit':
+          await getCalsFit(userId);
+          data = await fetchCaloriesLog(userId);
+          break;
+      }
+
+      console.log('Tässä calories' + data);
+      dayIndex = 0;
+      dbIndex = 0;
+      var dbDate;
+      var currentDate;
+      dateList = [];
+      console.log(dateArray);
+      dateArray.forEach(date => {
+        try {
+          currentDate = date.toISOString().slice(0, 10);
+          if (data[dbIndex] != undefined) {
+            dbDate = data[dbIndex].date.toDate().toISOString().slice(0, 10);
+          }
+        } catch (error) {
+          console.error(error);
         }
-  
-        console.log('Tässä calories' + data);
-        dayIndex = 0;
-        dbIndex = 0;
-        var dbDate;
-        var currentDate;
-        dateList = [];
-        console.log(dateArray);
-        dateArray.forEach(date => {
-          try {
-            currentDate = date.toISOString().slice(0, 10);
-            if (data[dbIndex] != undefined) {
-              dbDate = data[dbIndex].date.toDate().toISOString().slice(0, 10);
-            }
-          } catch (error) {
-            console.error(error);
-          }
-          if (dbDate == currentDate) {
-            dateList[dayIndex] = data[dbIndex].calories;
-            dbIndex += 1;
-          } else {
-            dateList[dayIndex] = 'NA';
-          }
-          dayIndex += 1;
-        });
-        setCaloriesDayList(dateList);
-       
+        if (dbDate == currentDate) {
+          dateList[dayIndex] = data[dbIndex].calories;
+          dbIndex += 1;
+        } else {
+          dateList[dayIndex] = 'NA';
+        }
+        dayIndex += 1;
+      });
+      setCaloriesDayList(dateList);
     };
 
     const fetchSleep = async () => {
@@ -209,7 +214,7 @@ const Athletecard = ({route,navigation}) => {
           var totalMinutes = data[dbIndex].sleep_min;
           const hours = Math.floor(totalMinutes / 60);
           const minutes = Math.floor(totalMinutes % 60);
-          dateList[dayIndex] = hours+'h'+minutes+'m';
+          dateList[dayIndex] = hours + 'h' + minutes + 'm';
 
           dbIndex += 1;
         } else {
@@ -236,6 +241,11 @@ const Athletecard = ({route,navigation}) => {
       />
       <View>
         <View style={styles.infocont}>
+          {/* <Image
+            style={{width: 120, height: 120, borderRadius: 75}}
+            source={{uri: filePathh}}
+            resizeMode={'cover'} // cover or contain its upto you view look
+          /> */}
           <View>
             <Text style={styles.name}>
               {firstname} {lastname}
@@ -262,19 +272,30 @@ const Athletecard = ({route,navigation}) => {
             </View>
           </View>
 
-
-          
-
           <DataTable>
             <DataTable.Header style={styles.weekdays}>
               <DataTable.Title></DataTable.Title>
-              <DataTable.Title textStyle={{fontSize: 17}} numeric>{Moment(day1).format('ddd')}</DataTable.Title>
-              <DataTable.Title  textStyle={{fontSize: 17}} numeric>{Moment(day2).format('ddd')}</DataTable.Title>
-              <DataTable.Title  textStyle={{fontSize: 17}}numeric>{Moment(day3).format('ddd')}</DataTable.Title>
-              <DataTable.Title  textStyle={{fontSize: 17}} numeric>{Moment(day4).format('ddd')}</DataTable.Title>
-              <DataTable.Title  textStyle={{fontSize: 17}}numeric>{Moment(day5).format('ddd')}</DataTable.Title>
-              <DataTable.Title  textStyle={{fontSize: 17}}numeric>{Moment(day6).format('ddd')}</DataTable.Title>
-              <DataTable.Title  textStyle={{fontSize: 17}}numeric>{Moment(day7).format('ddd')}</DataTable.Title>
+              <DataTable.Title textStyle={{fontSize: 17}} numeric>
+                {Moment(day1).format('ddd')}
+              </DataTable.Title>
+              <DataTable.Title textStyle={{fontSize: 17}} numeric>
+                {Moment(day2).format('ddd')}
+              </DataTable.Title>
+              <DataTable.Title textStyle={{fontSize: 17}} numeric>
+                {Moment(day3).format('ddd')}
+              </DataTable.Title>
+              <DataTable.Title textStyle={{fontSize: 17}} numeric>
+                {Moment(day4).format('ddd')}
+              </DataTable.Title>
+              <DataTable.Title textStyle={{fontSize: 17}} numeric>
+                {Moment(day5).format('ddd')}
+              </DataTable.Title>
+              <DataTable.Title textStyle={{fontSize: 17}} numeric>
+                {Moment(day6).format('ddd')}
+              </DataTable.Title>
+              <DataTable.Title textStyle={{fontSize: 17}} numeric>
+                {Moment(day7).format('ddd')}
+              </DataTable.Title>
             </DataTable.Header>
 
             <DataTable.Row style={styles.row}>
@@ -301,13 +322,34 @@ const Athletecard = ({route,navigation}) => {
 
             <DataTable.Row style={styles.row}>
               <DataTable.Cell>SLEEP</DataTable.Cell>
-              <DataTable.Cell textStyle={{fontSize: 13}}  numeric> {sleepDayList[0]}</DataTable.Cell>
-              <DataTable.Cell textStyle={{fontSize: 13}}  numeric> {sleepDayList[1]}</DataTable.Cell>
-              <DataTable.Cell textStyle={{fontSize: 13}}  numeric> {sleepDayList[0]}</DataTable.Cell>
-              <DataTable.Cell textStyle={{fontSize: 13}}  numeric> {sleepDayList[0]}</DataTable.Cell>
-              <DataTable.Cell textStyle={{fontSize: 13}}  numeric> {sleepDayList[0]}</DataTable.Cell>
-              <DataTable.Cell textStyle={{fontSize: 13}}  numeric> {sleepDayList[0]}</DataTable.Cell>
-              <DataTable.Cell textStyle={{fontSize: 13}}  numeric> {sleepDayList[0]}</DataTable.Cell>
+              <DataTable.Cell textStyle={{fontSize: 13}} numeric>
+                {' '}
+                {sleepDayList[0]}
+              </DataTable.Cell>
+              <DataTable.Cell textStyle={{fontSize: 13}} numeric>
+                {' '}
+                {sleepDayList[1]}
+              </DataTable.Cell>
+              <DataTable.Cell textStyle={{fontSize: 13}} numeric>
+                {' '}
+                {sleepDayList[0]}
+              </DataTable.Cell>
+              <DataTable.Cell textStyle={{fontSize: 13}} numeric>
+                {' '}
+                {sleepDayList[0]}
+              </DataTable.Cell>
+              <DataTable.Cell textStyle={{fontSize: 13}} numeric>
+                {' '}
+                {sleepDayList[0]}
+              </DataTable.Cell>
+              <DataTable.Cell textStyle={{fontSize: 13}} numeric>
+                {' '}
+                {sleepDayList[0]}
+              </DataTable.Cell>
+              <DataTable.Cell textStyle={{fontSize: 13}} numeric>
+                {' '}
+                {sleepDayList[0]}
+              </DataTable.Cell>
             </DataTable.Row>
           </DataTable>
         </View>

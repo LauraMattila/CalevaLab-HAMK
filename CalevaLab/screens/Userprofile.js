@@ -11,7 +11,7 @@ import {
   PermissionsAndroid,
   TouchableOpacity,
   Modal,
-  TextInput
+  TextInput,
 } from 'react-native';
 
 import {
@@ -22,10 +22,10 @@ import {
   setStepsPreference,
   setCaloriesPreference,
   fetchUserInfo,
-  updateUserInfo
+  updateUserInfo,
 } from '../db/UserDb';
 
-import {fetchAccessTokenP} from '../db/PolarDb'
+import {fetchAccessTokenP} from '../db/PolarDb';
 //import Icon from 'react-native-vector-icons/AntDesign';
 import SwitchSelector from 'react-native-switch-selector';
 import {Provider as PaperProvider} from 'react-native-paper';
@@ -37,7 +37,6 @@ import Moment from 'moment';
 import {RadioButton} from 'react-native-paper';
 
 const Userprofile = ({navigation}) => {
-
   const [firstname, setFirstname] = useState('');
   const [lastname, setLastname] = useState('');
   const [age, setAge] = useState('');
@@ -50,12 +49,9 @@ const Userprofile = ({navigation}) => {
     {label: 'Laura', value: '4'},
   ];
 
-
-
   const [Sleepchecked, setSleepChecked] = React.useState('');
   const [Stepschecked, setStepsChecked] = React.useState('');
   const [Calschecked, setCalsChecked] = React.useState('');
-
 
   const [filePath, setFilePath] = useState({});
   const [filePathh, setFilePathh] = useState(
@@ -100,7 +96,7 @@ const Userprofile = ({navigation}) => {
       return false;
     } else return true;
   };
-/*   
+  /*   
 
 const checkConnection = async () =>{
    const accessTokenP = fetchAccessTokenP(userId);
@@ -178,7 +174,6 @@ const checkConnection = async () =>{
           const fileName = item.fileName;
 
           setFilePathh(uri);
-
           console.log('FILEPATH:                 ' + filePathh);
         });
     });
@@ -186,213 +181,203 @@ const checkConnection = async () =>{
 
   const [visibility, setVisibility] = useState(false);
 
-  const [id, setUserId] = useState('2')
+  const [id, setUserId] = useState('3');
 
-
-  const showEditView = async() => {
+  const showEditView = async () => {
     var userInfo = await fetchUserInfo(id);
+
     setFirstname(userInfo.fname);
     setLastname(userInfo.lname);
     setGender(userInfo.gender);
     setAge(userInfo.age);
     setVisibility(true);
-  }
+  };
 
-  const updateUser = async() => {
+  const updateUser = async () => {
     var userInfo = await fetchUserInfo(id);
     console.log('paskakulli' + userInfo);
     updateUserInfo(firstname, lastname, gender, age, id);
     setVisibility(false);
-
-  }
+  };
 
   const cancel = () => {
     setVisibility(false);
-  }
+    
+  };
 
   return (
-    <View>  
-        <View>
-          <View style={styles.container}>
-            <View style={styles.image}>
+    <View>
+      <View style={styles.image}>
             <Image
               style={{width: 120, height: 120, borderRadius: 75}}
               source={{uri: filePathh}}
               resizeMode={'cover'} // cover or contain its upto you view look
             />
-            </View>
-            <TouchableOpacity
-              activeOpacity={0.5}
-              
-              onPress={() => captureImage('photo')}>
-              <Text style={styles.info}> Take a photo</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              activeOpacity={0.5}
-              
-              onPress={() => chooseFile('photo')}>
-              <Text style={styles.info}> Choose Image</Text>
-            </TouchableOpacity>
           </View>
+      <View>
+        <View style={styles.container}></View>
+      </View>
+      <View style={styles.infocont}>
+        <View>
+          <Text style={styles.name}>
+            {firstname} {lastname}
+          </Text>
+
+          <Text style={styles.info}>
+            {age} | {gender}
+          </Text>
         </View>
-        <View style={styles.infocont}>
-          <View>
-            <Text style={styles.name}>
-              {firstname} {lastname}
-            </Text>
-
-            <Text style={styles.info}>
-              {age} | {gender}
-            </Text>
-          </View>
-          <Pressable style={styles.buttonEdit}
-          onPress = {() => showEditView()}>
+        <Pressable style={styles.buttonEdit} onPress={() => showEditView()}>
           <Text style={styles.buttonTextEdit}>Edit Your Profile</Text>
         </Pressable>
-        </View>
-
-        <DataTable style={styles.datacont}>
-          <DataTable.Header>
-            <DataTable.Title>Service</DataTable.Title>
-            <DataTable.Title>Sleep</DataTable.Title>
-            <DataTable.Title>Steps</DataTable.Title>
-            <DataTable.Title>Calories</DataTable.Title>
-          </DataTable.Header>
-
-          <DataTable.Row>
-            <DataTable.Cell>POLAR</DataTable.Cell>
-            <DataTable.Cell>
-              <View>
-                <RadioButton
-                  value="sleeppolar"
-                  status={
-                    Sleepchecked === 'sleeppolar' ? 'checked' : 'unchecked'
-                  }
-                  onPress={() => setSleepChecked('sleeppolar')}
-                />
-              </View>
-            </DataTable.Cell>
-            <DataTable.Cell>
-              <View>
-                <RadioButton
-                  value="stepspolar"
-                  status={
-                    Stepschecked === 'stepspolar' ? 'checked' : 'unchecked'
-                  }
-                  onPress={() => setStepsChecked('stepspolar')}
-                />
-              </View>
-            </DataTable.Cell>
-            <DataTable.Cell>
-              <View>
-                <RadioButton
-                  value="calspolar"
-                  status={Calschecked === 'calspolar' ? 'checked' : 'unchecked'}
-                  onPress={() => setCalsChecked('calspolar')}
-                />
-              </View>
-            </DataTable.Cell>
-          </DataTable.Row>
-
-          <DataTable.Row>
-            <DataTable.Cell>FITBIT</DataTable.Cell>
-            <DataTable.Cell>
-              <View>
-                <RadioButton
-                  value="sleepfit"
-                  status={Sleepchecked === 'sleepfit' ? 'checked' : 'unchecked'}
-                  onPress={() => setSleepChecked('sleepfit')}
-                />
-              </View>
-            </DataTable.Cell>
-            <DataTable.Cell>
-              <View>
-                <RadioButton
-                  value="stepsfit"
-                  status={Stepschecked === 'stepsfit' ? 'checked' : 'unchecked'}
-                  onPress={() => setStepsChecked('stepsfit')}
-                />
-              </View>
-            </DataTable.Cell>
-            <DataTable.Cell>
-              <View>
-                <RadioButton
-                  value="calsfit"
-                  status={Calschecked === 'calsfit' ? 'checked' : 'unchecked'}
-                  onPress={() => setCalsChecked('calsfit')}
-                />
-              </View>
-            </DataTable.Cell>
-          </DataTable.Row>
-        </DataTable>
-        <Modal visible={visibility} animationType='slide'>
-      <View>
-        <Text style={styles.text}>
-          Edit Your Profile Information
-        </Text>
       </View>
 
-      <View style={styles.editView}>
-      <Text style={styles.headers}>
-        Firstname
-      </Text>
-      <TextInput style = {styles.input}
-            underlineColorAndroid = "transparent"
-            placeholder = "Firstname"
-            autoCapitalize = "none"
-            value = {firstname}
-            onChangeText = {setFirstname}
-      />
-      <Text style={styles.headers}>
-        Lastname
-      </Text>      
-      <TextInput style = {styles.input}
-            underlineColorAndroid = "transparent"
-            placeholder = "Lastname"
-            autoCapitalize = "none"
-            value = {lastname}
-            onChangeText = {setLastname}
-            
-      />
-      <Text style={styles.headers}>
-        Gender
-      </Text>
-      <TextInput style = {styles.input}
-            underlineColorAndroid = "transparent"
-            placeholder = "Gender"
-            autoCapitalize = "none"
-            value = {gender}
-            onChangeText = {setGender}
-           
-      />
-      <Text style={styles.headers}>
-        Age
-      </Text>
-      <TextInput style = {styles.input}
-            underlineColorAndroid = "transparent"
-            placeholder = "Age"
-            autoCapitalize = "none"
-            value = {age}
-            onChangeText = {setAge}
-      />
-        <View style={styles.sharecont}>
-        <Pressable style={styles.buttonCancel}
-          onPress= {cancel}>
-          <Text style={styles.buttonText}>Cancel</Text>
-        </Pressable>
+      <DataTable style={styles.datacont}>
+        <DataTable.Header>
+          <DataTable.Title>Service</DataTable.Title>
+          <DataTable.Title>Sleep</DataTable.Title>
+          <DataTable.Title>Steps</DataTable.Title>
+          <DataTable.Title>Calories</DataTable.Title>
+        </DataTable.Header>
+
+        <DataTable.Row>
+          <DataTable.Cell>POLAR</DataTable.Cell>
+          <DataTable.Cell>
+            <View>
+              <RadioButton
+                value="sleeppolar"
+                status={Sleepchecked === 'sleeppolar' ? 'checked' : 'unchecked'}
+                onPress={() => setSleepChecked('sleeppolar')}
+              />
+            </View>
+          </DataTable.Cell>
+          <DataTable.Cell>
+            <View>
+              <RadioButton
+                value="stepspolar"
+                status={Stepschecked === 'stepspolar' ? 'checked' : 'unchecked'}
+                onPress={() => setStepsChecked('stepspolar')}
+              />
+            </View>
+          </DataTable.Cell>
+          <DataTable.Cell>
+            <View>
+              <RadioButton
+                value="calspolar"
+                status={Calschecked === 'calspolar' ? 'checked' : 'unchecked'}
+                onPress={() => setCalsChecked('calspolar')}
+              />
+            </View>
+          </DataTable.Cell>
+        </DataTable.Row>
+
+        <DataTable.Row>
+          <DataTable.Cell>FITBIT</DataTable.Cell>
+          <DataTable.Cell>
+            <View>
+              <RadioButton
+                value="sleepfit"
+                status={Sleepchecked === 'sleepfit' ? 'checked' : 'unchecked'}
+                onPress={() => setSleepChecked('sleepfit')}
+              />
+            </View>
+          </DataTable.Cell>
+          <DataTable.Cell>
+            <View>
+              <RadioButton
+                value="stepsfit"
+                status={Stepschecked === 'stepsfit' ? 'checked' : 'unchecked'}
+                onPress={() => setStepsChecked('stepsfit')}
+              />
+            </View>
+          </DataTable.Cell>
+          <DataTable.Cell>
+            <View>
+              <RadioButton
+                value="calsfit"
+                status={Calschecked === 'calsfit' ? 'checked' : 'unchecked'}
+                onPress={() => setCalsChecked('calsfit')}
+              />
+            </View>
+          </DataTable.Cell>
+        </DataTable.Row>
+      </DataTable>
+      <Modal visible={visibility} animationType="slide">
+        <View>
+          <Text style={styles.text}>Edit Your Profile Information</Text>
         </View>
 
-        <View style={styles.sharecont}>
-        <Pressable style={styles.buttonUpdate}
-          onPress = {() => updateUser()}>
-          <Text style={styles.buttonText}>Update</Text>
-        </Pressable>
+        <View style={styles.editView}>
+          <View style={styles.image}>
+            <Image
+              style={{width: 120, height: 120, borderRadius: 75}}
+              source={{uri: filePathh}}
+              resizeMode={'cover'} // cover or contain its upto you view look
+            />
+          </View>
+
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => captureImage('photo')}>
+            <Text style={styles.info}> Take a photo</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => chooseFile('photo')}>
+            <Text style={styles.info}> Choose Image</Text>
+          </TouchableOpacity>
+
+          <Text style={styles.headers}>Firstname</Text>
+          <TextInput
+            style={styles.input}
+            underlineColorAndroid="transparent"
+            placeholder="Firstname"
+            autoCapitalize="none"
+            value={firstname}
+            onChangeText={setFirstname}
+          />
+          <Text style={styles.headers}>Lastname</Text>
+          <TextInput
+            style={styles.input}
+            underlineColorAndroid="transparent"
+            placeholder="Lastname"
+            autoCapitalize="none"
+            value={lastname}
+            onChangeText={setLastname}
+          />
+          <Text style={styles.headers}>Gender</Text>
+          <TextInput
+            style={styles.input}
+            underlineColorAndroid="transparent"
+            placeholder="Gender"
+            autoCapitalize="none"
+            value={gender}
+            onChangeText={setGender}
+          />
+          <Text style={styles.headers}>Age</Text>
+          <TextInput
+            style={styles.input}
+            underlineColorAndroid="transparent"
+            placeholder="Age"
+            autoCapitalize="none"
+            value={age}
+            onChangeText={setAge}
+          />
+          <View style={styles.sharecont}>
+            <Pressable style={styles.buttonCancel} onPress={cancel}>
+              <Text style={styles.buttonText}>Cancel</Text>
+            </Pressable>
+          </View>
+
+          <View style={styles.sharecont}>
+            <Pressable style={styles.buttonUpdate} onPress={() => updateUser()}>
+              <Text style={styles.buttonText}>Update</Text>
+            </Pressable>
+          </View>
         </View>
-      </View>
-    </Modal>
-  </View>    
- 
+      </Modal>
+    </View>
   );
 };
 const styles = StyleSheet.create({
@@ -429,7 +414,7 @@ const styles = StyleSheet.create({
   },
   datacont: {
     marginVertical: 350,
-    alignContent: 'flex-start' 
+    alignContent: 'flex-start',
   },
   name: {
     textAlign: 'center',
@@ -455,7 +440,7 @@ const styles = StyleSheet.create({
     borderColor: '#E6E6FA',
     borderWidth: 1,
     borderRadius: 5,
-    backgroundColor: '#F5F5F5'
+    backgroundColor: '#F5F5F5',
   },
   headers: {
     marginLeft: 25,
@@ -489,37 +474,35 @@ const styles = StyleSheet.create({
     letterSpacing: 2,
     borderColor: '#E6E6FA',
     borderWidth: 1,
-
   },
   buttonText: {
     fontSize: 13,
-    color: "#696969",
-    alignSelf: "center",
+    color: '#696969',
+    alignSelf: 'center',
     letterSpacing: 1.5,
     borderBottomWidth: 1,
-    borderColor: '#696969'   
+    borderColor: '#696969',
   },
   buttonTextEdit: {
     fontSize: 12,
     fontWeight: 'bold',
-    color: "#696969",
-    alignSelf: "center",
+    color: '#696969',
+    alignSelf: 'center',
   },
   buttonEdit: {
-    color: "black",
-    alignSelf: "center",
+    color: 'black',
+    alignSelf: 'center',
     borderBottomWidth: 1,
-    borderColor: "#696969"
+    borderColor: '#696969',
   },
   image: {
-
     alignItems: 'center',
-    marginHorizontal: 20
+    marginHorizontal: 20,
   },
 
   sharecont: {
     alignItems: 'center',
-    marginVertical: 60,
+    marginVertical: 6,
   },
 
   sharebutton: {
@@ -529,13 +512,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 100,
     backgroundColor: '#1e90ff',
-    width: 100,
-    height: 100,
+    width: 10,
+    height: 10,
   },
   sharetext: {
     fontSize: 20,
     fontWeight: 'bold',
   },
-
 });
 export default Userprofile;
