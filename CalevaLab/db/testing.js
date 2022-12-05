@@ -3,17 +3,44 @@ import {
   fetchStepsWeeklyF,
   fetchSleepWeeklyF,
   fetchCaloriesWeeklyF,
+  fetchSleepMonthlyF,
+  fetchCaloriesMonthlyF,
+  fetchStepsMonthlyF,
 } from './FitbitDb';
 import {
   fetchStepsWeeklyP,
   fetchSleepWeeklyP,
   fetchCaloriesWeeklyP,
+  fetchSleepMonthlyP,
+  fetchCaloriesMonthlyP,
+  fetchStepsMonthlyP,
 } from './PolarDb';
 import {
   fetchStepPreference,
   fetchSleepPreference,
   fetchCaloriesPreference,
 } from './UserDb';
+
+// Returns the ISO week of the date.
+Date.prototype.getWeek = function () {
+  var date = new Date(this.getTime());
+  date.setHours(0, 0, 0, 0);
+  // Thursday in current week decides the year.
+  date.setDate(date.getDate() + 3 - ((date.getDay() + 6) % 7));
+  // January 4 is always in week 1.
+  var week1 = new Date(date.getFullYear(), 0, 4);
+  // Adjust to Thursday in week 1 and count number of weeks from date to week1.
+  return (
+    1 +
+    Math.round(
+      ((date.getTime() - week1.getTime()) / 86400000 -
+        3 +
+        ((week1.getDay() + 6) % 7)) /
+        7,
+    )
+  );
+};
+
 var getDateArray = function (startdate, today) {
   var arr = new Array(),
     dt = new Date(startdate);
@@ -38,7 +65,7 @@ var getWeekStepList = async (userId, queryDate) => {
   if (preference == 'Fitbit') {
     data = await fetchStepsWeeklyF(userId, queryDate);
   }
-  console.log(queryDate);
+
   var dateIndex = 0;
   var dbIndex = 0;
   var weeklySteps = 0;
@@ -67,8 +94,8 @@ var getWeekStepList = async (userId, queryDate) => {
       }
       dateIndex++;
     }
-    console.log(currentDateObj.getWeek());
-    weeklyStepsList.push(weeklySteps);
+
+    weeklyStepsList.push({steps: weeklySteps, days: daysWithData});
   }
   return weeklyStepsList;
 };
@@ -85,7 +112,7 @@ var getWeekSleepList = async (userId, queryDate) => {
   if (preference == 'Fitbit') {
     data = await fetchSleepWeeklyF(userId, queryDate);
   }
-  console.log(queryDate);
+
   var dateIndex = 0;
   var dbIndex = 0;
   var weeklySleep = 0;
@@ -114,7 +141,7 @@ var getWeekSleepList = async (userId, queryDate) => {
       }
       dateIndex++;
     }
-    console.log(currentDateObj.getWeek());
+
     weeklySleepList.push({sleep: weeklySleep, days: daysWithData});
   }
   return weeklySleepList;
@@ -132,7 +159,7 @@ var getWeekCaloriesList = async (userId, queryDate) => {
   if (preference == 'Fitbit') {
     data = await fetchCaloriesWeeklyF(userId, queryDate);
   }
-  console.log(queryDate);
+
   var dateIndex = 0;
   var dbIndex = 0;
   var weeklyCalories = 0;
@@ -161,8 +188,8 @@ var getWeekCaloriesList = async (userId, queryDate) => {
       }
       dateIndex++;
     }
-    console.log(currentDateObj.getWeek());
-    weeklyCaloriesList.push(weeklyCalories);
+
+    weeklyCaloriesList.push({calories: weeklyCalories, days: daysWithData});
   }
   return weeklyCaloriesList;
 };
@@ -178,13 +205,13 @@ export const fetchWeeklySteps = async userId => {
     case 0:
       queryDate.setDate(today.getDate() - 49);
       weeklyStepList = await getWeekStepList(userId, queryDate);
-      console.log(weeklyStepList);
+
       index = 0;
       weeklyStepList.forEach(week => {
-        if (week != weeklyStepList[6]) {
-          stepsWeekList[index] = Math.round(week / 7);
+        if (week.days != 0) {
+          stepsWeekList[index] = Math.round(week.steps / week.days);
         } else {
-          stepsWeekList[index] = Math.round(week / 7);
+          stepsWeekList[index] = 'NA';
         }
         index++;
       });
@@ -192,13 +219,13 @@ export const fetchWeeklySteps = async userId => {
     case 1:
       queryDate.setDate(today.getDate() - 43);
       weeklyStepList = await getWeekStepList(userId, queryDate);
-      console.log(weeklyStepList);
+
       index = 0;
       weeklyStepList.forEach(week => {
-        if (week != weeklyStepList[6]) {
-          stepsWeekList[index] = Math.round(week / 7);
+        if (week.days != 0) {
+          stepsWeekList[index] = Math.round(week.steps / week.days);
         } else {
-          stepsWeekList[index] = Math.round(week / 1);
+          stepsWeekList[index] = 'NA';
         }
         index++;
       });
@@ -206,13 +233,13 @@ export const fetchWeeklySteps = async userId => {
     case 2:
       queryDate.setDate(today.getDate() - 44);
       weeklyStepList = await getWeekStepList(userId, queryDate);
-      console.log(weeklyStepList);
+
       index = 0;
       weeklyStepList.forEach(week => {
-        if (week != weeklyStepList[6]) {
-          stepsWeekList[index] = Math.round(week / 7);
+        if (week.days != 0) {
+          stepsWeekList[index] = Math.round(week.steps / week.days);
         } else {
-          stepsWeekList[index] = Math.round(week / 2);
+          stepsWeekList[index] = 'NA';
         }
         index++;
       });
@@ -220,13 +247,13 @@ export const fetchWeeklySteps = async userId => {
     case 3:
       queryDate.setDate(today.getDate() - 45);
       weeklyStepList = await getWeekStepList(userId, queryDate);
-      console.log(weeklyStepList);
+
       index = 0;
       weeklyStepList.forEach(week => {
-        if (week != weeklyStepList[6]) {
-          stepsWeekList[index] = Math.round(week / 7);
+        if (week.days != 0) {
+          stepsWeekList[index] = Math.round(week.steps / week.days);
         } else {
-          stepsWeekList[index] = Math.round(week / 3);
+          stepsWeekList[index] = 'NA';
         }
         index++;
       });
@@ -234,23 +261,27 @@ export const fetchWeeklySteps = async userId => {
     case 4:
       queryDate.setDate(today.getDate() - 46);
       weeklyStepList = await getWeekStepList(userId, queryDate);
-      console.log(weeklyStepList);
+
       index = 0;
       weeklyStepList.forEach(week => {
-        stepsWeekList[index] = Math.round(week.sleep / week.days);
+        if (week.days != 0) {
+          stepsWeekList[index] = Math.round(week.steps / week.days);
+        } else {
+          stepsWeekList[index] = 'NA';
+        }
         index++;
       });
       return stepsWeekList;
     case 5:
       queryDate.setDate(today.getDate() - 47);
       weeklyStepList = await getWeekStepList(userId, queryDate);
-      console.log(weeklyStepList);
+
       index = 0;
       weeklyStepList.forEach(week => {
-        if (week != weeklyStepList[6]) {
-          stepsWeekList[index] = Math.round(week / 7);
+        if (week.days != 0) {
+          stepsWeekList[index] = Math.round(week.steps / week.days);
         } else {
-          stepsWeekList[index] = Math.round(week / 5);
+          stepsWeekList[index] = 'NA';
         }
         index++;
       });
@@ -259,13 +290,13 @@ export const fetchWeeklySteps = async userId => {
     case 6:
       queryDate.setDate(today.getDate() - 48);
       weeklyStepList = await getWeekStepList(userId, queryDate);
-      console.log(weeklyStepList);
+
       index = 0;
       weeklyStepList.forEach(week => {
-        if (week != weeklyStepList[6]) {
-          stepsWeekList[index] = Math.round(week / 7);
+        if (week.days != 0) {
+          stepsWeekList[index] = Math.round(week.steps / week.days);
         } else {
-          stepsWeekList[index] = Math.round(week / 6);
+          stepsWeekList[index] = 'NA';
         }
         index++;
       });
@@ -289,16 +320,13 @@ export const fetchWeeklySleep = async userId => {
       console.log(weeklySleepList);
       index = 0;
       weeklySleepList.forEach(week => {
-        if (week != weeklySleepList[6]) {
-          totalMinutes = week / 7;
-          hours = Math.floor(totalMinutes / 60);
-          minutes = Math.floor(totalMinutes % 60);
+        totalMinutes = week.sleep / week.days;
+        hours = Math.floor(totalMinutes / 60);
+        minutes = Math.floor(totalMinutes % 60);
+        if (week.days != 0) {
           sleepWeekList[index] = hours + 'h ' + minutes + 'm';
         } else {
-          totalMinutes = week / 7;
-          hours = Math.floor(totalMinutes / 60);
-          minutes = Math.floor(totalMinutes % 60);
-          sleepWeekList[index] = hours + 'h ' + minutes + 'm';
+          sleepWeekList[index] = 'NA';
         }
         index++;
       });
@@ -309,16 +337,13 @@ export const fetchWeeklySleep = async userId => {
       console.log(weeklySleepList);
       index = 0;
       weeklySleepList.forEach(week => {
-        if (week != weeklySleepList[6]) {
-          totalMinutes = week / 7;
-          hours = Math.floor(totalMinutes / 60);
-          minutes = Math.floor(totalMinutes % 60);
+        totalMinutes = week.sleep / week.days;
+        hours = Math.floor(totalMinutes / 60);
+        minutes = Math.floor(totalMinutes % 60);
+        if (week.days != 0) {
           sleepWeekList[index] = hours + 'h ' + minutes + 'm';
         } else {
-          totalMinutes = week / 1;
-          hours = Math.floor(totalMinutes / 60);
-          minutes = Math.floor(totalMinutes % 60);
-          sleepWeekList[index] = hours + 'h ' + minutes + 'm';
+          sleepWeekList[index] = 'NA';
         }
         index++;
       });
@@ -328,16 +353,13 @@ export const fetchWeeklySleep = async userId => {
       weeklySleepList = await getWeekSleepList(userId, queryDate);
       index = 0;
       weeklySleepList.forEach(week => {
-        if (week != weeklySleepList[6]) {
-          totalMinutes = week / 7;
-          hours = Math.floor(totalMinutes / 60);
-          minutes = Math.floor(totalMinutes % 60);
+        totalMinutes = week.sleep / week.days;
+        hours = Math.floor(totalMinutes / 60);
+        minutes = Math.floor(totalMinutes % 60);
+        if (week.days != 0) {
           sleepWeekList[index] = hours + 'h ' + minutes + 'm';
         } else {
-          totalMinutes = week / 2;
-          hours = Math.floor(totalMinutes / 60);
-          minutes = Math.floor(totalMinutes % 60);
-          sleepWeekList[index] = hours + 'h ' + minutes + 'm';
+          sleepWeekList[index] = 'NA';
         }
         index++;
       });
@@ -347,16 +369,13 @@ export const fetchWeeklySleep = async userId => {
       weeklySleepList = await getWeekSleepList(userId, queryDate);
       index = 0;
       weeklySleepList.forEach(week => {
-        if (week != weeklySleepList[6]) {
-          totalMinutes = week / 7;
-          hours = Math.floor(totalMinutes / 60);
-          minutes = Math.floor(totalMinutes % 60);
+        totalMinutes = week.sleep / week.days;
+        hours = Math.floor(totalMinutes / 60);
+        minutes = Math.floor(totalMinutes % 60);
+        if (week.days != 0) {
           sleepWeekList[index] = hours + 'h ' + minutes + 'm';
         } else {
-          totalMinutes = week / 3;
-          hours = Math.floor(totalMinutes / 60);
-          minutes = Math.floor(totalMinutes % 60);
-          sleepWeekList[index] = hours + 'h ' + minutes + 'm';
+          sleepWeekList[index] = 'NA';
         }
         index++;
       });
@@ -382,16 +401,13 @@ export const fetchWeeklySleep = async userId => {
       weeklySleepList = await getWeekSleepList(userId, queryDate);
       index = 0;
       weeklySleepList.forEach(week => {
-        if (week != weeklySleepList[6]) {
-          totalMinutes = week / 7;
-          hours = Math.floor(totalMinutes / 60);
-          minutes = Math.floor(totalMinutes % 60);
+        totalMinutes = week.sleep / week.days;
+        hours = Math.floor(totalMinutes / 60);
+        minutes = Math.floor(totalMinutes % 60);
+        if (week.days != 0) {
           sleepWeekList[index] = hours + 'h ' + minutes + 'm';
         } else {
-          totalMinutes = week / 5;
-          hours = Math.floor(totalMinutes / 60);
-          minutes = Math.floor(totalMinutes % 60);
-          sleepWeekList[index] = hours + 'h ' + minutes + 'm';
+          sleepWeekList[index] = 'NA';
         }
         index++;
       });
@@ -402,16 +418,13 @@ export const fetchWeeklySleep = async userId => {
       weeklySleepList = await getWeekSleepList(userId, queryDate);
       index = 0;
       weeklySleepList.forEach(week => {
-        if (week != weeklySleepList[6]) {
-          totalMinutes = week / 7;
-          hours = Math.floor(totalMinutes / 60);
-          minutes = Math.floor(totalMinutes % 60);
+        totalMinutes = week.sleep / week.days;
+        hours = Math.floor(totalMinutes / 60);
+        minutes = Math.floor(totalMinutes % 60);
+        if (week.days != 0) {
           sleepWeekList[index] = hours + 'h ' + minutes + 'm';
         } else {
-          totalMinutes = week / 6;
-          hours = Math.floor(totalMinutes / 60);
-          minutes = Math.floor(totalMinutes % 60);
-          sleepWeekList[index] = hours + 'h ' + minutes + 'm';
+          sleepWeekList[index] = 'NA';
         }
         index++;
       });
@@ -431,10 +444,10 @@ export const fetchWeeklyCalories = async userId => {
       weeklyCaloriesList = await getWeekCaloriesList(userId, queryDate);
       index = 0;
       weeklyCaloriesList.forEach(week => {
-        if (week != weeklyCaloriesList[6]) {
-          caloriesWeekList[index] = Math.round(week / 7);
+        if (week.days != 0) {
+          caloriesWeekList[index] = Math.round(week.calories / week.days);
         } else {
-          caloriesWeekList[index] = Math.round(week / 7);
+          caloriesWeekList[index] = 'NA';
         }
         index++;
       });
@@ -444,10 +457,10 @@ export const fetchWeeklyCalories = async userId => {
       weeklyCaloriesList = await getWeekCaloriesList(userId, queryDate);
       index = 0;
       weeklyCaloriesList.forEach(week => {
-        if (week != weeklyCaloriesList[6]) {
-          caloriesWeekList[index] = Math.round(week / 7);
+        if (week.days != 0) {
+          caloriesWeekList[index] = Math.round(week.calories / week.days);
         } else {
-          caloriesWeekList[index] = Math.round(week / 1);
+          caloriesWeekList[index] = 'NA';
         }
         index++;
       });
@@ -457,10 +470,10 @@ export const fetchWeeklyCalories = async userId => {
       weeklyCaloriesList = await getWeekCaloriesList(userId, queryDate);
       index = 0;
       weeklyCaloriesList.forEach(week => {
-        if (week != weeklyCaloriesList[6]) {
-          caloriesWeekList[index] = Math.round(week / 7);
+        if (week.days != 0) {
+          caloriesWeekList[index] = Math.round(week.calories / week.days);
         } else {
-          caloriesWeekList[index] = Math.round(week / 2);
+          caloriesWeekList[index] = 'NA';
         }
         index++;
       });
@@ -470,10 +483,10 @@ export const fetchWeeklyCalories = async userId => {
       weeklyCaloriesList = await getWeekCaloriesList(userId, queryDate);
       index = 0;
       weeklyCaloriesList.forEach(week => {
-        if (week != weeklyCaloriesList[6]) {
-          caloriesWeekList[index] = Math.round(week / 7);
+        if (week.days != 0) {
+          caloriesWeekList[index] = Math.round(week.calories / week.days);
         } else {
-          caloriesWeekList[index] = Math.round(week / 3);
+          caloriesWeekList[index] = 'NA';
         }
         index++;
       });
@@ -483,10 +496,10 @@ export const fetchWeeklyCalories = async userId => {
       weeklyCaloriesList = await getWeekCaloriesList(userId, queryDate);
       index = 0;
       weeklyCaloriesList.forEach(week => {
-        if (week != weeklyCaloriesList[6]) {
-          caloriesWeekList[index] = Math.round(week / 7);
+        if (week.days != 0) {
+          caloriesWeekList[index] = Math.round(week.calories / week.days);
         } else {
-          caloriesWeekList[index] = Math.round(week / 4);
+          caloriesWeekList[index] = 'NA';
         }
         index++;
       });
@@ -496,10 +509,10 @@ export const fetchWeeklyCalories = async userId => {
       weeklyCaloriesList = await getWeekCaloriesList(userId, queryDate);
       index = 0;
       weeklyCaloriesList.forEach(week => {
-        if (week != weeklyCaloriesList[6]) {
-          caloriesWeekList[index] = Math.round(week / 7);
+        if (week.days != 0) {
+          caloriesWeekList[index] = Math.round(week.calories / week.days);
         } else {
-          caloriesWeekList[index] = Math.round(week / 5);
+          caloriesWeekList[index] = 'NA';
         }
         index++;
       });
@@ -510,13 +523,91 @@ export const fetchWeeklyCalories = async userId => {
       weeklyCaloriesList = await getWeekCaloriesList(userId, queryDate);
       index = 0;
       weeklyCaloriesList.forEach(week => {
-        if (week != weeklyCaloriesList[6]) {
-          caloriesWeekList[index] = Math.round(week / 7);
+        if (week.days != 0) {
+          caloriesWeekList[index] = Math.round(week.calories / week.days);
         } else {
-          caloriesWeekList[index] = Math.round(week / 6);
+          caloriesWeekList[index] = 'NA';
         }
         index++;
       });
       return caloriesWeekList;
   }
+};
+
+export const fetchMonthlySleep = async userId => {
+  const date = new Date();
+  let month = date.getMonth();
+  let year = date.getFullYear();
+  const data = [];
+  const preference = await fetchSleepPreference(userId);
+  for (let i = 0; i < 7; i++) {
+    if (preference == 'Polar') {
+      data[i] = await fetchSleepMonthlyP(month, year, userId);
+    }
+    if (preference == 'Fitbit') {
+      data[i] = await fetchSleepMonthlyF(month, year, userId);
+    }
+    switch (month) {
+      case 0:
+        month = 11;
+        year--;
+        break;
+      default:
+        month--;
+        break;
+    }
+  }
+  return data;
+};
+
+export const fetchMonthlySteps = async userId => {
+  const date = new Date();
+  let month = date.getMonth();
+  let year = date.getFullYear();
+  const data = [];
+  const preference = await fetchStepPreference(userId);
+  for (let i = 0; i < 7; i++) {
+    if (preference == 'Polar') {
+      data.push(await fetchStepsMonthlyP(month, year, userId));
+    }
+    if (preference == 'Fitbit') {
+      data.push(await fetchStepsMonthlyF(month, year, userId));
+    }
+    switch (month) {
+      case 0:
+        month = 11;
+        year--;
+        break;
+      default:
+        month--;
+        break;
+    }
+  }
+  return data;
+};
+
+export const fetchMonthlyCalories = async userId => {
+  const date = new Date();
+  let month = date.getMonth();
+  let year = date.getFullYear();
+  const data = [];
+  const preference = await fetchCaloriesPreference(userId);
+  for (let i = 0; i < 7; i++) {
+    if (preference == 'Polar') {
+      data.push(await fetchCaloriesMonthlyP(month, year, userId));
+    }
+    if (preference == 'Fitbit') {
+      data.push(await fetchCaloriesMonthlyF(month, year, userId));
+    }
+    switch (month) {
+      case 0:
+        month = 11;
+        year--;
+        break;
+      default:
+        month--;
+        break;
+    }
+  }
+  return data;
 };

@@ -61,6 +61,9 @@ import {
   fetchWeeklyCalories,
   fetchWeeklySleep,
   fetchWeeklySteps,
+  fetchMonthlySleep,
+  fetchMonthlySteps,
+  fetchMonthlyCalories
 } from '../db/testing';
 
 const Dashboard = ({navigation}) => {
@@ -93,20 +96,19 @@ const Dashboard = ({navigation}) => {
   const [endTime, setEndTime] = useState();
   const [loading, setLoading] = useState(true);
 
-
-  
-
-  const [userId, setUserId] = useState('2');
-
-
+  const [userId, setUserId] = useState('3');
 
   const [stepsDayList, setStepsDayList] = useState(['']);
   const [stepsWeekList, setStepsWeekList] = useState(['']);
+  const [stepsMonthList, setStepsMonthList] = useState(['']);
 
   const [caloriesDayList, setCaloriesDayList] = useState(['']);
   const [caloriesWeekList, setCaloriesWeekList] = useState(['']);
+  const [caloriesMonthList, setCaloriesMonthList] = useState(['']);
+
   const [sleepDayList, setSleepDayList] = useState(['']);
   const [sleepWeekList, setSleepWeekList] = useState(['']);
+  const [sleepMonthList, setSleepMonthList] = useState(['']);
 
   const [dateArr, setDateArr] = useState([]);
 
@@ -115,32 +117,7 @@ const Dashboard = ({navigation}) => {
   const [show2, setShow2] = useState(false);
   const [show3, setShow3] = useState(false);
 
-  // Returns the ISO week of the date.
-  Date.prototype.getWeek = function () {
-    var date = new Date(this.getTime());
-    date.setHours(0, 0, 0, 0);
-    // Thursday in current week decides the year.
-    date.setDate(date.getDate() + 3 - ((date.getDay() + 6) % 7));
-    // January 4 is always in week 1.
-    var week1 = new Date(date.getFullYear(), 0, 4);
-    // Adjust to Thursday in week 1 and count number of weeks from date to week1.
-    return (
-      1 +
-      Math.round(
-        ((date.getTime() - week1.getTime()) / 86400000 -
-          3 +
-          ((week1.getDay() + 6) % 7)) /
-          7,
-      )
-    );
-  };
-
-  // Returns the four-digit year corresponding to the ISO week of the date.
-  Date.prototype.getWeekYear = function () {
-    var date = new Date(this.getTime());
-    date.setDate(date.getDate() + 3 - ((date.getDay() + 6) % 7));
-    return date.getFullYear();
-  };
+  
 
   var getDateArray = function (startdate, today) {
     var arr = new Array(),
@@ -169,7 +146,6 @@ const Dashboard = ({navigation}) => {
       switch (preference) {
         case 'Polar':
           //await getActivity(userId);
-
           data = await fetchStepsP(userId);
           console.log(data);
           break;
@@ -204,8 +180,10 @@ const Dashboard = ({navigation}) => {
         }
         dayIndex += 1;
       });
-      setStepsWeekList(await fetchWeeklySteps(userId));
       setStepsDayList(dateList);
+      setStepsWeekList(await fetchWeeklySteps(userId));
+      setStepsMonthList(await fetchMonthlySteps(userId));
+      
     };
 
     const fetchCalories = async () => {
@@ -250,6 +228,7 @@ const Dashboard = ({navigation}) => {
       });
       setCaloriesDayList(dateList);
       setCaloriesWeekList(await fetchWeeklyCalories(userId));
+      setCaloriesMonthList(await fetchMonthlyCalories(userId));
     };
 
     const fetchSleep = async () => {
@@ -297,8 +276,9 @@ const Dashboard = ({navigation}) => {
       });
       setSleepDayList(dateList);
       setSleepWeekList(await fetchWeeklySleep(userId));
+      setSleepMonthList(await fetchMonthlySleep(userId));
     };
-
+    
     fetchSleep();
     fetchSteps();
     fetchCalories();
@@ -309,15 +289,6 @@ const Dashboard = ({navigation}) => {
   console.log('User:   ' + userId);
 
   console.log('TODAY:' + day7);
-  if (stepsDayList == ['']) {
-    sleep(1000);
-    return null;
-  }
-
-  if (caloriesDayList == ['']) {
-    calories(1000);
-    return null;
-  }
 
   const showTable = value => {
     if (value == 'days') {
@@ -438,10 +409,16 @@ const Dashboard = ({navigation}) => {
           />
         ) : null}
 
-        {show3 ? <MonthData /> : null}
+        {show3 ?(
+         <MonthData
+            sleep={sleepMonthList}
+            steps={stepsMonthList}
+            calories={caloriesMonthList}
+         />
+        )  : null}
         <Button
           title="POlar Activities"
-          onPress={() => fetchWeeklySteps()}></Button>
+          onPress={() => fetchMonthlySleep(userId)}></Button>
         <Button
           title="Get polar Sleep"
           onPress={() => fetchSleepP(userId)}></Button>

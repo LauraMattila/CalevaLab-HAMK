@@ -9,6 +9,27 @@ import {
     Button,
     Pressable,
   } from 'react-native';
+
+  var date = new Date();
+
+  Date.prototype.getWeek = function () {
+    var date = new Date(this.getTime());
+    date.setHours(0, 0, 0, 0);
+    // Thursday in current week decides the year.
+    date.setDate(date.getDate() + 3 - ((date.getDay() + 6) % 7));
+    // January 4 is always in week 1.
+    var week1 = new Date(date.getFullYear(), 0, 4);
+    // Adjust to Thursday in week 1 and count number of weeks from date to week1.
+    return (
+      1 +
+      Math.round(
+        ((date.getTime() - week1.getTime()) / 86400000 -
+          3 +
+          ((week1.getDay() + 6) % 7)) /
+          7,
+      )
+    );
+  };
 const WeekData = (props) =>{
 
     return(
@@ -23,14 +44,14 @@ const WeekData = (props) =>{
         </DataTable.Header>
 
         <DataTable.Row>
-          <DataTable.Cell>Week 7</DataTable.Cell>
+          <DataTable.Cell>Week {date.getWeek()}</DataTable.Cell>
           <DataTable.Cell numeric>{props.sleep[6]}</DataTable.Cell>
           <DataTable.Cell numeric>{props.steps[6]}</DataTable.Cell>
           <DataTable.Cell numeric>{props.calories[6]}</DataTable.Cell>
         </DataTable.Row>
 
         <DataTable.Row>
-          <DataTable.Cell>Week 6</DataTable.Cell>
+          <DataTable.Cell>Week {date.getWeek()-1}</DataTable.Cell>
           <DataTable.Cell numeric>{props.sleep[5]}</DataTable.Cell>
           <DataTable.Cell numeric>{props.steps[5]}</DataTable.Cell>
           <DataTable.Cell numeric>{props.calories[5]}</DataTable.Cell>
@@ -38,21 +59,21 @@ const WeekData = (props) =>{
 
 
         <DataTable.Row>
-          <DataTable.Cell>Week 5</DataTable.Cell>
+          <DataTable.Cell>Week {date.getWeek()-2}</DataTable.Cell>
           <DataTable.Cell numeric>{props.sleep[4]}</DataTable.Cell>
           <DataTable.Cell numeric>{props.steps[4]}</DataTable.Cell>
           <DataTable.Cell numeric>{props.calories[4]}</DataTable.Cell>
         </DataTable.Row>
 
         <DataTable.Row>
-          <DataTable.Cell>Week 4</DataTable.Cell>
+          <DataTable.Cell>Week {date.getWeek()-3}</DataTable.Cell>
           <DataTable.Cell numeric>{props.sleep[3]}</DataTable.Cell>
           <DataTable.Cell numeric>{props.steps[3]}</DataTable.Cell>
           <DataTable.Cell numeric>{props.calories[3]}</DataTable.Cell>
         </DataTable.Row>
 
         <DataTable.Row>
-          <DataTable.Cell>Week 3</DataTable.Cell>
+          <DataTable.Cell>Week {date.getWeek()-4}</DataTable.Cell>
           <DataTable.Cell numeric>{props.sleep[2]}</DataTable.Cell>
           <DataTable.Cell numeric>{props.steps[2]}</DataTable.Cell>
           <DataTable.Cell numeric>{props.calories[2]}</DataTable.Cell>
@@ -60,7 +81,7 @@ const WeekData = (props) =>{
 
 
         <DataTable.Row>
-          <DataTable.Cell>Week 2</DataTable.Cell>
+          <DataTable.Cell>Week {date.getWeek()-5}</DataTable.Cell>
           <DataTable.Cell numeric>{props.sleep[1]}</DataTable.Cell>
           <DataTable.Cell numeric>{props.steps[1]}</DataTable.Cell>
           <DataTable.Cell numeric>{props.calories[1]}</DataTable.Cell>
@@ -68,7 +89,7 @@ const WeekData = (props) =>{
 
 
         <DataTable.Row>
-          <DataTable.Cell>Week 1</DataTable.Cell>
+          <DataTable.Cell>Week {date.getWeek()-6}</DataTable.Cell>
           <DataTable.Cell numeric>{props.sleep[0]}</DataTable.Cell>
           <DataTable.Cell numeric>{props.steps[0]}</DataTable.Cell>
           <DataTable.Cell numeric>{props.calories[0]}</DataTable.Cell>

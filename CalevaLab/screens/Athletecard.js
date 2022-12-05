@@ -90,12 +90,12 @@ const Athletecard = ({route,navigation}) => {
       console.log(preference);
       switch (preference) {
         case 'Polar':
-          await getActivity(userId);
+          //await getActivity(userId);
           data = await fetchStepsP(userId);
           console.log(data);
           break;
         case 'Fitbit':
-          await getStepsFit(userId);
+          //await getStepsFit(userId);
           data = await fetchStepsLog(userId);
           break;
       }
@@ -135,12 +135,12 @@ const Athletecard = ({route,navigation}) => {
         console.log(preference);
         switch (preference) {
           case 'Polar':
-            await getActivity(userId);
+            //await getActivity(userId);
             data = await fetchCaloriesP(userId);
             console.log(data);
             break;
           case 'Fitbit':
-            await getCalsFit(userId);
+            //await getCalsFit(userId);
             data = await fetchCaloriesLog(userId);
             break;
         }
@@ -184,7 +184,7 @@ const Athletecard = ({route,navigation}) => {
           console.log(data);
           break;
         case 'Fitbit':
-          // await getSleepDataFit(userId);
+          //await getSleepDataFit(userId);
           data = await fetchSleepLog(userId);
           break;
       }

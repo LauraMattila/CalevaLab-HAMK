@@ -9,8 +9,23 @@ import {
     Button,
     Pressable,
   } from 'react-native';
-const MonthData = () =>{
 
+
+const MonthData = (props) =>{
+  
+  
+  let date = new Date();
+  const options = {month: "short"};
+  let monthDate;
+  const monthList = [];
+  for (i = 0; i < 7; i++) {
+  monthDate = date.getMonth();
+  monthString = new Intl.DateTimeFormat("en-US", options).format(date); 
+  date.setMonth(monthDate-1);
+  monthList.push(monthString);
+  }
+ 
+  
     return(
       
 
@@ -23,61 +38,62 @@ const MonthData = () =>{
         </DataTable.Header>
 
         <DataTable.Row>
-          <DataTable.Cell>Month 7</DataTable.Cell>
-          <DataTable.Cell numeric>Koira </DataTable.Cell>
-          <DataTable.Cell numeric>Koira</DataTable.Cell>
-          <DataTable.Cell numeric>Koira</DataTable.Cell>
+          <DataTable.Cell>{monthList[0]}</DataTable.Cell>
+          <DataTable.Cell numeric>{props.sleep[0]}</DataTable.Cell>
+          <DataTable.Cell numeric>{props.steps[0]}</DataTable.Cell>
+          <DataTable.Cell numeric>{props.calories[0]}</DataTable.Cell>
         </DataTable.Row>
 
         <DataTable.Row>
-          <DataTable.Cell>Month 6</DataTable.Cell>
-          <DataTable.Cell numeric>Koira </DataTable.Cell>
-          <DataTable.Cell numeric>Koira</DataTable.Cell>
-          <DataTable.Cell numeric>Koira</DataTable.Cell>
-        </DataTable.Row>
-
-
-        <DataTable.Row>
-          <DataTable.Cell>Month 5</DataTable.Cell>
-          <DataTable.Cell numeric>Koira </DataTable.Cell>
-          <DataTable.Cell numeric>Koira</DataTable.Cell>
-          <DataTable.Cell numeric>Koira</DataTable.Cell>
-        </DataTable.Row>
-
-        <DataTable.Row>
-          <DataTable.Cell>Month 4</DataTable.Cell>
-          <DataTable.Cell numeric>Koira </DataTable.Cell>
-          <DataTable.Cell numeric>Koira</DataTable.Cell>
-          <DataTable.Cell numeric>Koira</DataTable.Cell>
-        </DataTable.Row>
-
-        <DataTable.Row>
-          <DataTable.Cell>Month 3</DataTable.Cell>
-          <DataTable.Cell numeric>Koira </DataTable.Cell>
-          <DataTable.Cell numeric>Koira</DataTable.Cell>
-          <DataTable.Cell numeric>Koira</DataTable.Cell>
+          <DataTable.Cell>{monthList[1]}</DataTable.Cell>
+          <DataTable.Cell numeric>{props.sleep[1]}</DataTable.Cell>
+          <DataTable.Cell numeric>{props.steps[1]}</DataTable.Cell>
+          <DataTable.Cell numeric>{props.calories[1]}</DataTable.Cell>
         </DataTable.Row>
 
 
         <DataTable.Row>
-          <DataTable.Cell>Month 2</DataTable.Cell>
-          <DataTable.Cell numeric>Koira </DataTable.Cell>
-          <DataTable.Cell numeric>Koira</DataTable.Cell>
-          <DataTable.Cell numeric>Koira</DataTable.Cell>
+          <DataTable.Cell>{monthList[2]}</DataTable.Cell>
+          <DataTable.Cell numeric>{props.sleep[2]}</DataTable.Cell>
+          <DataTable.Cell numeric>{props.steps[2]}</DataTable.Cell>
+          <DataTable.Cell numeric>{props.calories[2]}</DataTable.Cell>
+        </DataTable.Row>
+
+        <DataTable.Row>
+          <DataTable.Cell>{monthList[3]}</DataTable.Cell>
+          <DataTable.Cell numeric>{props.sleep[3]}</DataTable.Cell>
+          <DataTable.Cell numeric>{props.steps[3]}</DataTable.Cell>
+          <DataTable.Cell numeric>{props.calories[3]}</DataTable.Cell>
+        </DataTable.Row>
+
+        <DataTable.Row>
+          <DataTable.Cell>{monthList[4]}</DataTable.Cell>
+          <DataTable.Cell numeric>{props.sleep[4]}</DataTable.Cell>
+          <DataTable.Cell numeric>{props.steps[4]}</DataTable.Cell>
+          <DataTable.Cell numeric>{props.calories[4]}</DataTable.Cell>
         </DataTable.Row>
 
 
         <DataTable.Row>
-          <DataTable.Cell>Month 1</DataTable.Cell>
-          <DataTable.Cell numeric>Koira </DataTable.Cell>
-          <DataTable.Cell numeric>Koira</DataTable.Cell>
-          <DataTable.Cell numeric>Koira</DataTable.Cell>
+          <DataTable.Cell>{monthList[5]}</DataTable.Cell>
+          <DataTable.Cell numeric>{props.sleep[5]}</DataTable.Cell>
+          <DataTable.Cell numeric>{props.steps[5]}</DataTable.Cell>
+          <DataTable.Cell numeric>{props.calories[5]}</DataTable.Cell>
+        </DataTable.Row>
+
+
+        <DataTable.Row>
+          <DataTable.Cell>{monthList[6]}</DataTable.Cell>
+          <DataTable.Cell numeric>{props.sleep[6]}</DataTable.Cell>
+          <DataTable.Cell numeric>{props.steps[6]}</DataTable.Cell>
+          <DataTable.Cell numeric>{props.calories[6]}</DataTable.Cell>
         </DataTable.Row>
         </DataTable>
 
 
       );
 };
+
 const styles = StyleSheet.create({
     header: {
       fontSize: 20,
