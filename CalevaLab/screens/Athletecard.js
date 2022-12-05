@@ -209,8 +209,7 @@ const Athletecard = ({route,navigation}) => {
           var totalMinutes = data[dbIndex].sleep_min;
           const hours = Math.floor(totalMinutes / 60);
           const minutes = Math.floor(totalMinutes % 60);
-
-          dateList[dayIndex] = hours + '.' + minutes;
+          dateList[dayIndex] = hours+'h'+minutes+'m';
 
           dbIndex += 1;
         } else {
@@ -263,16 +262,19 @@ const Athletecard = ({route,navigation}) => {
             </View>
           </View>
 
+
+          
+
           <DataTable>
             <DataTable.Header style={styles.weekdays}>
               <DataTable.Title></DataTable.Title>
-              <DataTable.Title>{Moment(day1).format('ddd')}</DataTable.Title>
-              <DataTable.Title>{Moment(day2).format('ddd')}</DataTable.Title>
-              <DataTable.Title>{Moment(day3).format('ddd')}</DataTable.Title>
-              <DataTable.Title>{Moment(day4).format('ddd')}</DataTable.Title>
-              <DataTable.Title>{Moment(day5).format('ddd')}</DataTable.Title>
-              <DataTable.Title>{Moment(day6).format('ddd')}</DataTable.Title>
-              <DataTable.Title>{Moment(day7).format('ddd')}</DataTable.Title>
+              <DataTable.Title textStyle={{fontSize: 17}} numeric>{Moment(day1).format('ddd')}</DataTable.Title>
+              <DataTable.Title  textStyle={{fontSize: 17}} numeric>{Moment(day2).format('ddd')}</DataTable.Title>
+              <DataTable.Title  textStyle={{fontSize: 17}}numeric>{Moment(day3).format('ddd')}</DataTable.Title>
+              <DataTable.Title  textStyle={{fontSize: 17}} numeric>{Moment(day4).format('ddd')}</DataTable.Title>
+              <DataTable.Title  textStyle={{fontSize: 17}}numeric>{Moment(day5).format('ddd')}</DataTable.Title>
+              <DataTable.Title  textStyle={{fontSize: 17}}numeric>{Moment(day6).format('ddd')}</DataTable.Title>
+              <DataTable.Title  textStyle={{fontSize: 17}}numeric>{Moment(day7).format('ddd')}</DataTable.Title>
             </DataTable.Header>
 
             <DataTable.Row style={styles.row}>
@@ -299,13 +301,13 @@ const Athletecard = ({route,navigation}) => {
 
             <DataTable.Row style={styles.row}>
               <DataTable.Cell>SLEEP</DataTable.Cell>
-              <DataTable.Cell numeric>{sleepDayList[0]}</DataTable.Cell>
-              <DataTable.Cell numeric>{sleepDayList[1]}</DataTable.Cell>
-              <DataTable.Cell numeric>{sleepDayList[2]}</DataTable.Cell>
-              <DataTable.Cell numeric>{sleepDayList[3]}</DataTable.Cell>
-              <DataTable.Cell numeric>{sleepDayList[4]}</DataTable.Cell>
-              <DataTable.Cell numeric>{sleepDayList[5]}</DataTable.Cell>
-              <DataTable.Cell numeric>{sleepDayList[6]}</DataTable.Cell>
+              <DataTable.Cell textStyle={{fontSize: 13}}  numeric> {sleepDayList[0]}</DataTable.Cell>
+              <DataTable.Cell textStyle={{fontSize: 13}}  numeric> {sleepDayList[1]}</DataTable.Cell>
+              <DataTable.Cell textStyle={{fontSize: 13}}  numeric> {sleepDayList[0]}</DataTable.Cell>
+              <DataTable.Cell textStyle={{fontSize: 13}}  numeric> {sleepDayList[0]}</DataTable.Cell>
+              <DataTable.Cell textStyle={{fontSize: 13}}  numeric> {sleepDayList[0]}</DataTable.Cell>
+              <DataTable.Cell textStyle={{fontSize: 13}}  numeric> {sleepDayList[0]}</DataTable.Cell>
+              <DataTable.Cell textStyle={{fontSize: 13}}  numeric> {sleepDayList[0]}</DataTable.Cell>
             </DataTable.Row>
           </DataTable>
         </View>
@@ -365,12 +367,12 @@ const styles = StyleSheet.create({
   },
 
   weekdays: {
-    marginLeft: 10,
-    marginHorizontal: -35,
+    marginLeft: -15,
+    marginHorizontal: -15,
   },
   row: {
-    marginHorizontal: -10,
-    marginVertical: 10,
+    marginHorizontal: -12,
+    marginVertical: 12,
   },
   sharecont: {
     alignItems: 'center',
