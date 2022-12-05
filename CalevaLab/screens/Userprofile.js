@@ -11,7 +11,8 @@ import {
   PermissionsAndroid,
   TouchableOpacity,
   Modal,
-  TextInput
+  TextInput,
+  ActivityIndicator
 } from 'react-native';
 
 import {
@@ -22,10 +23,10 @@ import {
   setStepsPreference,
   setCaloriesPreference,
   fetchUserInfo,
-  updateUserInfo
+  updateUserInfo,
 } from '../db/UserDb';
 
-import {fetchAccessTokenP} from '../db/PolarDb'
+import {fetchAccessTokenP} from '../db/PolarDb';
 //import Icon from 'react-native-vector-icons/AntDesign';
 import SwitchSelector from 'react-native-switch-selector';
 import {Provider as PaperProvider} from 'react-native-paper';
@@ -37,12 +38,13 @@ import Moment from 'moment';
 import {RadioButton} from 'react-native-paper';
 
 const Userprofile = ({navigation}) => {
+    const [ loading, setLoading ] = useState(true);
 
   const [firstname, setFirstname] = useState('');
   const [lastname, setLastname] = useState('');
   const [age, setAge] = useState('');
   const [gender, setGender] = useState('');
-
+  const [doc, setDoc] = useState('1');
   const kuka = [
     {label: 'Sampo', value: '1'},
     {label: 'Jere', value: '2'},
@@ -50,12 +52,9 @@ const Userprofile = ({navigation}) => {
     {label: 'Laura', value: '4'},
   ];
 
-
-
   const [Sleepchecked, setSleepChecked] = React.useState('');
   const [Stepschecked, setStepsChecked] = React.useState('');
   const [Calschecked, setCalsChecked] = React.useState('');
-
 
   const [filePath, setFilePath] = useState({});
   const [filePathh, setFilePathh] = useState(
@@ -100,7 +99,7 @@ const Userprofile = ({navigation}) => {
       return false;
     } else return true;
   };
-/*   
+  /*   
 
 const checkConnection = async () =>{
    const accessTokenP = fetchAccessTokenP(userId);
@@ -113,6 +112,109 @@ const checkConnection = async () =>{
    }
 
 } */
+
+  useEffect(() => {
+    const checkPrefSleep = async () => {
+      var preference = await fetchSleepPreference(id);
+
+      switch (preference) {
+        case 'Polar':
+          setSleepChecked('sleeppolar');
+          break;
+
+        case 'Fitbit':
+          setSleepChecked('sleepfit');
+          break;
+      }
+   
+    };
+
+    const checkPrefSteps = async () => {
+      var preference = await fetchStepPreference(id);
+
+      switch (preference) {
+        case 'Polar':
+          setStepsChecked('stepspolar');
+          break;
+
+        case 'Fitbit':
+          setStepsChecked('stepsfit');
+          break;
+      }
+
+    };
+
+    const checkPrefCals = async () => {
+      var preference = await fetchCaloriesPreference(id);
+
+      switch (preference) {
+        case 'Polar':
+          setCalsChecked('calspolar');
+          break;
+
+        case 'Fitbit':
+          setCalsChecked('calsfit');
+          break;
+
+      }
+      setLoading(false);
+    };
+
+    checkPrefSleep();
+    checkPrefSteps();
+    checkPrefCals();
+    
+  }, []);
+  const setSleep = async () => {
+    var preference = await fetchSleepPreference(id);
+    switch (preference) {
+      case 'Polar':
+        var sleep = 'Fitbit';
+        await setSleepPreference(doc, sleep);
+        setSleepChecked('sleepfit');
+        break;
+
+      case 'Fitbit':
+        var sleep = 'Polar';
+        await setSleepPreference(doc, sleep);
+        setSleepChecked('sleeppolar');
+        break;
+    }
+  };
+
+  const setSteps = async () => {
+    var preference = await fetchStepPreference(id);
+    switch (preference) {
+      case 'Polar':
+        var steps = 'Fitbit';
+        await setStepsPreference(doc, steps);
+        setStepsChecked('stepsfit');
+        break;
+
+      case 'Fitbit':
+        var steps = 'Polar';
+        await setStepsPreference(doc, steps);
+        setStepsChecked('stepspolar');
+        break;
+    }
+  };
+
+  const setCals = async () => {
+    var preference = await fetchCaloriesPreference(id);
+    switch (preference) {
+      case 'Polar':
+        var cals = 'Fitbit';
+        await setCaloriesPreference(doc, cals);
+        setCalsChecked('calsfit');
+        break;
+
+      case 'Fitbit':
+        var cals = 'Polar';
+        await setCaloriesPreference(doc, cals);
+        setCalsChecked('calspolar');
+        break;
+    }
+  };
 
   const captureImage = async type => {
     let options = {
@@ -186,213 +288,223 @@ const checkConnection = async () =>{
 
   const [visibility, setVisibility] = useState(false);
 
-  const [id, setUserId] = useState('2')
+  const [id, setUserId] = useState('1');
 
-
-  const showEditView = async() => {
+  const showEditView = async () => {
     var userInfo = await fetchUserInfo(id);
     setFirstname(userInfo.fname);
     setLastname(userInfo.lname);
     setGender(userInfo.gender);
     setAge(userInfo.age);
     setVisibility(true);
-  }
+  };
 
-  const updateUser = async() => {
+  const updateUser = async () => {
     var userInfo = await fetchUserInfo(id);
     console.log('paskakulli' + userInfo);
     updateUserInfo(firstname, lastname, gender, age, id);
     setVisibility(false);
-
-  }
+  };
 
   const cancel = () => {
     setVisibility(false);
-  }
+  };
 
   return (
-    <View>  
-        <View>
-          <View style={styles.container}>
-            <View style={styles.image}>
+    <View>
+      <View>
+        <View style={styles.container}>
+          <View style={styles.image}>
             <Image
               style={{width: 120, height: 120, borderRadius: 75}}
               source={{uri: filePathh}}
               resizeMode={'cover'} // cover or contain its upto you view look
             />
-            </View>
-            <TouchableOpacity
-              activeOpacity={0.5}
-              
-              onPress={() => captureImage('photo')}>
-              <Text style={styles.info}> Take a photo</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              activeOpacity={0.5}
-              
-              onPress={() => chooseFile('photo')}>
-              <Text style={styles.info}> Choose Image</Text>
-            </TouchableOpacity>
           </View>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => captureImage('photo')}>
+            <Text style={styles.info}> Take a photo</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => chooseFile('photo')}>
+            <Text style={styles.info}> Choose Image</Text>
+          </TouchableOpacity>
         </View>
-        <View style={styles.infocont}>
-          <View>
-            <Text style={styles.name}>
-              {firstname} {lastname}
-            </Text>
+      </View>
+      <View style={styles.infocont}>
+        <View>
+          <Text style={styles.name}>
+            {firstname} {lastname}
+          </Text>
 
-            <Text style={styles.info}>
-              {age} | {gender}
-            </Text>
-          </View>
-          <Pressable style={styles.buttonEdit}
-          onPress = {() => showEditView()}>
+          <Text style={styles.info}>
+            {age} | {gender}
+          </Text>
+        </View>
+        <Pressable style={styles.buttonEdit} onPress={() => showEditView()}>
           <Text style={styles.buttonTextEdit}>Edit Your Profile</Text>
         </Pressable>
-        </View>
-
-        <DataTable style={styles.datacont}>
-          <DataTable.Header>
-            <DataTable.Title>Service</DataTable.Title>
-            <DataTable.Title>Sleep</DataTable.Title>
-            <DataTable.Title>Steps</DataTable.Title>
-            <DataTable.Title>Calories</DataTable.Title>
-          </DataTable.Header>
-
-          <DataTable.Row>
-            <DataTable.Cell>POLAR</DataTable.Cell>
-            <DataTable.Cell>
-              <View>
-                <RadioButton
-                  value="sleeppolar"
-                  status={
-                    Sleepchecked === 'sleeppolar' ? 'checked' : 'unchecked'
-                  }
-                  onPress={() => setSleepChecked('sleeppolar')}
-                />
-              </View>
-            </DataTable.Cell>
-            <DataTable.Cell>
-              <View>
-                <RadioButton
-                  value="stepspolar"
-                  status={
-                    Stepschecked === 'stepspolar' ? 'checked' : 'unchecked'
-                  }
-                  onPress={() => setStepsChecked('stepspolar')}
-                />
-              </View>
-            </DataTable.Cell>
-            <DataTable.Cell>
-              <View>
-                <RadioButton
-                  value="calspolar"
-                  status={Calschecked === 'calspolar' ? 'checked' : 'unchecked'}
-                  onPress={() => setCalsChecked('calspolar')}
-                />
-              </View>
-            </DataTable.Cell>
-          </DataTable.Row>
-
-          <DataTable.Row>
-            <DataTable.Cell>FITBIT</DataTable.Cell>
-            <DataTable.Cell>
-              <View>
-                <RadioButton
-                  value="sleepfit"
-                  status={Sleepchecked === 'sleepfit' ? 'checked' : 'unchecked'}
-                  onPress={() => setSleepChecked('sleepfit')}
-                />
-              </View>
-            </DataTable.Cell>
-            <DataTable.Cell>
-              <View>
-                <RadioButton
-                  value="stepsfit"
-                  status={Stepschecked === 'stepsfit' ? 'checked' : 'unchecked'}
-                  onPress={() => setStepsChecked('stepsfit')}
-                />
-              </View>
-            </DataTable.Cell>
-            <DataTable.Cell>
-              <View>
-                <RadioButton
-                  value="calsfit"
-                  status={Calschecked === 'calsfit' ? 'checked' : 'unchecked'}
-                  onPress={() => setCalsChecked('calsfit')}
-                />
-              </View>
-            </DataTable.Cell>
-          </DataTable.Row>
-        </DataTable>
-        <Modal visible={visibility} animationType='slide'>
-      <View>
-        <Text style={styles.text}>
-          Edit Your Profile Information
-        </Text>
       </View>
 
-      <View style={styles.editView}>
-      <Text style={styles.headers}>
-        Firstname
-      </Text>
-      <TextInput style = {styles.input}
-            underlineColorAndroid = "transparent"
-            placeholder = "Firstname"
-            autoCapitalize = "none"
-            value = {firstname}
-            onChangeText = {setFirstname}
-      />
-      <Text style={styles.headers}>
-        Lastname
-      </Text>      
-      <TextInput style = {styles.input}
-            underlineColorAndroid = "transparent"
-            placeholder = "Lastname"
-            autoCapitalize = "none"
-            value = {lastname}
-            onChangeText = {setLastname}
-            
-      />
-      <Text style={styles.headers}>
-        Gender
-      </Text>
-      <TextInput style = {styles.input}
-            underlineColorAndroid = "transparent"
-            placeholder = "Gender"
-            autoCapitalize = "none"
-            value = {gender}
-            onChangeText = {setGender}
-           
-      />
-      <Text style={styles.headers}>
-        Age
-      </Text>
-      <TextInput style = {styles.input}
-            underlineColorAndroid = "transparent"
-            placeholder = "Age"
-            autoCapitalize = "none"
-            value = {age}
-            onChangeText = {setAge}
-      />
-        <View style={styles.sharecont}>
-        <Pressable style={styles.buttonCancel}
-          onPress= {cancel}>
-          <Text style={styles.buttonText}>Cancel</Text>
-        </Pressable>
+
+
+     
+      <DataTable style={styles.datacont}>
+        <DataTable.Header>
+          <DataTable.Title>Service</DataTable.Title>
+          <DataTable.Title>Sleep</DataTable.Title>
+          <DataTable.Title>Steps</DataTable.Title>
+          <DataTable.Title>Calories</DataTable.Title>
+        </DataTable.Header>
+
+        <DataTable.Row>
+          <DataTable.Cell>POLAR</DataTable.Cell>
+   
+          <DataTable.Cell>
+
+
+          { loading ?
+      <ActivityIndicator /> :
+            <View>
+              <RadioButton
+                value="sleeppolar"
+                status={Sleepchecked === 'sleeppolar' ? 'checked' : 'unchecked'}
+                onPress={() => setSleep()}
+              />
+            </View>
+}
+          </DataTable.Cell>
+          <DataTable.Cell>
+          { loading ?
+      <ActivityIndicator /> :
+            <View>
+              <RadioButton
+                value="stepspolar"
+                status={Stepschecked === 'stepspolar' ? 'checked' : 'unchecked'}
+                onPress={() => setSteps()}
+              />
+            </View>
+}
+          </DataTable.Cell>
+          <DataTable.Cell>
+          { loading ?
+      <ActivityIndicator /> :
+            <View>
+              <RadioButton
+                value="calspolar"
+                status={Calschecked === 'calspolar' ? 'checked' : 'unchecked'}
+                onPress={() => setCals()}
+              />
+            </View>
+}
+          
+          
+          </DataTable.Cell>
+        </DataTable.Row>
+      
+        <DataTable.Row>
+          <DataTable.Cell>FITBIT</DataTable.Cell>
+          <DataTable.Cell>
+          { loading ?
+      <ActivityIndicator /> :
+            <View>
+              <RadioButton
+                value="sleepfit"
+                status={Sleepchecked === 'sleepfit' ? 'checked' : 'unchecked'}
+                onPress={() => setSleep()}
+              />
+            </View>
+}
+          </DataTable.Cell>
+          <DataTable.Cell>
+          { loading ?
+      <ActivityIndicator /> :
+            <View>
+              <RadioButton
+                value="stepsfit"
+                status={Stepschecked === 'stepsfit' ? 'checked' : 'unchecked'}
+                onPress={() => setSteps()}
+              />
+            </View>
+}
+          </DataTable.Cell>
+          <DataTable.Cell>
+
+          { loading ?
+      <ActivityIndicator /> :
+            <View>
+              <RadioButton
+                value="calsfit"
+                status={Calschecked === 'calsfit' ? 'checked' : 'unchecked'}
+                onPress={() => setCals()}
+              />
+            </View>
+}
+          
+          </DataTable.Cell>
+
+          
+        </DataTable.Row>
+      </DataTable>
+      <Modal visible={visibility} animationType="slide">
+        <View>
+          <Text style={styles.text}>Edit Your Profile Information</Text>
         </View>
 
-        <View style={styles.sharecont}>
-        <Pressable style={styles.buttonUpdate}
-          onPress = {() => updateUser()}>
-          <Text style={styles.buttonText}>Update</Text>
-        </Pressable>
+        <View style={styles.editView}>
+          <Text style={styles.headers}>Firstname</Text>
+          <TextInput
+            style={styles.input}
+            underlineColorAndroid="transparent"
+            placeholder="Firstname"
+            autoCapitalize="none"
+            value={firstname}
+            onChangeText={setFirstname}
+          />
+          <Text style={styles.headers}>Lastname</Text>
+          <TextInput
+            style={styles.input}
+            underlineColorAndroid="transparent"
+            placeholder="Lastname"
+            autoCapitalize="none"
+            value={lastname}
+            onChangeText={setLastname}
+          />
+          <Text style={styles.headers}>Gender</Text>
+          <TextInput
+            style={styles.input}
+            underlineColorAndroid="transparent"
+            placeholder="Gender"
+            autoCapitalize="none"
+            value={gender}
+            onChangeText={setGender}
+          />
+          <Text style={styles.headers}>Age</Text>
+          <TextInput
+            style={styles.input}
+            underlineColorAndroid="transparent"
+            placeholder="Age"
+            autoCapitalize="none"
+            value={age}
+            onChangeText={setAge}
+          />
+          <View style={styles.sharecont}>
+            <Pressable style={styles.buttonCancel} onPress={cancel}>
+              <Text style={styles.buttonText}>Cancel</Text>
+            </Pressable>
+          </View>
+
+          <View style={styles.sharecont}>
+            <Pressable style={styles.buttonUpdate} onPress={() => updateUser()}>
+              <Text style={styles.buttonText}>Update</Text>
+            </Pressable>
+          </View>
         </View>
-      </View>
-    </Modal>
-  </View>    
- 
+      </Modal>
+    </View>
   );
 };
 const styles = StyleSheet.create({
@@ -429,7 +541,7 @@ const styles = StyleSheet.create({
   },
   datacont: {
     marginVertical: 350,
-    alignContent: 'flex-start' 
+    alignContent: 'flex-start',
   },
   name: {
     textAlign: 'center',
@@ -455,7 +567,7 @@ const styles = StyleSheet.create({
     borderColor: '#E6E6FA',
     borderWidth: 1,
     borderRadius: 5,
-    backgroundColor: '#F5F5F5'
+    backgroundColor: '#F5F5F5',
   },
   headers: {
     marginLeft: 25,
@@ -489,32 +601,30 @@ const styles = StyleSheet.create({
     letterSpacing: 2,
     borderColor: '#E6E6FA',
     borderWidth: 1,
-
   },
   buttonText: {
     fontSize: 13,
-    color: "#696969",
-    alignSelf: "center",
+    color: '#696969',
+    alignSelf: 'center',
     letterSpacing: 1.5,
     borderBottomWidth: 1,
-    borderColor: '#696969'   
+    borderColor: '#696969',
   },
   buttonTextEdit: {
     fontSize: 12,
     fontWeight: 'bold',
-    color: "#696969",
-    alignSelf: "center",
+    color: '#696969',
+    alignSelf: 'center',
   },
   buttonEdit: {
-    color: "black",
-    alignSelf: "center",
+    color: 'black',
+    alignSelf: 'center',
     borderBottomWidth: 1,
-    borderColor: "#696969"
+    borderColor: '#696969',
   },
   image: {
-
     alignItems: 'center',
-    marginHorizontal: 20
+    marginHorizontal: 20,
   },
 
   sharecont: {
@@ -536,6 +646,5 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
   },
-
 });
 export default Userprofile;
