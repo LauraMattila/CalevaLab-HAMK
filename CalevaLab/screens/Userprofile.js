@@ -302,6 +302,12 @@ const checkConnection = async () =>{
 
   const [visibility, setVisibility] = useState(false);
 
+
+
+
+
+
+
   const showEditView = async () => {
     var userInfo = await fetchUserInfo(id);
 
@@ -547,19 +553,6 @@ const styles = StyleSheet.create({
     padding: 10,
     marginTop: 16,
   },
-  buttonStyle: {
-    fontSize: 16,
-    color: 'white',
-    backgroundColor: 'green',
-    padding: 5,
-    marginTop: 32,
-    minWidth: 250,
-  },
-  buttonTextStyle: {
-    padding: 5,
-    color: 'white',
-    textAlign: 'center',
-  },
   infocont: {
     marginVertical: 50,
     flexDirection: 'row',
@@ -568,8 +561,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   datacont: {
-    marginVertical: 100,
-    alignContent: 'center',
+
+    marginVertical: 250,
+    alignContent: 'flex-start',
   },
   name: {
     textAlign: 'center',
@@ -581,7 +575,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     fontSize: 13,
   },
-
   editView: {
     marginLeft: 25,
     marginRight: 25,
@@ -653,27 +646,10 @@ const styles = StyleSheet.create({
   image: {
     alignItems: 'center',
     marginHorizontal: 20,
+    marginTop: 40,
     marginVertical: 20,
   },
 
-  sharecont: {
-    alignItems: 'center',
-    marginVertical: 6,
-  },
 
-  sharebutton: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 100,
-    backgroundColor: '#1e90ff',
-    width: 10,
-    height: 10,
-  },
-  sharetext: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
 });
 export default Userprofile;
