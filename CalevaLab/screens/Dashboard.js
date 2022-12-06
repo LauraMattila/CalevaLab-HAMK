@@ -55,12 +55,17 @@ import {
   fetchCaloriesPreference,
   fetchStepPreference,
   fetchSleepPreference,
+  fetchUserInfo
 } from '../db/UserDb';
 
 import {
   fetchWeeklyCalories,
   fetchWeeklySleep,
   fetchWeeklySteps,
+  fetchMonthlySleep,
+  fetchMonthlySteps,
+  fetchMonthlyCalories
+
 } from '../db/testing';
 
 const Dashboard = ({navigation}) => {
@@ -94,19 +99,20 @@ const Dashboard = ({navigation}) => {
   const [loading, setLoading] = useState(true);
 
 
-  
-
-  const [userId, setUserId] = useState('2');
-
+  const [userId, setUserId] = useState('1');
 
 
   const [stepsDayList, setStepsDayList] = useState(['']);
   const [stepsWeekList, setStepsWeekList] = useState(['']);
+  const [stepsMonthList, setStepsMonthList] = useState(['']);
 
   const [caloriesDayList, setCaloriesDayList] = useState(['']);
   const [caloriesWeekList, setCaloriesWeekList] = useState(['']);
+  const [caloriesMonthList, setCaloriesMonthList] = useState(['']);
+
   const [sleepDayList, setSleepDayList] = useState(['']);
   const [sleepWeekList, setSleepWeekList] = useState(['']);
+  const [sleepMonthList, setSleepMonthList] = useState(['']);
 
   const [dateArr, setDateArr] = useState([]);
 
@@ -115,32 +121,7 @@ const Dashboard = ({navigation}) => {
   const [show2, setShow2] = useState(false);
   const [show3, setShow3] = useState(false);
 
-  // Returns the ISO week of the date.
-  Date.prototype.getWeek = function () {
-    var date = new Date(this.getTime());
-    date.setHours(0, 0, 0, 0);
-    // Thursday in current week decides the year.
-    date.setDate(date.getDate() + 3 - ((date.getDay() + 6) % 7));
-    // January 4 is always in week 1.
-    var week1 = new Date(date.getFullYear(), 0, 4);
-    // Adjust to Thursday in week 1 and count number of weeks from date to week1.
-    return (
-      1 +
-      Math.round(
-        ((date.getTime() - week1.getTime()) / 86400000 -
-          3 +
-          ((week1.getDay() + 6) % 7)) /
-          7,
-      )
-    );
-  };
-
-  // Returns the four-digit year corresponding to the ISO week of the date.
-  Date.prototype.getWeekYear = function () {
-    var date = new Date(this.getTime());
-    date.setDate(date.getDate() + 3 - ((date.getDay() + 6) % 7));
-    return date.getFullYear();
-  };
+  
 
   var getDateArray = function (startdate, today) {
     var arr = new Array(),
@@ -155,6 +136,17 @@ const Dashboard = ({navigation}) => {
   };
 
   useEffect(() => {
+    const setUserInfo = async () => {
+      var userInfo = await fetchUserInfo(userId);
+      setFirstname(userInfo.fname);
+      setLastname(userInfo.lname);
+      setGender(userInfo.gender);
+      setAge(userInfo.age);
+      console.log(
+        ' TOIMIIKOTOIMIIKOTOIMIIIIKOTOIMIIIKO :   ' + userInfo.gender,
+      );
+    };
+
     var today = new Date();
     var startdate = new Date();
     startdate.setDate(today.getDate() - 6);
@@ -165,13 +157,12 @@ const Dashboard = ({navigation}) => {
     const fetchSteps = async () => {
       var data = [];
       var preference = await fetchStepPreference(userId);
-      console.log(preference);
+      console.log('STEPS PREFERENCE:   ' + preference);
       switch (preference) {
         case 'Polar':
           //await getActivity(userId);
-
           data = await fetchStepsP(userId);
-          console.log(data);
+          // console.log(data);
           break;
         case 'Fitbit':
           //await getStepsFit(userId);
@@ -179,13 +170,13 @@ const Dashboard = ({navigation}) => {
           break;
       }
 
-      console.log('Tässä stepsit' + data);
+      //console.log('Tässä stepsit' + data);
       dayIndex = 0;
       dbIndex = 0;
       var dbDate;
       var currentDate;
       var dateList = [];
-      console.log(dateArray);
+      //console.log(dateArray);
       dateArray.forEach(date => {
         try {
           currentDate = date.toISOString().slice(0, 10);
@@ -204,19 +195,21 @@ const Dashboard = ({navigation}) => {
         }
         dayIndex += 1;
       });
-      setStepsWeekList(await fetchWeeklySteps(userId));
       setStepsDayList(dateList);
+      setStepsWeekList(await fetchWeeklySteps(userId));
+      setStepsMonthList(await fetchMonthlySteps(userId));
+      
     };
 
     const fetchCalories = async () => {
       var data = [];
       var preference = await fetchCaloriesPreference(userId);
-      console.log(preference);
+      console.log('CALS PREFERENCE:   ' + preference);
       switch (preference) {
         case 'Polar':
           //await getActivity(userId);
           data = await fetchCaloriesP(userId);
-          console.log(data);
+          //console.log(data);
           break;
         case 'Fitbit':
           //await getCalsFit(userId);
@@ -224,13 +217,13 @@ const Dashboard = ({navigation}) => {
           break;
       }
 
-      console.log('Tässä calories' + data);
+      // console.log('Tässä calories' + data);
       dayIndex = 0;
       dbIndex = 0;
       var dbDate;
       var currentDate;
       var dateList = [];
-      console.log(dateArray);
+      // console.log(dateArray);
       dateArray.forEach(date => {
         try {
           currentDate = date.toISOString().slice(0, 10);
@@ -250,17 +243,18 @@ const Dashboard = ({navigation}) => {
       });
       setCaloriesDayList(dateList);
       setCaloriesWeekList(await fetchWeeklyCalories(userId));
+      setCaloriesMonthList(await fetchMonthlyCalories(userId));
     };
 
     const fetchSleep = async () => {
       var data = [];
       var preference = await fetchSleepPreference(userId);
-      console.log(preference);
+      console.log('SLEEP PREFERENCE:   ' + preference);
       switch (preference) {
         case 'Polar':
           //await getSleep(userId);
           data = await fetchSleepP(userId);
-          console.log(data);
+          // console.log(data);
           break;
         case 'Fitbit':
           //await getSleepDataFit(userId);
@@ -268,13 +262,13 @@ const Dashboard = ({navigation}) => {
           break;
       }
 
-      console.log('Tässä SLeepit' + data);
+      // console.log('Tässä SLeepit' + data);
       dayIndex = 0;
       dbIndex = 0;
       var dbDate;
       var currentDate;
       var dateList = [];
-      console.log(dateArray);
+      //console.log(dateArray);
       dateArray.forEach(date => {
         try {
           currentDate = date.toISOString().slice(0, 10);
@@ -297,27 +291,20 @@ const Dashboard = ({navigation}) => {
       });
       setSleepDayList(dateList);
       setSleepWeekList(await fetchWeeklySleep(userId));
+      setSleepMonthList(await fetchMonthlySleep(userId));
     };
-
+    
     fetchSleep();
     fetchSteps();
     fetchCalories();
+    setUserInfo();
   }, [userId]);
 
   var [day1, day2, day3, day4, day5, day6, day7] = dateArr;
 
-  console.log('User:   ' + userId);
+  // console.log('USER:   ' + userId);
 
   console.log('TODAY:' + day7);
-  if (stepsDayList == ['']) {
-    sleep(1000);
-    return null;
-  }
-
-  if (caloriesDayList == ['']) {
-    calories(1000);
-    return null;
-  }
 
   const showTable = value => {
     if (value == 'days') {
@@ -339,11 +326,11 @@ const Dashboard = ({navigation}) => {
     <PaperProvider>
       <SwitchSelector
         options={kuka}
-        initial={userId - 1}
+        initial={1}
         onPress={value => setUserId(value)}
       />
       <View>
-        <Text style={styles.header}>Welcome Back, {userId}!</Text>
+        <Text style={styles.header}>Welcome Back!</Text>
 
         <View style={styles.infocont}>
           <View>
@@ -438,10 +425,16 @@ const Dashboard = ({navigation}) => {
           />
         ) : null}
 
-        {show3 ? <MonthData /> : null}
+        {show3 ?(
+         <MonthData
+            sleep={sleepMonthList}
+            steps={stepsMonthList}
+            calories={caloriesMonthList}
+         />
+        )  : null}
         <Button
           title="POlar Activities"
-          onPress={() => fetchWeeklySteps()}></Button>
+          onPress={() => fetchMonthlySleep(userId)}></Button>
         <Button
           title="Get polar Sleep"
           onPress={() => fetchSleepP(userId)}></Button>
