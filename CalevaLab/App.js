@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import type {Node} from 'react';
 import {Provider as PaperProvider} from 'react-native-paper';
+import {MD3LightTheme, adaptNavigationTheme } from 'react-native-paper';
 import {
   StyleSheet,
   Text,
@@ -16,11 +17,16 @@ import Dashboard from './screens/Dashboard';
 import Userprofile from './screens/Userprofile';
 import Athletecard from './screens/Athletecard';
 
+
+const theme = {
+}
+ 
+
 const App: () => Node = () => {
   const Drawer = createDrawerNavigator();
 
   return (
-    <PaperProvider>
+    <PaperProvider theme={theme}>
       <NavigationContainer>
         <Drawer.Navigator>
           <Drawer.Screen name="Dashboard" component={Dashboard} />
