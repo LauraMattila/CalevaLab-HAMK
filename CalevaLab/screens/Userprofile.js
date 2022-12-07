@@ -361,16 +361,20 @@ const checkConnection = async () =>{
       <View style={styles.datacont}>
         <DataTable>
           <DataTable.Header>
-            <DataTable.Title textStyle={{fontSize: 16}} >Service</DataTable.Title>
+            <DataTable.Title textStyle={{fontSize: 16}}>
+              Service
+            </DataTable.Title>
             <DataTable.Title textStyle={{fontSize: 16}}>Sleep</DataTable.Title>
             <DataTable.Title textStyle={{fontSize: 16}}>Steps</DataTable.Title>
-            <DataTable.Title textStyle={{fontSize: 16}}>Calories</DataTable.Title>
+            <DataTable.Title textStyle={{fontSize: 16}}>
+              Calories
+            </DataTable.Title>
           </DataTable.Header>
 
           <DataTable.Row style={styles.cell}>
             <DataTable.Cell>POLAR</DataTable.Cell>
 
-            <DataTable.Cell >
+            <DataTable.Cell>
               {loading ? (
                 <ActivityIndicator />
               ) : (
@@ -471,15 +475,14 @@ const checkConnection = async () =>{
           <Text style={styles.text}>Edit Your Profile Information</Text>
         </View>
 
-        <View style={styles.editView}>
-          <View style={styles.image}>
-            <Image
-              style={{width: 120, height: 120, borderRadius: 75}}
-              source={{uri: filePathh}}
-              resizeMode={'cover'} // cover or contain its upto you view look
-            />
-          </View>
-
+        <View style={styles.image}>
+          <Image
+            style={{width: 120, height: 120, borderRadius: 75, margin: -70}}
+            source={{uri: filePathh}}
+            resizeMode={'cover'} // cover or contain its upto you view look
+          />
+        </View>
+        <View style={styles.photobuttons}>
           <TouchableOpacity
             activeOpacity={0.5}
             onPress={() => captureImage('photo')}>
@@ -491,7 +494,9 @@ const checkConnection = async () =>{
             onPress={() => chooseFile('photo')}>
             <Text style={styles.info}> Choose Image</Text>
           </TouchableOpacity>
+        </View>
 
+        <View style={styles.editView}>
           <Text style={styles.headers}>Firstname</Text>
           <TextInput
             style={styles.input}
@@ -551,6 +556,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 
+  photobuttons: {
+    marginVertical: 30,
+  },
+
   radio: {
     color: 'black',
   },
@@ -573,27 +582,28 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     alignItems: 'center',
     width: 450,
-    justifyContent:'center'
+    justifyContent: 'center',
   },
   name: {
     textAlign: 'center',
-    fontSize: 30,
+    fontSize: 25,
     fontWeight: 'bold',
   },
   info: {
     textAlign: 'center',
     marginHorizontal: 20,
-    fontSize: 13,
+    fontSize: 15,
   },
   editView: {
     marginLeft: 25,
     marginRight: 25,
     height: 40,
+    marginVertical: 0,
   },
   input: {
     marginLeft: 25,
     marginRight: 25,
-    marginBottom: 30,
+    marginBottom: 4,
     height: 40,
     borderColor: '#E6E6FA',
     borderWidth: 1,
@@ -661,8 +671,7 @@ const styles = StyleSheet.create({
   },
 
   cell: {
-
     marginVertical: 20,
-  }
+  },
 });
 export default Userprofile;
