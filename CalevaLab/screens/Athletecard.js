@@ -249,6 +249,8 @@ const Athletecard = ({route, navigation}) => {
         options={kuka}
         initial={0}
         onPress={value => setUserId(value)}
+        selectedColor={'white'}
+        buttonColor={'#483d8b'}
       />
       <View>
         <View style={styles.infocont}>
@@ -279,6 +281,8 @@ const Athletecard = ({route, navigation}) => {
                 options={options}
                 initial={0}
                 onPress={value => console.log(`Selected: ${value}`)}
+                selectedColor={'white'}
+        buttonColor={'#483d8b'}
               />
             </View>
           </View>
@@ -429,21 +433,24 @@ const styles = StyleSheet.create({
   },
   sharecont: {
     alignItems: 'center',
+    marginVertical: -20,
   },
 
   sharebutton: {
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 12,
-    paddingHorizontal: 32,
-    borderRadius: 40,
-    backgroundColor: '#1e90ff',
+    paddingHorizontal: 20,
+    borderRadius: 30,
+    backgroundColor: '#5f9ea0',
     width: 200,
     height: 75,
+    
   },
   sharetext: {
     fontSize: 20,
     fontWeight: 'bold',
+    color: 'white'
   },
 });
 

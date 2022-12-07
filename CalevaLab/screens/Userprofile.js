@@ -302,12 +302,6 @@ const checkConnection = async () =>{
 
   const [visibility, setVisibility] = useState(false);
 
-
-
-
-
-
-
   const showEditView = async () => {
     var userInfo = await fetchUserInfo(id);
 
@@ -335,6 +329,8 @@ const checkConnection = async () =>{
         options={kuka}
         initial={0}
         onPress={value => setUserId(value)}
+        selectedColor={'white'}
+        buttonColor={'#483d8b'}
       />
       <View style={styles.image}>
         <Image
@@ -362,106 +358,114 @@ const checkConnection = async () =>{
           </Pressable>
         </View>
       </View>
+      <View style={styles.datacont}>
+        <DataTable>
+          <DataTable.Header>
+            <DataTable.Title textStyle={{fontSize: 16}} >Service</DataTable.Title>
+            <DataTable.Title textStyle={{fontSize: 16}}>Sleep</DataTable.Title>
+            <DataTable.Title textStyle={{fontSize: 16}}>Steps</DataTable.Title>
+            <DataTable.Title textStyle={{fontSize: 16}}>Calories</DataTable.Title>
+          </DataTable.Header>
 
-      <DataTable style={styles.datacont}>
-        <DataTable.Header>
-          <DataTable.Title>Service</DataTable.Title>
-          <DataTable.Title>Sleep</DataTable.Title>
-          <DataTable.Title>Steps</DataTable.Title>
-          <DataTable.Title>Calories</DataTable.Title>
-        </DataTable.Header>
+          <DataTable.Row style={styles.cell}>
+            <DataTable.Cell>POLAR</DataTable.Cell>
 
-        <DataTable.Row>
-          <DataTable.Cell>POLAR</DataTable.Cell>
+            <DataTable.Cell >
+              {loading ? (
+                <ActivityIndicator />
+              ) : (
+                <View>
+                  <RadioButton
+                    style={styles.radio}
+                    value="sleeppolar"
+                    status={
+                      Sleepchecked === 'sleeppolar' ? 'checked' : 'unchecked'
+                    }
+                    onPress={() => setSleep()}
+                  />
+                </View>
+              )}
+            </DataTable.Cell>
+            <DataTable.Cell>
+              {loading ? (
+                <ActivityIndicator />
+              ) : (
+                <View>
+                  <RadioButton
+                    value="stepspolar"
+                    status={
+                      Stepschecked === 'stepspolar' ? 'checked' : 'unchecked'
+                    }
+                    onPress={() => setSteps()}
+                  />
+                </View>
+              )}
+            </DataTable.Cell>
+            <DataTable.Cell>
+              {loading ? (
+                <ActivityIndicator />
+              ) : (
+                <View>
+                  <RadioButton
+                    value="calspolar"
+                    status={
+                      Calschecked === 'calspolar' ? 'checked' : 'unchecked'
+                    }
+                    onPress={() => setCals()}
+                  />
+                </View>
+              )}
+            </DataTable.Cell>
+          </DataTable.Row>
 
-          <DataTable.Cell>
-            {loading ? (
-              <ActivityIndicator />
-            ) : (
-              <View>
-                <RadioButton
-                  value="sleeppolar"
-                  status={
-                    Sleepchecked === 'sleeppolar' ? 'checked' : 'unchecked'
-                  }
-                  onPress={() => setSleep()}
-                />
-              </View>
-            )}
-          </DataTable.Cell>
-          <DataTable.Cell>
-            {loading ? (
-              <ActivityIndicator />
-            ) : (
-              <View>
-                <RadioButton
-                  value="stepspolar"
-                  status={
-                    Stepschecked === 'stepspolar' ? 'checked' : 'unchecked'
-                  }
-                  onPress={() => setSteps()}
-                />
-              </View>
-            )}
-          </DataTable.Cell>
-          <DataTable.Cell>
-            {loading ? (
-              <ActivityIndicator />
-            ) : (
-              <View>
-                <RadioButton
-                  value="calspolar"
-                  status={Calschecked === 'calspolar' ? 'checked' : 'unchecked'}
-                  onPress={() => setCals()}
-                />
-              </View>
-            )}
-          </DataTable.Cell>
-        </DataTable.Row>
-
-        <DataTable.Row>
-          <DataTable.Cell>FITBIT</DataTable.Cell>
-          <DataTable.Cell>
-            {loading ? (
-              <ActivityIndicator />
-            ) : (
-              <View>
-                <RadioButton
-                  value="sleepfit"
-                  status={Sleepchecked === 'sleepfit' ? 'checked' : 'unchecked'}
-                  onPress={() => setSleep()}
-                />
-              </View>
-            )}
-          </DataTable.Cell>
-          <DataTable.Cell>
-            {loading ? (
-              <ActivityIndicator />
-            ) : (
-              <View>
-                <RadioButton
-                  value="stepsfit"
-                  status={Stepschecked === 'stepsfit' ? 'checked' : 'unchecked'}
-                  onPress={() => setSteps()}
-                />
-              </View>
-            )}
-          </DataTable.Cell>
-          <DataTable.Cell>
-            {loading ? (
-              <ActivityIndicator />
-            ) : (
-              <View>
-                <RadioButton
-                  value="calsfit"
-                  status={Calschecked === 'calsfit' ? 'checked' : 'unchecked'}
-                  onPress={() => setCals()}
-                />
-              </View>
-            )}
-          </DataTable.Cell>
-        </DataTable.Row>
-      </DataTable>
+          <DataTable.Row>
+            <DataTable.Cell>FITBIT</DataTable.Cell>
+            <DataTable.Cell>
+              {loading ? (
+                <ActivityIndicator />
+              ) : (
+                <View>
+                  <RadioButton
+                    value="sleepfit"
+                    status={
+                      Sleepchecked === 'sleepfit' ? 'checked' : 'unchecked'
+                    }
+                    onPress={() => setSleep()}
+                  />
+                </View>
+              )}
+            </DataTable.Cell>
+            <DataTable.Cell>
+              {loading ? (
+                <ActivityIndicator />
+              ) : (
+                <View>
+                  <RadioButton
+                    value="stepsfit"
+                    status={
+                      Stepschecked === 'stepsfit' ? 'checked' : 'unchecked'
+                    }
+                    onPress={() => setSteps()}
+                  />
+                </View>
+              )}
+            </DataTable.Cell>
+            <DataTable.Cell>
+              {loading ? (
+                <ActivityIndicator />
+              ) : (
+                <View>
+                  <RadioButton
+                    value="calsfit"
+                    status={Calschecked === 'calsfit' ? 'checked' : 'unchecked'}
+                    onPress={() => setCals()}
+                  />
+                </View>
+              )}
+            </DataTable.Cell>
+          </DataTable.Row>
+        </DataTable>
+      </View>
       <Modal visible={visibility} animationType="slide">
         <View>
           <Text style={styles.text}>Edit Your Profile Information</Text>
@@ -546,6 +550,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: 'bold',
   },
+
+  radio: {
+    color: 'black',
+  },
   textStyle: {
     color: 'black',
     fontSize: 16,
@@ -561,13 +569,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   datacont: {
-
-    marginVertical: 250,
-    alignContent: 'flex-start',
+    marginVertical: 20,
+    alignContent: 'center',
+    alignItems: 'center',
+    width: 450,
+    justifyContent:'center'
   },
   name: {
     textAlign: 'center',
-    fontSize: 16,
+    fontSize: 30,
     fontWeight: 'bold',
   },
   info: {
@@ -650,6 +660,9 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
 
+  cell: {
 
+    marginVertical: 20,
+  }
 });
 export default Userprofile;

@@ -55,7 +55,7 @@ import {
   fetchCaloriesPreference,
   fetchStepPreference,
   fetchSleepPreference,
-  fetchUserInfo
+  fetchUserInfo,
 } from '../db/UserDb';
 
 import {
@@ -64,9 +64,9 @@ import {
   fetchWeeklySteps,
   fetchMonthlySleep,
   fetchMonthlySteps,
-  fetchMonthlyCalories
-
+  fetchMonthlyCalories,
 } from '../db/testing';
+import {black} from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
 
 const Dashboard = ({navigation}) => {
   const options = [
@@ -98,9 +98,7 @@ const Dashboard = ({navigation}) => {
   const [endTime, setEndTime] = useState();
   const [loading, setLoading] = useState(true);
 
-
   const [userId, setUserId] = useState('1');
-
 
   const [stepsDayList, setStepsDayList] = useState(['']);
   const [stepsWeekList, setStepsWeekList] = useState(['']);
@@ -120,8 +118,6 @@ const Dashboard = ({navigation}) => {
   const [show, setShow] = useState(true);
   const [show2, setShow2] = useState(false);
   const [show3, setShow3] = useState(false);
-
-  
 
   var getDateArray = function (startdate, today) {
     var arr = new Array(),
@@ -198,7 +194,6 @@ const Dashboard = ({navigation}) => {
       setStepsDayList(dateList);
       setStepsWeekList(await fetchWeeklySteps(userId));
       setStepsMonthList(await fetchMonthlySteps(userId));
-      
     };
 
     const fetchCalories = async () => {
@@ -293,7 +288,7 @@ const Dashboard = ({navigation}) => {
       setSleepWeekList(await fetchWeeklySleep(userId));
       setSleepMonthList(await fetchMonthlySleep(userId));
     };
-    
+
     fetchSleep();
     fetchSteps();
     fetchCalories();
@@ -325,9 +320,12 @@ const Dashboard = ({navigation}) => {
   return (
     <PaperProvider>
       <SwitchSelector
+        style={{color: 'red'}}
         options={kuka}
         initial={1}
         onPress={value => setUserId(value)}
+        selectedColor={'white'}
+        buttonColor={'#483d8b'}
       />
       <View>
         <Text style={styles.header}>Welcome Back!</Text>
@@ -353,6 +351,8 @@ const Dashboard = ({navigation}) => {
               options={options}
               initial={0}
               onPress={value => showTable(value)}
+              selectedColor={'white'}
+              buttonColor={'#483d8b'}
             />
           </View>
         </View>
@@ -360,10 +360,16 @@ const Dashboard = ({navigation}) => {
         {show ? (
           <DataTable>
             <DataTable.Header>
-              <DataTable.Title>Day</DataTable.Title>
-              <DataTable.Title numeric>Sleep</DataTable.Title>
-              <DataTable.Title numeric>Steps</DataTable.Title>
-              <DataTable.Title numeric>Calories</DataTable.Title>
+              <DataTable.Title textStyle={{fontSize: 16}}>Day</DataTable.Title>
+              <DataTable.Title textStyle={{fontSize: 16}} numeric>
+                Sleep
+              </DataTable.Title>
+              <DataTable.Title textStyle={{fontSize: 16}} numeric>
+                Steps
+              </DataTable.Title>
+              <DataTable.Title textStyle={{fontSize: 16}} numeric>
+                Calories
+              </DataTable.Title>
             </DataTable.Header>
 
             <DataTable.Row>
@@ -425,14 +431,14 @@ const Dashboard = ({navigation}) => {
           />
         ) : null}
 
-        {show3 ?(
-         <MonthData
+        {show3 ? (
+          <MonthData
             sleep={sleepMonthList}
             steps={stepsMonthList}
             calories={caloriesMonthList}
-         />
-        )  : null}
-        <Button
+          />
+        ) : null}
+        {/* <Button
           title="POlar Activities"
           onPress={() => fetchMonthlySleep(userId)}></Button>
         <Button
@@ -478,7 +484,7 @@ const Dashboard = ({navigation}) => {
           onPress={() => fetchSleepLog(userId)}></Button>
         <Button
           title="fitbit calories from db"
-          onPress={() => fetchCaloriesLog(userId)}></Button>
+          onPress={() => fetchCaloriesLog(userId)}></Button> */}
 
         <View>
           <FlatList
