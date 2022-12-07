@@ -360,14 +360,14 @@ const Dashboard = ({navigation}) => {
         {show ? (
           <DataTable>
             <DataTable.Header>
-              <DataTable.Title textStyle={{fontSize: 16}}>Day</DataTable.Title>
-              <DataTable.Title textStyle={{fontSize: 16}} numeric>
+              <DataTable.Title >Day</DataTable.Title>
+              <DataTable.Title  numeric>
                 Sleep
               </DataTable.Title>
-              <DataTable.Title textStyle={{fontSize: 16}} numeric>
+              <DataTable.Title  numeric>
                 Steps
               </DataTable.Title>
-              <DataTable.Title textStyle={{fontSize: 16}} numeric>
+              <DataTable.Title  numeric>
                 Calories
               </DataTable.Title>
             </DataTable.Header>
@@ -424,7 +424,10 @@ const Dashboard = ({navigation}) => {
         ) : null}
 
         {show2 ? (
+            
           <WeekData
+          
+          
             steps={stepsWeekList}
             sleep={sleepWeekList}
             calories={caloriesWeekList}
@@ -514,7 +517,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   infocont: {
-    margin: 10,
+    marginHorizontal: 0,
+    marginVertical: 20,
     width: '100%',
     flexDirection: 'row',
     height: 70,
@@ -549,6 +553,16 @@ const styles = StyleSheet.create({
     marginVertical: 2,
     width: 230,
   },
+
+  datatable: {
+
+    marginVertical: 25,
+  },
+
+  row: {
+
+    marginVertical: 15,
+  }
 });
 
 export default Dashboard;
