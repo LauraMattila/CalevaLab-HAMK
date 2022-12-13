@@ -96,7 +96,6 @@ const Athletecard = ({route, navigation}) => {
       setLastname(userInfo.lname);
       setGender(userInfo.gender);
       setAge(userInfo.age);
-    
     };
 
     const fetchSteps = async () => {
@@ -128,7 +127,7 @@ const Athletecard = ({route, navigation}) => {
             dbDate = data[dbIndex].date.toDate().toISOString().slice(0, 10);
           }
         } catch (error) {
-          console.error(error);
+          console.log(error);
         }
         if (dbDate == currentDate) {
           dateList[dayIndex] = data[dbIndex].steps;
@@ -147,12 +146,12 @@ const Athletecard = ({route, navigation}) => {
       var preference = await fetchCaloriesPreference(userId);
       switch (preference) {
         case 'Polar':
-          await getActivity(userId);
+          //await getActivity(userId);
           data = await fetchCaloriesP(userId);
           //console.log(data);
           break;
         case 'Fitbit':
-          await getCalsFit(userId);
+          //await getCalsFit(userId);
           data = await fetchCaloriesLog(userId);
           break;
       }
@@ -171,7 +170,7 @@ const Athletecard = ({route, navigation}) => {
             dbDate = data[dbIndex].date.toDate().toISOString().slice(0, 10);
           }
         } catch (error) {
-          console.error(error);
+          console.log(error);
         }
         if (dbDate == currentDate) {
           dateList[dayIndex] = data[dbIndex].calories;
@@ -213,7 +212,7 @@ const Athletecard = ({route, navigation}) => {
             dbDate = data[dbIndex].date.toDate().toISOString().slice(0, 10);
           }
         } catch (error) {
-          console.error(error);
+          console.log(error);
         }
         if (dbDate == currentDate) {
           var totalMinutes = data[dbIndex].sleep_min;
@@ -277,7 +276,7 @@ const Athletecard = ({route, navigation}) => {
                 initial={0}
                 onPress={value => console.log(`Selected: ${value}`)}
                 selectedColor={'white'}
-        buttonColor={'#483d8b'}
+                buttonColor={'#483d8b'}
               />
             </View>
           </View>
@@ -342,23 +341,23 @@ const Athletecard = ({route, navigation}) => {
               </DataTable.Cell>
               <DataTable.Cell textStyle={{fontSize: 13}} numeric>
                 {' '}
-                {sleepDayList[0]}
+                {sleepDayList[2]}
               </DataTable.Cell>
               <DataTable.Cell textStyle={{fontSize: 13}} numeric>
                 {' '}
-                {sleepDayList[0]}
+                {sleepDayList[3]}
               </DataTable.Cell>
               <DataTable.Cell textStyle={{fontSize: 13}} numeric>
                 {' '}
-                {sleepDayList[0]}
+                {sleepDayList[4]}
               </DataTable.Cell>
               <DataTable.Cell textStyle={{fontSize: 13}} numeric>
                 {' '}
-                {sleepDayList[0]}
+                {sleepDayList[5]}
               </DataTable.Cell>
               <DataTable.Cell textStyle={{fontSize: 13}} numeric>
                 {' '}
-                {sleepDayList[0]}
+                {sleepDayList[6]}
               </DataTable.Cell>
             </DataTable.Row>
           </DataTable>
@@ -440,12 +439,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#5f9ea0',
     width: 200,
     height: 75,
-    
   },
   sharetext: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: 'white'
+    color: 'white',
   },
 });
 

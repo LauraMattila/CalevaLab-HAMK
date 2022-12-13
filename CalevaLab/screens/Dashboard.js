@@ -138,7 +138,6 @@ const Dashboard = ({navigation}) => {
       setLastname(userInfo.lname);
       setGender(userInfo.gender);
       setAge(userInfo.age);
-  
     };
 
     var today = new Date();
@@ -151,12 +150,12 @@ const Dashboard = ({navigation}) => {
     const fetchSteps = async () => {
       var data = [];
       var preference = await fetchStepPreference(userId);
-  
+
       switch (preference) {
         case 'Polar':
           //await getActivity(userId);
           data = await fetchStepsP(userId);
-         
+
           break;
         case 'Fitbit':
           //await getStepsFit(userId);
@@ -164,21 +163,19 @@ const Dashboard = ({navigation}) => {
           break;
       }
 
-      
       dayIndex = 0;
       dbIndex = 0;
       var dbDate;
       var currentDate;
       var dateList = [];
-     
+
       dateArray.forEach(date => {
         try {
           currentDate = date.toISOString().slice(0, 10);
-          if (data[dbIndex] != undefined) {
-            dbDate = data[dbIndex].date.toDate().toISOString().slice(0, 10);
-          }
+
+          dbDate = data[dbIndex].date.toDate().toISOString().slice(0, 10);
         } catch (error) {
-          console.error(error);
+          console.log(error);
         }
         if (dbDate == currentDate) {
           dateList[dayIndex] = data[dbIndex].steps;
@@ -197,12 +194,12 @@ const Dashboard = ({navigation}) => {
     const fetchCalories = async () => {
       var data = [];
       var preference = await fetchCaloriesPreference(userId);
-   
+
       switch (preference) {
         case 'Polar':
           //await getActivity(userId);
           data = await fetchCaloriesP(userId);
-          
+
           break;
         case 'Fitbit':
           //await getCalsFit(userId);
@@ -210,21 +207,18 @@ const Dashboard = ({navigation}) => {
           break;
       }
 
-      
       dayIndex = 0;
       dbIndex = 0;
       var dbDate;
       var currentDate;
       var dateList = [];
-     
+
       dateArray.forEach(date => {
         try {
           currentDate = date.toISOString().slice(0, 10);
-          if (data[dbIndex] != undefined) {
-            dbDate = data[dbIndex].date.toDate().toISOString().slice(0, 10);
-          }
+          dbDate = data[dbIndex].date.toDate().toISOString().slice(0, 10);
         } catch (error) {
-          console.error(error);
+          console.log(error);
         }
         if (dbDate == currentDate) {
           dateList[dayIndex] = data[dbIndex].calories;
@@ -246,7 +240,6 @@ const Dashboard = ({navigation}) => {
         case 'Polar':
           //await getSleep(userId);
           data = await fetchSleepP(userId);
-         
           break;
         case 'Fitbit':
           //await getSleepDataFit(userId);
@@ -254,21 +247,18 @@ const Dashboard = ({navigation}) => {
           break;
       }
 
-      
       dayIndex = 0;
       dbIndex = 0;
       var dbDate;
       var currentDate;
       var dateList = [];
-      
+
       dateArray.forEach(date => {
         try {
           currentDate = date.toISOString().slice(0, 10);
-          if (data[dbIndex] != undefined) {
-            dbDate = data[dbIndex].date.toDate().toISOString().slice(0, 10);
-          }
+          dbDate = data[dbIndex].date.toDate().toISOString().slice(0, 10);
         } catch (error) {
-          console.error(error);
+          console.log(error);
         }
         if (dbDate == currentDate) {
           var totalMinutes = data[dbIndex].sleep_min;
@@ -353,16 +343,10 @@ const Dashboard = ({navigation}) => {
         {show ? (
           <DataTable>
             <DataTable.Header>
-              <DataTable.Title >Day</DataTable.Title>
-              <DataTable.Title  numeric>
-                Sleep
-              </DataTable.Title>
-              <DataTable.Title  numeric>
-                Steps
-              </DataTable.Title>
-              <DataTable.Title  numeric>
-                Calories
-              </DataTable.Title>
+              <DataTable.Title>Day</DataTable.Title>
+              <DataTable.Title numeric>Sleep</DataTable.Title>
+              <DataTable.Title numeric>Steps</DataTable.Title>
+              <DataTable.Title numeric>Calories</DataTable.Title>
             </DataTable.Header>
 
             <DataTable.Row>
@@ -417,10 +401,7 @@ const Dashboard = ({navigation}) => {
         ) : null}
 
         {show2 ? (
-            
           <WeekData
-          
-          
             steps={stepsWeekList}
             sleep={sleepWeekList}
             calories={caloriesWeekList}
@@ -548,14 +529,12 @@ const styles = StyleSheet.create({
   },
 
   datatable: {
-
     marginVertical: 25,
   },
 
   row: {
-
     marginVertical: 15,
-  }
+  },
 });
 
 export default Dashboard;
