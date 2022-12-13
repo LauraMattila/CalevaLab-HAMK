@@ -61,9 +61,7 @@ const Userprofile = ({navigation}) => {
       setLastname(userInfo.lname);
       setGender(userInfo.gender);
       setAge(userInfo.age);
-      console.log(
-        ' TOIMIIKOTOIMIIKOTOIMIIIIKOTOIMIIIKO :   ' + userInfo.gender,
-      );
+    
     };
 
     setUserInfo();
@@ -264,7 +262,6 @@ const checkConnection = async () =>{
 
             setFilePathh(uri);
 
-            console.log('FILEPATH:                 ' + uri);
           });
       });
     }
@@ -295,7 +292,6 @@ const checkConnection = async () =>{
           const fileName = item.fileName;
 
           setFilePathh(uri);
-          console.log('FILEPATH:                 ' + filePathh);
         });
     });
   };
@@ -314,7 +310,6 @@ const checkConnection = async () =>{
 
   const updateUser = async () => {
     var userInfo = await fetchUserInfo(id);
-    console.log('UPDATE USER INFO:         ' + userInfo);
     updateUserInfo(firstname, lastname, gender, age, id);
     setVisibility(false);
   };

@@ -96,15 +96,12 @@ const Athletecard = ({route, navigation}) => {
       setLastname(userInfo.lname);
       setGender(userInfo.gender);
       setAge(userInfo.age);
-      console.log(
-        ' TOIMIIKOTOIMIIKOTOIMIIIIKOTOIMIIIKO :   ' + userInfo.gender,
-      );
+    
     };
 
     const fetchSteps = async () => {
       var data = [];
       var preference = await fetchStepPreference(userId);
-      console.log('STEPS PREFERENCE:   ' + preference);
       switch (preference) {
         case 'Polar':
           //await getActivity(userId);
@@ -148,7 +145,6 @@ const Athletecard = ({route, navigation}) => {
     const fetchCalories = async () => {
       var data = [];
       var preference = await fetchCaloriesPreference(userId);
-      console.log('CALS PREFERENCE:   ' + preference);
       switch (preference) {
         case 'Polar':
           await getActivity(userId);
@@ -191,7 +187,6 @@ const Athletecard = ({route, navigation}) => {
     const fetchSleep = async () => {
       var data = [];
       var preference = await fetchSleepPreference(userId);
-      console.log('SLEEP PREFERENCE:   ' + preference);
       switch (preference) {
         case 'Polar':
           //await getSleep(userId);

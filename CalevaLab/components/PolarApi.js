@@ -31,8 +31,7 @@ export async function getSleep(id) {
 
       const sleepMin = (Math.abs(date1 - date2) / 36e5) * 60;
       const sleepDate = item.date;
-      console.log(sleepDate);
-      console.log(sleepMin);
+      
 
       createSleep(sleepDate, sleepMin, id);
     });
@@ -61,7 +60,7 @@ export async function postSomething(id) {
 
     const json = await response.json();
 
-    console.log(json['transaction-id']);
+    
     transactionId = json['transaction-id'];
 
     return transactionId;
@@ -135,7 +134,6 @@ export async function getActivity(id) {
     //loop start
     while(true) {
     const transactionId = await postSomething(id);
-    console.log("Transaction ID: " + transactionId);
     if (transactionId == undefined) {
         console.log("No new data available")
         return;
@@ -143,7 +141,6 @@ export async function getActivity(id) {
     const activityLink = await listActivity(id, transactionId);
     
     const activitySummary = [];
-    console.log(activityLink);
     for (const link of activityLink) {
       const jsonObj = await activity(link, accessTokenP);
 
@@ -169,14 +166,12 @@ export async function getActivity(id) {
         return;
       }
     }
-      console.log(item);
       createSteps(date, steps, id);
       createCalories(date, calories, id);
     });
     putSomething(id, transactionId);
   }
     //loop end
-    console.log(activitySummary);
   } catch (error) {
     console.log(error);
   }
