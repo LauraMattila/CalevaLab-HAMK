@@ -145,7 +145,6 @@ export async function getCalsFit(id) {
     });
 
     //fetchCaloriesLog(string, id)
-    })
   } catch (error) {
     console.error(error);
   }
