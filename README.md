@@ -21,7 +21,7 @@ Tools:
 
 1. Visual studio code
 2. Node.js
-3. Java Script
+3. Javascript
 4. Android Studio
 5. Android emulator
 6. React Native
@@ -29,6 +29,7 @@ Tools:
 8. OAuth 2.0
 9. GitHub
 10. Firebase Firestore
+11. Fitbit and Polar APIs
 
 ![image](https://user-images.githubusercontent.com/75027829/207273879-45791536-50d7-431b-9fca-77e175000d0a.png) ![image](https://user-images.githubusercontent.com/75027829/207274144-aa109ce5-089d-4f13-83d8-1262448d0313.png)
 ![image](https://user-images.githubusercontent.com/75027829/207274198-a1c20de5-4279-418b-a975-fd81d51c30d9.png) ![image](https://user-images.githubusercontent.com/75027829/207274878-72ea57ff-a3ee-4bd5-8ab2-720c7ed1ee05.png)
