@@ -8,7 +8,7 @@ import Moment from 'moment';
 import {StyleSheet, Text, View, Pressable} from 'react-native';
 
 import firestore from '@react-native-firebase/firestore';
-
+import WeekDataCard from '../components/WeekDataCard';
 import {
   fetchUserIdP,
   fetchAccessTokenP,
@@ -47,6 +47,17 @@ import {
   fetchUserInfo,
 } from '../db/UserDb';
 
+
+import {
+    fetchWeeklyCalories,
+    fetchWeeklySleep,
+    fetchWeeklySteps,
+    fetchMonthlySleep,
+    fetchMonthlySteps,
+    fetchMonthlyCalories,
+  } from '../db/testing';
+import MonthDataCard from '../components/MonthDataCard';
+
 const Athletecard = ({route, navigation}) => {
   const options = [
     {label: 'days', value: 'days'},
@@ -68,9 +79,22 @@ const Athletecard = ({route, navigation}) => {
 
   const [dateArr, setDateArr] = useState([]);
   const [stepsDayList, setStepsDayList] = useState(['']);
+  const [stepsWeekList, setStepsWeekList] = useState(['']);
+  const [stepsMonthList, setStepsMonthList] = useState(['']);
+
   const [caloriesDayList, setCaloriesDayList] = useState(['']);
+  const [caloriesWeekList, setCaloriesWeekList] = useState(['']);
+  const [caloriesMonthList, setCaloriesMonthList] = useState(['']);
+
   const [sleepDayList, setSleepDayList] = useState(['']);
+  const [sleepWeekList, setSleepWeekList] = useState(['']);
+  const [sleepMonthList, setSleepMonthList] = useState(['']);
+
+
   const [userId, setUserId] = useState('1');
+  const [show, setShow] = useState(true);
+  const [show2, setShow2] = useState(false);
+  const [show3, setShow3] = useState(false);
 
   useEffect(() => {
     var today = new Date();
@@ -139,6 +163,8 @@ const Athletecard = ({route, navigation}) => {
         dayIndex += 1;
       });
       setStepsDayList(dateList);
+      setStepsWeekList(await fetchWeeklySteps(userId));
+      setStepsMonthList(await fetchMonthlySteps(userId));
     };
 
     const fetchCalories = async () => {
@@ -181,6 +207,8 @@ const Athletecard = ({route, navigation}) => {
         dayIndex += 1;
       });
       setCaloriesDayList(dateList);
+      setCaloriesWeekList(await fetchWeeklyCalories(userId));
+      setCaloriesMonthList(await fetchMonthlyCalories(userId));
     };
 
     const fetchSleep = async () => {
@@ -227,6 +255,8 @@ const Athletecard = ({route, navigation}) => {
         dayIndex += 1;
       });
       setSleepDayList(dateList);
+      setSleepWeekList(await fetchWeeklySleep(userId));
+      setSleepMonthList(await fetchMonthlySleep(userId));
     };
 
     setUserInfo();
@@ -236,6 +266,23 @@ const Athletecard = ({route, navigation}) => {
   }, [userId]);
 
   var [day1, day2, day3, day4, day5, day6, day7] = dateArr;
+
+
+  const showTable = value => {
+    if (value == 'days') {
+      setShow(true);
+      setShow2(false);
+      setShow3(false);
+    } else if (value == 'weeks') {
+      setShow3(false);
+      setShow(false);
+      setShow2(true);
+    } else if (value == 'months') {
+      setShow(false);
+      setShow2(false);
+      setShow3(true);
+    }
+  };
 
   return (
     <PaperProvider>
@@ -274,12 +321,13 @@ const Athletecard = ({route, navigation}) => {
               <SwitchSelector
                 options={options}
                 initial={0}
-                onPress={value => console.log(`Selected: ${value}`)}
+                onPress={value => showTable(value)}
                 selectedColor={'white'}
                 buttonColor={'#483d8b'}
               />
             </View>
           </View>
+          {show ? (
 
           <DataTable>
             <DataTable.Header style={styles.weekdays}>
@@ -361,6 +409,29 @@ const Athletecard = ({route, navigation}) => {
               </DataTable.Cell>
             </DataTable.Row>
           </DataTable>
+           ) : null}
+
+
+{show2 ? (
+            
+            <WeekDataCard
+            
+            
+              steps={stepsWeekList}
+              sleep={sleepWeekList}
+              calories={caloriesWeekList}
+            />
+          ) : null}
+{show3 ? (
+
+<MonthDataCard
+sleep={sleepMonthList}
+steps={stepsMonthList}
+calories={caloriesMonthList}
+/>
+
+) : null}
+
         </View>
       </View>
       <View style={styles.sharecont}>

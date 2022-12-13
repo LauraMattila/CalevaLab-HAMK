@@ -41,7 +41,7 @@ export async function getSleep(id) {
 }
 
 //Posts the transaction id
-export async function postSomething(id) {
+export async function createTransaction(id) {
   try {
     const accessTokenP = await fetchAccessTokenP(id);
     const userId = await fetchUserIdP(id);
@@ -102,7 +102,7 @@ export async function listActivity(id, transaction) {
   }
 }
 
-export async function putSomething(id, transaction) {
+export async function commitTransaction(id, transaction) {
   try {
     const accessTokenP = await fetchAccessTokenP(id);
     const userId = await fetchUserIdP(id);
@@ -133,7 +133,7 @@ export async function getActivity(id) {
     const userId = await fetchUserIdP(id);
     //loop start
     while(true) {
-    const transactionId = await postSomething(id);
+    const transactionId = await createTransaction(id);
     if (transactionId == undefined) {
         console.log("No new data available")
         return;
@@ -169,7 +169,7 @@ export async function getActivity(id) {
       createSteps(date, steps, id);
       createCalories(date, calories, id);
     });
-    putSomething(id, transactionId);
+    commitTransaction(id, transactionId);
   }
     //loop end
   } catch (error) {
