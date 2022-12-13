@@ -17,7 +17,6 @@ export async function getSleepDataFit(id) {
     const startdate = new Date();
     const enddate = new Date();
     startdate.setDate(enddate.getDate() - 28);
-    console.log(date);
     const URL =
       'https://api.fitbit.com/1.2/user/' +
       user_id +
@@ -141,7 +140,9 @@ export async function getCalsFit(id) {
       const caloriesDate = new Date(string);
       const calories = item.value;
       SaveCaloriesLog(caloriesDate, calories, string, id);
-     
+   
+
+    });
 
     //fetchCaloriesLog(string, id)
   } catch (error) {
