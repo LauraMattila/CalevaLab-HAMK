@@ -17,11 +17,13 @@ After parsing the data we programmed functions that would save the relevant data
 
 Frontend development part of the project was minimal compared to backend in this project and included mostly showing the data in the applications UI that we read from our own database.
 
+Tools:
+
 1. Visual studio code
 2. Node.js
 3. Java Script
 4. Android Studio
-5. Adroid emulator
+5. Android emulator
 6. React Native
 7. Fitbit and Polar Fitness trackers
 8. OAuth 2.0
