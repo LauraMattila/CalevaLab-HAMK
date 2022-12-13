@@ -17,15 +17,15 @@ After parsing the data we programmed functions that would save the relevant data
 
 Frontend development part of the project was minimal compared to backend in this project and included mostly showing the data in the applications UI that we read from our own database.
 
-Visual studio code
-Node.js
-Java Script
-Android Studio
-Adroid emulator
-React Native
-Fitbit and Polar Fitness trackers
-OAuth 2.0
-GitHub
+1. Visual studio code
+2. Node.js
+3. Java Script
+4. Android Studio
+5. Adroid emulator
+6. React Native
+7. Fitbit and Polar Fitness trackers
+8. OAuth 2.0
+9. GitHub
 
 ![image](https://user-images.githubusercontent.com/75027829/207273879-45791536-50d7-431b-9fca-77e175000d0a.png) ![image](https://user-images.githubusercontent.com/75027829/207274144-aa109ce5-089d-4f13-83d8-1262448d0313.png)
 ![image](https://user-images.githubusercontent.com/75027829/207274198-a1c20de5-4279-418b-a975-fd81d51c30d9.png) ![image](https://user-images.githubusercontent.com/75027829/207274878-72ea57ff-a3ee-4bd5-8ab2-720c7ed1ee05.png)
