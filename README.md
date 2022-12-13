@@ -7,6 +7,27 @@ The main idea behind the project was not only to create a mobile application but
 
 The outcome was that we developed a mobile application where the athlete can see their slept hours, steps and burned calories daily for past 7 days, the weekly average for past 7 weeks and the monthly average for past 7 months. Athlete can also edit their profile and decide the priority from which fitness tracker the activity data is collected from. Athlete also has a Athlete CV or Athlete card, which includes all of the data about his or hers activity, which can then be shared to a coach for updates on the athletes activity.
 
+In the programming part of the project we utilized various tools, technologies and methods to help us meet our objectives.
+
+The programming was mainly backend focused and included mostly code that was made to sent requests into the APIs and to handle the responses that we got back from the APIs.
+
+The handling part consisted of parsing the correct data from the API responses that we wanted to save into our database.
+
+After parsing the data we programmed functions that would save the relevant data into our own database.
+
+Frontend development part of the project was minimal compared to backend in this project and included mostly showing the data in the applications UI that we read from our own database.
+
+Visual studio code
+Node.js
+Java Script
+Android Studio
+Adroid emulator
+React Native
+Fitbit and Polar Fitness trackers
+OAuth 2.0
+GitHub
+
 ![image](https://user-images.githubusercontent.com/75027829/207273879-45791536-50d7-431b-9fca-77e175000d0a.png) ![image](https://user-images.githubusercontent.com/75027829/207274144-aa109ce5-089d-4f13-83d8-1262448d0313.png)
-![image](https://user-images.githubusercontent.com/75027829/207274198-a1c20de5-4279-418b-a975-fd81d51c30d9.png)
+![image](https://user-images.githubusercontent.com/75027829/207274198-a1c20de5-4279-418b-a975-fd81d51c30d9.png) ![image](https://user-images.githubusercontent.com/75027829/207274878-72ea57ff-a3ee-4bd5-8ab2-720c7ed1ee05.png)
+
 
