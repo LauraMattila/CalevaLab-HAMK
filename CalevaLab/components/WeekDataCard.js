@@ -68,47 +68,31 @@ const WeekDataCard = props => {
 
           <DataTable.Row style={styles.row}>
             <DataTable.Cell>STEPS</DataTable.Cell>
-            <DataTable.Cell numeric>{props.steps[6]}</DataTable.Cell>
-            <DataTable.Cell numeric>{props.steps[5]}</DataTable.Cell>
-            <DataTable.Cell numeric>{props.steps[4]}</DataTable.Cell>
-            <DataTable.Cell numeric>{props.steps[3]}</DataTable.Cell>
-            <DataTable.Cell numeric>{props.steps[2]}</DataTable.Cell>
-            <DataTable.Cell numeric>{props.steps[1]}</DataTable.Cell>
             <DataTable.Cell numeric>{props.steps[0]}</DataTable.Cell>
+            <DataTable.Cell numeric>{props.steps[1]}</DataTable.Cell>
+            <DataTable.Cell numeric>{props.steps[2]}</DataTable.Cell>
+            <DataTable.Cell numeric>{props.steps[3]}</DataTable.Cell>
+            <DataTable.Cell numeric>{props.steps[4]}</DataTable.Cell>
+            <DataTable.Cell numeric>{props.steps[5]}</DataTable.Cell>
+            <DataTable.Cell numeric>{props.steps[6]}</DataTable.Cell>
           </DataTable.Row>
 
           <DataTable.Row style={styles.row}>
             <DataTable.Cell>KCAL</DataTable.Cell>
-            <DataTable.Cell numeric>{props.calories[6]}</DataTable.Cell>
-            <DataTable.Cell numeric>{props.calories[5]}</DataTable.Cell>
-            <DataTable.Cell numeric>{props.calories[4]}</DataTable.Cell>
-            <DataTable.Cell numeric>{props.calories[3]}</DataTable.Cell>
-            <DataTable.Cell numeric>{props.calories[2]}</DataTable.Cell>
-            <DataTable.Cell numeric>{props.calories[1]}</DataTable.Cell>
             <DataTable.Cell numeric>{props.calories[0]}</DataTable.Cell>
+            <DataTable.Cell numeric>{props.calories[1]}</DataTable.Cell>
+            <DataTable.Cell numeric>{props.calories[2]}</DataTable.Cell>
+            <DataTable.Cell numeric>{props.calories[3]}</DataTable.Cell>
+            <DataTable.Cell numeric>{props.calories[4]}</DataTable.Cell>
+            <DataTable.Cell numeric>{props.calories[5]}</DataTable.Cell>
+            <DataTable.Cell numeric>{props.calories[6]}</DataTable.Cell>
           </DataTable.Row>
 
           <DataTable.Row style={styles.row}>
             <DataTable.Cell>SLEEP</DataTable.Cell>
             <DataTable.Cell textStyle={{fontSize: 13}} numeric>
               {' '}
-              {props.sleep[6]}
-            </DataTable.Cell>
-            <DataTable.Cell textStyle={{fontSize: 13}} numeric>
-              {' '}
-              {props.sleep[5]}
-            </DataTable.Cell>
-            <DataTable.Cell textStyle={{fontSize: 13}} numeric>
-              {' '}
-              {props.sleep[4]}
-            </DataTable.Cell>
-            <DataTable.Cell textStyle={{fontSize: 13}} numeric>
-              {' '}
-              {props.sleep[3]}
-            </DataTable.Cell>
-            <DataTable.Cell textStyle={{fontSize: 13}} numeric>
-              {' '}
-              {props.sleep[2]}
+              {props.sleep[0]}
             </DataTable.Cell>
             <DataTable.Cell textStyle={{fontSize: 13}} numeric>
               {' '}
@@ -116,7 +100,23 @@ const WeekDataCard = props => {
             </DataTable.Cell>
             <DataTable.Cell textStyle={{fontSize: 13}} numeric>
               {' '}
-              {props.sleep[0]}
+              {props.sleep[2]}
+            </DataTable.Cell>
+            <DataTable.Cell textStyle={{fontSize: 13}} numeric>
+              {' '}
+              {props.sleep[3]}
+            </DataTable.Cell>
+            <DataTable.Cell textStyle={{fontSize: 13}} numeric>
+              {' '}
+              {props.sleep[4]}
+            </DataTable.Cell>
+            <DataTable.Cell textStyle={{fontSize: 13}} numeric>
+              {' '}
+              {props.sleep[5]}
+            </DataTable.Cell>
+            <DataTable.Cell textStyle={{fontSize: 13}} numeric>
+              {' '}
+              {props.sleep[6]}
             </DataTable.Cell>
           </DataTable.Row>
         </DataTable>
