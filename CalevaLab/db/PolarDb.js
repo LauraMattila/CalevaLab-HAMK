@@ -34,7 +34,6 @@ export async function fetchUserIdP(id) {
     }
     userIdP.forEach(doc => {
       result = doc.data().polar_user_id;
-      console.log(doc.data().polar_user_id);
 
     });
     return result;
@@ -51,7 +50,6 @@ export async function fetchAccessTokenP(id) {
       .get();
 
     if (accessTokenP.empty) {
-      console.log('EI ole');
       return;
     }
     accessTokenP.forEach(doc => {
@@ -77,7 +75,6 @@ export async function fetchSleepP(id) {
 
      
     if (response.empty) {
-      console.log('EI ole');
       return;
     }
 
@@ -108,7 +105,6 @@ export async function fetchStepsP(id) {
   
        
       if (response.empty) {
-        console.log('EI ole');
         return;
       }
   
@@ -136,7 +132,6 @@ export async function fetchStepsP(id) {
   
        
       if (response.empty) {
-        console.log('EI ole');
         return;
       }
   
@@ -163,7 +158,6 @@ export async function fetchStepsP(id) {
   
        
       if (response.empty) {
-        console.log('EI ole');
         return;
       }
   
@@ -190,7 +184,6 @@ export async function fetchStepsP(id) {
   
        
       if (response.empty) {
-        console.log('EI ole');
         return;
       }
   
@@ -221,7 +214,6 @@ export async function fetchStepsP(id) {
   
        
       if (calories.empty) {
-        console.log('EI ole');
         return;
       }
   
@@ -308,7 +300,6 @@ export async function fetchSleepMonthlyP (month, year, id) {
       .get(); 
 
     if (response.empty) {
-      console.log('EI ole');
       return "NA";
     }
 
@@ -340,7 +331,7 @@ export async function fetchStepsMonthlyP (month, year, id) {
       .get(); 
 
     if (response.empty) {
-      console.log('EI ole');
+      
       return "NA";
     }
 
@@ -370,7 +361,7 @@ export async function fetchCaloriesMonthlyP (month, year, id) {
       .get(); 
 
     if (response.empty) {
-      console.log('EI ole');
+      
       return "NA";
     }
 

@@ -28,7 +28,6 @@ export async function getSleepDataFit(id) {
       '.json';
 
     const accessToken = await fetchAccessToken(id);
-    console.log(accessToken);
     const response = await fetch(URL, {
       method: 'GET',
       headers: {
@@ -87,11 +86,7 @@ export async function getStepsFit(id) {
       '.json';
     const accessToken = await fetchAccessToken(id);
 
-    console.log(startdate);
-    console.log('URL = ' + URL);
-    console.log('USER ID = ' + user_id);
-    console.log('ACCESSTOKEN = ' + accessToken);
-    console.log('');
+   
 
     const response = await fetch(URL, {
       method: 'GET',
@@ -101,7 +96,6 @@ export async function getStepsFit(id) {
       },
     });
     const json = await response.json();
-    console.log(response);
 
     json['activities-steps'].forEach(item => {
       const string = item.dateTime;
@@ -132,11 +126,7 @@ export async function getCalsFit(id) {
       '.json';
     const accessToken = await fetchAccessToken(id);
 
-    console.log('');
-    console.log('URL = ' + URL);
-    console.log('USER ID = ' + user_id);
-    console.log('ACCESSTOKEN = ' + accessToken);
-    console.log('');
+
 
     const response = await fetch(URL, {
       method: 'GET',
@@ -151,12 +141,7 @@ export async function getCalsFit(id) {
       const caloriesDate = new Date(string);
       const calories = item.value;
       SaveCaloriesLog(caloriesDate, calories, string, id);
-      console.log(
-        'total: ' + JSON.stringify(item) + '   date: ' + item.timeDate,
-      );
-
-      console.log('Calories: ' + item.value + '     Date: ' + item.dateTime);
-    });
+     
 
     //fetchCaloriesLog(string, id)
   } catch (error) {
