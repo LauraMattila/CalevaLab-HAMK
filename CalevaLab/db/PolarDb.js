@@ -22,6 +22,8 @@ Date.prototype.getWeek = function () {
   );
 };
 
+
+//Fetches the userId of from the users collection
 export async function fetchUserIdP(id) {
   try {
     var userIdP = await firestore()
@@ -42,6 +44,7 @@ export async function fetchUserIdP(id) {
   }
 }
 
+//Fetches the accesstoken of from the users collection
 export async function fetchAccessTokenP(id) {
   try {
     var accessTokenP = await firestore()
@@ -61,6 +64,8 @@ export async function fetchAccessTokenP(id) {
   }
 }
 
+
+//Fetches the saved sleep records from the database collection polar_sleep for the past 7 days and returns a list of the records
 export async function fetchSleepP(id) {
   try {
     const today = new Date();
@@ -91,6 +96,7 @@ export async function fetchSleepP(id) {
   }
 }
 
+//Fetches the saved steps per day records from the database collection polar_steps for the past 7 days and returns a list of the records
 export async function fetchStepsP(id) {
     try {
       const today = new Date();
@@ -108,7 +114,7 @@ export async function fetchStepsP(id) {
         return;
       }
   
-      //const sleepListP = []
+     
       var caloriesData = [];
       response.forEach(doc => {
         caloriesData.push(doc.data());
@@ -120,6 +126,8 @@ export async function fetchStepsP(id) {
       console.error(error);
     }
   }
+
+//Fetches the saved steps records per day from the database collection polar_steps 
   export async function fetchStepsWeeklyP(id, date) {
     try {
   
@@ -135,17 +143,19 @@ export async function fetchStepsP(id) {
         return;
       }
   
-      var caloriesData = [];
+      var stepsData = [];
       response.forEach(doc => {
-        caloriesData.push(doc.data());
+        stepsData.push(doc.data());
       });
-      return caloriesData;
+      return stepsData;
       
   
     } catch (error) {
       console.error(error);
     }
   }
+
+  //Fetches the saved sleep records per week from the database collection polar_sleep
   export async function fetchSleepWeeklyP(id, date) {
     try {
   
@@ -172,6 +182,9 @@ export async function fetchStepsP(id) {
       console.error(error);
     }
   }
+
+
+//Fetches the saved calories records per week from the database collection polar_calories
   export async function fetchCaloriesWeeklyP(id, date) {
     try {
   
@@ -200,6 +213,7 @@ export async function fetchStepsP(id) {
   }
   
   
+  //Fetches the saved calories per day records from the database collection polar_calories for the past 7 days and returns a list of the records
   export async function fetchCaloriesP(id) {
     try {
       const today = new Date();
@@ -231,7 +245,7 @@ export async function fetchStepsP(id) {
   }
   
  
-
+//Creates a polar_sleep collection and saves new records there any
 export async function createSleep(sleepDate, sleepMin, id) {
   try {
        
@@ -252,6 +266,7 @@ export async function createSleep(sleepDate, sleepMin, id) {
   }
 }
 
+//Creates a polar_steps collection and saves new records there any
 export async function createSteps(stepsDate, steps, id) {
   try {
     const stepData = {
@@ -270,6 +285,8 @@ export async function createSteps(stepsDate, steps, id) {
     console.error(error);
   }
 }
+
+//Creates a polar_calories collection and saves new records there any
 export async function createCalories(caloriesDate, calories, id) {
   try {
     const caloriesData = {
@@ -289,6 +306,7 @@ export async function createCalories(caloriesDate, calories, id) {
   }
 }
 
+//Fetches the saved sleep records per month from the database collection polar_sleep
 export async function fetchSleepMonthlyP (month, year, id) {
   try {
   
@@ -320,6 +338,7 @@ export async function fetchSleepMonthlyP (month, year, id) {
   }
 }
 
+//Fetches the saved steps records per month from the database collection polar_steps
 export async function fetchStepsMonthlyP (month, year, id) {
   try {
   
@@ -350,6 +369,8 @@ export async function fetchStepsMonthlyP (month, year, id) {
   }
 }
 
+
+//Fetches the saved calories records per month from the database collection polar_calories
 export async function fetchCaloriesMonthlyP (month, year, id) {
   try {
   
