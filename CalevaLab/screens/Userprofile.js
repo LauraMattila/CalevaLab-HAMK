@@ -116,19 +116,7 @@ const Userprofile = ({navigation}) => {
       return false;
     } else return true;
   };
-  /*   
-
-const checkConnection = async () =>{
-   const accessTokenP = fetchAccessTokenP(userId);
-
-   console.log(accessTokenP);
-   if(accessTokenP== undefined ){
-    setConnection('red');
-    } else{
-    setConnection('green');
-   }
-
-} */
+  
 
   useEffect(() => {
     const checkPrefSleep = async () => {

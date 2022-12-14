@@ -38,9 +38,7 @@ export async function getSleepDataFit(id) {
   
 
     const json = await response.json();
-    //console.log(json);
-    //console.log('Sleep (minutes) = ' + json.sleep[0].minutesAsleep);
-    //console.log('Date = ' + json.sleep[1].dateOfSleep);
+   
     let index = 0;
     var userSleep = 0;
     var sleepDate;
@@ -57,8 +55,7 @@ export async function getSleepDataFit(id) {
       } catch (error) {
         console.error(error);
       }
-      //console.log("sleepDate     " +sleepDate);
-      //console.log("userSleep     "+userSleep);
+      
       saveSleepLog(sleepDate, userSleep, id);
       userSleep = 0;
     });

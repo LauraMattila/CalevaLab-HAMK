@@ -8,6 +8,8 @@ import {
   createCalories,
 } from '../db/PolarDb';
 
+
+//Gets all of the new sleep records from the API and saves them to the database
 export async function getSleep(id) {
   try {
     const accessTokenP = await fetchAccessTokenP(id);
@@ -23,7 +25,7 @@ export async function getSleep(id) {
     );
     const json = await response.json();
 
-    //JSON.parse(JSON.stringify(json))
+    
 
     json.available.forEach(item => {
       var date1 = new Date(item.start_time);
@@ -102,6 +104,7 @@ export async function listActivity(id, transaction) {
   }
 }
 
+//Commits the transaction
 export async function commitTransaction(id, transaction) {
   try {
     const accessTokenP = await fetchAccessTokenP(id);
@@ -126,7 +129,7 @@ export async function commitTransaction(id, transaction) {
   }
 }
 
-//needs listActivity() to work
+//Gets all the new activity transactions and saves them to the database
 export async function getActivity(id) {
   try {
     const accessTokenP = await fetchAccessTokenP(id);
